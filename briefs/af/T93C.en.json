@@ -1,0 +1,5559 @@
+{
+  "unit": "T93C",
+  "generated": "2026-10-17T22:06:51.222Z",
+  "files": [
+    "js/quests/questf5-timeline-build.js",
+    "js/quests/questf8-which-total.js",
+    "js/quests/questf9-car-or-no-car.js",
+    "js/quests/questf11-meeting-day.js",
+    "js/quests/questf12-build-timeline.js",
+    "js/quests/questf13-one-equation.js"
+  ],
+  "items": {
+    "questf5-timeline-build#1": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:29:22"
+      ],
+      "af": "${r}%${NB}p.j."
+    },
+    "questf5-timeline-build#2": {
+      "en": "Moving an amount <b>forward</b> from T0 to <b>T${k}</b>: what exponent goes on (1 + i)?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:39:9"
+      ],
+      "af": "'n Bedrag word <b>vorentoe</b> geskuif van T0 na <b>T${k}</b>: watter eksponent kom op (1 + i)?"
+    },
+    "questf5-timeline-build#3": {
+      "en": "Forward = positive exponent = the number of periods.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:43:17"
+      ],
+      "af": "Vorentoe = positiewe eksponent = die aantal periodes."
+    },
+    "questf5-timeline-build#4": {
+      "en": "exponent = +${k}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:43:146"
+      ],
+      "af": "eksponent = +${k}"
+    },
+    "questf5-timeline-build#5": {
+      "en": "From T0 to T${k} is ${k} periods",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:45:18"
+      ],
+      "af": "Van T0 tot T${k} is ${k} periodes"
+    },
+    "questf5-timeline-build#6": {
+      "en": "count the jumps",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:45:97",
+        "questf5-timeline-build.js:59:130"
+      ],
+      "af": "tel die spronge"
+    },
+    "questf5-timeline-build#7": {
+      "en": "Forward means the money grows, so the exponent is positive: +${k}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:46:18"
+      ],
+      "af": "Vorentoe beteken die geld groei, so die eksponent is positief: +${k}"
+    },
+    "questf5-timeline-build#8": {
+      "en": "(1 + i)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:46:174",
+        "questf5-timeline-build.js:60:176"
+      ],
+      "af": "(1 + i)"
+    },
+    "questf5-timeline-build#9": {
+      "en": "Moving an amount <b>back</b> from T${b} to <b>T${a}</b>: what exponent goes on (1 + i)?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:53:9"
+      ],
+      "af": "'n Bedrag word <b>terug</b> geskuif van T${b} na <b>T${a}</b>: watter eksponent kom op (1 + i)?"
+    },
+    "questf5-timeline-build#10": {
+      "en": "Backward = negative exponent. Count the periods, then make it negative.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:57:17"
+      ],
+      "af": "Agtertoe = negatiewe eksponent. Tel die periodes en maak dit dan negatief."
+    },
+    "questf5-timeline-build#11": {
+      "en": "exponent = −${d}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:57:186"
+      ],
+      "af": "eksponent = −${d}"
+    },
+    "questf5-timeline-build#12": {
+      "en": "From T${b} to T${a} is ${b} − ${a} = ${d} periods",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:59:18"
+      ],
+      "af": "Van T${b} na T${a} is ${b} − ${a} = ${d} periodes"
+    },
+    "questf5-timeline-build#13": {
+      "en": "Backward undoes the growth, so the exponent goes negative: −${d}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:60:18"
+      ],
+      "af": "Agtertoe maak die groei ongedaan, so die eksponent word negatief: −${d}"
+    },
+    "questf5-timeline-build#14": {
+      "en": "Which expression gives the value at <b>T${k}</b> of ${money(P, 0, true)} invested at T0 (i = ${i})?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:69:9"
+      ],
+      "af": "Watter uitdrukking gee die waarde by <b>T${k}</b> van ${money(P, 0, true)} wat by T0 belê is (i = ${i})?"
+    },
+    "questf5-timeline-build#15": {
+      "en": "Forward → multiply, positive exponent equal to the number of periods.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:73:17"
+      ],
+      "af": "Vorentoe → vermenigvuldig, met 'n positiewe eksponent gelyk aan die aantal periodes."
+    },
+    "questf5-timeline-build#16": {
+      "en": "T0 → T${k} is forward ${k} periods",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:75:18"
+      ],
+      "af": "T0 → T${k} is ${k} periodes vorentoe"
+    },
+    "questf5-timeline-build#17": {
+      "en": "a later date, so the money grows",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:75:102"
+      ],
+      "af": "'n latere datum, so die geld groei"
+    },
+    "questf5-timeline-build#18": {
+      "en": "Forward → multiply by ${pow(\"(1 + i)\", k)}, with i = ${i}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:76:18"
+      ],
+      "af": "Vorentoe → vermenigvuldig met ${pow(\"(1 + i)\", k)}, met i = ${i}",
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf5-timeline-build#19": {
+      "en": "Value at T${k} = ${right}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:77:18"
+      ],
+      "af": "Waarde by T${k} = ${right}"
+    },
+    "questf5-timeline-build#20": {
+      "en": "one equation, built completely before anything is worked out",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:77:83"
+      ],
+      "af": "een vergelyking, heeltemal opgebou voordat enigiets bereken word"
+    },
+    "questf5-timeline-build#21": {
+      "en": "Forward: ${term(P, pow(`(1 + ${iC})`, k))} = ${money(fwd, 2)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:101:14"
+      ],
+      "af": "Vorentoe: ${term(P, pow(`(1 + ${iC})`, k))} = ${money(fwd, 2)}"
+    },
+    "questf5-timeline-build#22": {
+      "en": "Back: ${term(P, pow(`(1 + ${iC})`, T), pow(`(1 + ${iC})`, `−${back}`))} = ${term(P, pow(`(1 + ${iC})`, k))}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:102:14"
+      ],
+      "af": "Terug: ${term(P, pow(`(1 + ${iC})`, T), pow(`(1 + ${iC})`, `−${back}`))} = ${term(P, pow(`(1 + ${iC})`, k))}"
+    },
+    "questf5-timeline-build#23": {
+      "en": "${T} − ${back} = ${k}, so it is the same value: ${money(fwd, 2)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:103:14"
+      ],
+      "af": "${T} − ${back} = ${k}, so dit is dieselfde waarde: ${money(fwd, 2)}"
+    },
+    "questf5-timeline-build#24": {
+      "en": "A plus exponent gives ${money(wrongBack, 2)} — that is moving forward again.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:105:48"
+      ],
+      "af": "'n Plus-eksponent gee ${money(wrongBack, 2)}: dit skuif weer vorentoe."
+    },
+    "questf5-timeline-build#25": {
+      "en": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. To move the T${T} amount <b>back</b> to T${k}, you multiply by ${pow(\"(1 + i)\", `<b>+${back}</b>`)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:109:13"
+      ],
+      "af": "${money(P)} by T0 is ${money(A, 2)} werd by T${T}. Om die bedrag by T${T} <b>terug</b> na T${k} te skuif, vermenigvuldig jy met ${pow(\"(1 + i)\", `<b>+${back}</b>`)}.",
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf5-timeline-build#26": {
+      "en": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. Moving <b>forward ${k}</b> from T0 and moving <b>back ${back}</b> from T${T} give ${claim === \"same\" ? \"the <b>same</b> value\" : \"<b>different</b> values\"} at T${k}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:110:13"
+      ],
+      "af": "${money(P)} by T0 is ${money(A, 2)} werd by T${T}. <b>${k} vorentoe</b> skuif vanaf T0 en <b>${back} terug</b> skuif vanaf T${T} gee ${claim === \"same\" ? \"<b>dieselfde</b> waarde\" : \"<b>verskillende</b> waardes\"} by T${k}.",
+      "nested": [
+        "same",
+        "the <b>same</b> value",
+        "<b>different</b> values"
+      ]
+    },
+    "questf5-timeline-build#27": {
+      "en": "Moving to an EARLIER date undoes the growth — the exponent goes negative.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:122:13"
+      ],
+      "af": "Skuif na 'n VROEËRE datum maak die groei ongedaan: die eksponent word negatief."
+    },
+    "questf5-timeline-build#28": {
+      "en": "The same money has ONE value at each date, no matter which way you travel to it.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:123:13"
+      ],
+      "af": "Dieselfde geld het EEN waarde op elke datum, van watter kant jy ook al daar aankom."
+    },
+    "questf5-timeline-build#29": {
+      "en": "False — moving back to T${k} is ${pow(\"(1 + i)\", `−${back}`)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:125:13"
+      ],
+      "af": "Onwaar: terugskuif na T${k} is ${pow(\"(1 + i)\", `−${back}`)}",
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf5-timeline-build#30": {
+      "en": "True — both routes give the same value at T${k}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:127:15"
+      ],
+      "af": "Waar: albei roetes gee dieselfde waarde by T${k}"
+    },
+    "questf5-timeline-build#31": {
+      "en": "False — both routes give the same value at T${k}: ${money(fwd, 2)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:128:15"
+      ],
+      "af": "Onwaar: albei roetes gee dieselfde waarde by T${k}: ${money(fwd, 2)}"
+    },
+    "questf5-timeline-build#32": {
+      "en": "An amount grows at one rate for <b>${y1} years</b>, then a different rate for <b>${y2} years</b>. How many interest <b>brackets</b> will the expression have?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:137:17"
+      ],
+      "af": "'n Bedrag groei teen een koers vir <b>${y1} jaar</b>, dan teen 'n ander koers vir <b>${y2} jaar</b>. Hoeveel rente-<b>hakies</b> sal die uitdrukking hê?"
+    },
+    "questf5-timeline-build#33": {
+      "en": "One bracket per segment of the timeline.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:139:15"
+      ],
+      "af": "Een hakie per segment van die tydlyn."
+    },
+    "questf5-timeline-build#34": {
+      "en": "2 brackets — one per rate segment",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:140:22"
+      ],
+      "af": "2 hakies: een per koerssegment"
+    },
+    "questf5-timeline-build#35": {
+      "en": "The rate changes once, so the timeline splits into 2 segments: ${y1} years, then ${y2} years",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:142:16"
+      ],
+      "af": "Die koers verander een keer, so die tydlyn verdeel in 2 segmente: ${y1} jaar, dan ${y2} jaar"
+    },
+    "questf5-timeline-build#36": {
+      "en": "One bracket per segment → 2 brackets",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:143:16"
+      ],
+      "af": "Een hakie per segment → 2 hakies"
+    },
+    "questf5-timeline-build#37": {
+      "en": "multiplied together, never added",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:143:98"
+      ],
+      "af": "met mekaar vermenigvuldig, nooit bygetel nie"
+    },
+    "questf5-timeline-build#38": {
+      "en": "One segment: ${pa(C(annual))} compounded <b>${HOW(o)}</b> for <b>${yrs} years</b>. The exponent on that bracket is…",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:153:17"
+      ],
+      "af": "Een segment: ${pa(C(annual))} <b>${HOW(o)}</b> saamgestel vir <b>${yrs} jaar</b>. Die eksponent op daardie hakie is…"
+    },
+    "questf5-timeline-build#39": {
+      "en": "Exponent for the segment = years × ${nw(\"times‑per‑year\")}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:155:15"
+      ],
+      "af": "Eksponent vir die segment = jare × ${nw(\"keer‑per‑jaar\")}.",
+      "nested": [
+        "times‑per‑year"
+      ]
+    },
+    "questf5-timeline-build#40": {
+      "en": "Compounded ${HOW(o)} → interest is added ${o.k} times a year",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:158:16"
+      ],
+      "af": "Rente word ${HOW(o)} saamgestel → ${o.k} keer per jaar bygetel"
+    },
+    "questf5-timeline-build#41": {
+      "en": "Exponent = years × ${nw(\"times‑per‑year\")} = ${yrs} × ${o.k} = ${e}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:159:16"
+      ],
+      "af": "Eksponent = jare × ${nw(\"keer‑per‑jaar\")} = ${yrs} × ${o.k} = ${e}",
+      "nested": [
+        "times‑per‑year"
+      ]
+    },
+    "questf5-timeline-build#42": {
+      "en": "the ${C(annual)}% plays no part in the exponent",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:159:163"
+      ],
+      "af": "die ${C(annual)}% speel geen rol in die eksponent nie"
+    },
+    "questf5-timeline-build#43": {
+      "en": "${money(P, 0, true)} grows at ${pa(C(r1))} compounded <b>${HOW(o1)}</b> for ${y1} years, then at ${pa(C(r2))} compounded <b>${HOW(o2)}</b> for ${y2} years. Which expression gives its value at the end of the ${y1 + y2} years?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:174:9"
+      ],
+      "af": "${money(P, 0, true)} groei teen ${pa(C(r1))} <b>${HOW(o1)}</b> saamgestel vir ${y1} jaar, dan teen ${pa(C(r2))} <b>${HOW(o2)}</b> saamgestel vir ${y2} jaar. Watter uitdrukking gee die waarde aan die einde van die ${y1 + y2} jaar?"
+    },
+    "questf5-timeline-build#44": {
+      "en": "rate changes",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:179:75"
+      ],
+      "af": "koers verander"
+    },
+    "questf5-timeline-build#45": {
+      "en": "Split the timeline where the rate changes: ONE bracket per segment, multiplied together.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:180:17"
+      ],
+      "af": "Verdeel die tydlyn waar die koers verander: EEN hakie per segment, met mekaar vermenigvuldig."
+    },
+    "questf5-timeline-build#46": {
+      "en": "Segment 1: rate per period = ${i1}/${o1.k}, periods = ${y1}×${o1.k}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:183:18"
+      ],
+      "af": "Segment 1: koers per periode = ${i1}/${o1.k}, periodes = ${y1}×${o1.k}"
+    },
+    "questf5-timeline-build#47": {
+      "en": "Segment 2: rate per period = ${i2}/${o2.k}, periods = ${y2}×${o2.k}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:184:18"
+      ],
+      "af": "Segment 2: koers per periode = ${i2}/${o2.k}, periodes = ${y2}×${o2.k}"
+    },
+    "questf5-timeline-build#48": {
+      "en": "A = ${right}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:185:18"
+      ],
+      "af": "A = ${right}"
+    },
+    "questf5-timeline-build#49": {
+      "en": "one bracket per segment, multiplied — the money keeps moving forward",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf5-timeline-build.js:185:56"
+      ],
+      "af": "een hakie per segment, vermenigvuldig: die geld skuif steeds vorentoe"
+    },
+    "questf8-which-total#1": {
+      "en": "the total",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:78:36"
+      ],
+      "af": "die totaal"
+    },
+    "questf8-which-total#2": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:84:23"
+      ],
+      "af": "${r}%${NB}p.j."
+    },
+    "questf8-which-total#3": {
+      "en": "${y}${NB}year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:85:25"
+      ],
+      "af": "${y}${NB}jaar${y === 1 ? \"\" : \"\"}",
+      "nested": [
+        "s"
+      ]
+    },
+    "questf8-which-total#4": {
+      "en": "annually",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:87:20"
+      ],
+      "af": "jaarliks"
+    },
+    "questf8-which-total#5": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:87:50"
+      ],
+      "af": "halfjaarliks"
+    },
+    "questf8-which-total#6": {
+      "en": "quarterly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:87:87"
+      ],
+      "af": "kwartaalliks"
+    },
+    "questf8-which-total#7": {
+      "en": "monthly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:87:123"
+      ],
+      "af": "maandeliks"
+    },
+    "questf8-which-total#8": {
+      "en": "she",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:95:21",
+        "questf8-which-total.js:415:31"
+      ],
+      "af": "sy"
+    },
+    "questf8-which-total#9": {
+      "en": "her",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:95:42"
+      ],
+      "af": "haar"
+    },
+    "questf8-which-total#10": {
+      "en": "he",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:95:73",
+        "questf8-which-total.js:415:47"
+      ],
+      "af": "hy"
+    },
+    "questf8-which-total#11": {
+      "en": "his",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:95:93"
+      ],
+      "af": "sy"
+    },
+    "questf8-which-total#12": {
+      "en": "Mvelo’s",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:97:45"
+      ],
+      "af": "Mvelo se"
+    },
+    "questf8-which-total#13": {
+      "en": "lounge suite",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:101:18",
+        "questf8-which-total.js:360:55"
+      ],
+      "af": "sitkamerstel"
+    },
+    "questf8-which-total#14": {
+      "en": "motorbike",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:101:53"
+      ],
+      "af": "motorfiets"
+    },
+    "questf8-which-total#15": {
+      "en": "laptop",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:101:83"
+      ],
+      "af": "skootrekenaar"
+    },
+    "questf8-which-total#16": {
+      "en": "fridge",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:101:113"
+      ],
+      "af": "yskas"
+    },
+    "questf8-which-total#17": {
+      "en": "TV",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:101:135"
+      ],
+      "af": "TV"
+    },
+    "questf8-which-total#18": {
+      "en": "bed",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:101:150"
+      ],
+      "af": "bed"
+    },
+    "questf8-which-total#19": {
+      "en": "empty",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:115:17"
+      ],
+      "af": "empty"
+    },
+    "questf8-which-total#20": {
+      "en": "<p>Payments are <b>coins</b>. The${NB}total (the${NB}lumpsum) is <b>the${NB}jug</b>.</p>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:116:9"
+      ],
+      "af": "<p>Paaiemente is <b>munte</b>. Die${NB}totaal (die${NB}enkelbedrag) is <b>die${NB}beker</b>.</p>"
+    },
+    "questf8-which-total#21": {
+      "en": "<p>Your textbook says “lump sum”. That is the${NB}total we are talking about. From now on we just call it the${NB}total.</p>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:117:9"
+      ],
+      "af": "<p>Jou handboek sê “enkelbedrag”. Dit is die${NB}totaal waarvan ons praat. Van nou af noem ons dit net die${NB}totaal.</p>"
+    },
+    "questf8-which-total#22": {
+      "en": "<p class=\"muted small\">Tap Next to see where the jug sits.</p></div>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:118:9"
+      ],
+      "af": "<p class=\"muted small\">Klik op Next om te sien waar die beker staan.</p></div>"
+    },
+    "questf8-which-total#23": {
+      "en": "save",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:119:17"
+      ],
+      "af": "save"
+    },
+    "questf8-which-total#24": {
+      "en": "<p><b>Savings:</b> you fill the jug coin by coin. The${NB}total sits at <b>the${NB}END</b>.</p></div>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:120:9"
+      ],
+      "af": "<p><b>Spaar:</b> jy vul die beker munt vir munt. Die${NB}totaal staan aan <b>die${NB}EINDE</b>.</p></div>"
+    },
+    "questf8-which-total#25": {
+      "en": "loan",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:121:17"
+      ],
+      "af": "loan"
+    },
+    "questf8-which-total#26": {
+      "en": "<p><b>A loan:</b> the bank hands you the full${NB}jug at <b>the${NB}START</b>. The${NB}total sits at the beginning, and your coins pay it back.</p></div>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:122:9"
+      ],
+      "af": "<p><b>'n Lening:</b> die bank gee jou die volle${NB}beker aan <b>die${NB}BEGIN</b>. Die${NB}totaal staan aan die begin, en jou munte betaal dit terug.</p></div>"
+    },
+    "questf8-which-total#27": {
+      "en": "the jug",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:167:20"
+      ],
+      "af": "die beker"
+    },
+    "questf8-which-total#28": {
+      "en": "the jug: what someone has, borrows or wants to have, the ONE total",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:167:52"
+      ],
+      "af": "die beker: wat iemand het, leen of wil hê, die EEN totaal"
+    },
+    "questf8-which-total#29": {
+      "en": "a coin: in",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:168:20"
+      ],
+      "af": "'n munt: in"
+    },
+    "questf8-which-total#30": {
+      "en": "That is a coin: money going in on its day.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:168:57"
+      ],
+      "af": "Dit is 'n munt: geld wat op sy dag ingaan."
+    },
+    "questf8-which-total#31": {
+      "en": "a coin: money going in on its day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:168:157"
+      ],
+      "af": "'n munt: geld wat op sy dag ingaan"
+    },
+    "questf8-which-total#32": {
+      "en": "a coin: out",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:169:20"
+      ],
+      "af": "'n munt: uit"
+    },
+    "questf8-which-total#33": {
+      "en": "That is a coin: money coming out on its day.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:169:59"
+      ],
+      "af": "Dit is 'n munt: geld wat op sy dag uitkom."
+    },
+    "questf8-which-total#34": {
+      "en": "a coin: money coming out on its day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:169:161"
+      ],
+      "af": "'n munt: geld wat op sy dag uitkom"
+    },
+    "questf8-which-total#35": {
+      "en": "a coin: repayment",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:170:20"
+      ],
+      "af": "'n munt: terugbetaling"
+    },
+    "questf8-which-total#36": {
+      "en": "That is a coin: a repayment, money going back to the bank on its day.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:170:75"
+      ],
+      "af": "Dit is 'n munt: 'n terugbetaling, geld wat op sy dag terug na die bank gaan."
+    },
+    "questf8-which-total#37": {
+      "en": "a coin: a repayment going back to the bank on its day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:170:236"
+      ],
+      "af": "'n munt: 'n terugbetaling wat op sy dag terug na die bank gaan"
+    },
+    "questf8-which-total#38": {
+      "en": "a coin: down payment",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:171:20"
+      ],
+      "af": "'n munt: aanbetaling"
+    },
+    "questf8-which-total#39": {
+      "en": "That is a coin: the down payment, paid on day one straight to the shop.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:171:76"
+      ],
+      "af": "Dit is 'n munt: die aanbetaling, op dag een reguit aan die winkel betaal."
+    },
+    "questf8-which-total#40": {
+      "en": "a coin: the down payment, paid on day one straight to the shop",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:171:236"
+      ],
+      "af": "'n munt: die aanbetaling, op dag een reguit aan die winkel betaal"
+    },
+    "questf8-which-total#41": {
+      "en": "rate and time",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:172:20"
+      ],
+      "af": "koers en tyd"
+    },
+    "questf8-which-total#42": {
+      "en": "That is a rate-and-time sentence, not an amount.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:172:61"
+      ],
+      "af": "Dit is 'n sin oor koers en tyd, nie 'n bedrag nie."
+    },
+    "questf8-which-total#43": {
+      "en": "rate and time: not an amount",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:172:175"
+      ],
+      "af": "koers en tyd: nie 'n bedrag nie"
+    },
+    "questf8-which-total#44": {
+      "en": "The total is the ONE amount worth the same as ALL the payments together, once they are all on the same day.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:174:22"
+      ],
+      "af": "Die totaal is die EEN bedrag wat net soveel werd is as AL die paaiemente saam, sodra hulle almal op dieselfde dag is."
+    },
+    "questf8-which-total#45": {
+      "en": "The jug is what someone HAS, BORROWS or WANTS TO HAVE. Coins are what they DO: deposit, withdraw, pay.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:175:20"
+      ],
+      "af": "Die beker is wat iemand HET, LEEN of WIL HÊ. Munte is wat hulle DOEN: deponeer, onttrek, betaal."
+    },
+    "questf8-which-total#46": {
+      "en": "The bank charges ${paU(r)}, compounded ${HOW[k]}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:194:8"
+      ],
+      "af": "Die bank vra rente teen ${paU(r)}, ${HOW[k]} saamgestel."
+    },
+    "questf8-which-total#47": {
+      "en": "The interest rate is ${paU(r)}, compounded ${HOW[k]}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:194:124",
+        "questf8-which-total.js:195:145"
+      ],
+      "af": "Die rentekoers is ${paU(r)}, ${HOW[k]} saamgestel."
+    },
+    "questf8-which-total#48": {
+      "en": "The account earns interest at ${paU(r)}, compounded ${HOW[k]}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:195:8"
+      ],
+      "af": "Die rekening verdien rente teen ${paU(r)}, ${HOW[k]} saamgestel."
+    },
+    "questf8-which-total#49": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:200:47"
+      ],
+      "af": "P"
+    },
+    "questf8-which-total#50": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:200:61"
+      ],
+      "af": "A"
+    },
+    "questf8-which-total#51": {
+      "en": "Tap the sentence that is the jug.<br><span class=\"muted small\">One of them is the total; the others are coins, or the rate and the time.</span>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:208:15"
+      ],
+      "af": "Klik op die sin wat die beker is.<br><span class=\"muted small\">Een daarvan is die totaal; die ander is munte, of die koers en die tyd.</span>"
+    },
+    "questf8-which-total#52": {
+      "en": "Savings or loan?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:214:15"
+      ],
+      "af": "Spaar of lening?"
+    },
+    "questf8-which-total#53": {
+      "en": "Savings",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:216:13",
+        "questf8-which-total.js:239:119"
+      ],
+      "af": "Spaar"
+    },
+    "questf8-which-total#54": {
+      "en": "Hire purchase is a loan: the down payment goes to the shop and the rest is borrowed.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:217:24"
+      ],
+      "af": "Huurkoop is 'n lening: die aanbetaling gaan na die winkel en die res word geleen."
+    },
+    "questf8-which-total#55": {
+      "en": "Somebody borrows here: the bank hands over the full jug, and the coins pay it back.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:217:201"
+      ],
+      "af": "Iemand leen hier: die bank gee die volle beker oor, en die munte betaal dit terug."
+    },
+    "questf8-which-total#56": {
+      "en": "Loan",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:218:13"
+      ],
+      "af": "Lening"
+    },
+    "questf8-which-total#57": {
+      "en": "Nobody borrows here: the coins go into a savings account and fill the jug.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:219:25"
+      ],
+      "af": "Niemand leen hier nie: die munte gaan in 'n spaarrekening en vul die beker."
+    },
+    "questf8-which-total#58": {
+      "en": "Is someone filling an account, or did the bank hand money over? Hire purchase counts as a loan with a down payment.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:221:13"
+      ],
+      "af": "Vul iemand 'n rekening, of het die bank geld oorhandig? Huurkoop tel as 'n lening met 'n aanbetaling."
+    },
+    "questf8-which-total#59": {
+      "en": "Does the jug sit at T0 or at the end?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:225:15"
+      ],
+      "af": "Staan die beker by T0 of aan die einde?"
+    },
+    "questf8-which-total#60": {
+      "en": "T0",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:227:13"
+      ],
+      "af": "T0"
+    },
+    "questf8-which-total#61": {
+      "en": "Savings fill the jug coin by coin: it is full at the END.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:228:25"
+      ],
+      "af": "Spaargeld vul die beker munt vir munt: dit is vol aan die EINDE."
+    },
+    "questf8-which-total#62": {
+      "en": "T${n}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:229:13"
+      ],
+      "af": "T${n}"
+    },
+    "questf8-which-total#63": {
+      "en": "The bank hands you the full jug at the START: the loan is the jug at T0.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:230:18"
+      ],
+      "af": "Die bank gee jou die volle beker aan die BEGIN: die lening is die beker by T0."
+    },
+    "questf8-which-total#64": {
+      "en": "Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:232:13"
+      ],
+      "af": "Spaar: jy vul die beker, so dit staan aan die einde. 'n Lening: die bank gee jou die beker aan die begin."
+    },
+    "questf8-which-total#65": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:236:22"
+      ],
+      "af": "T in jare"
+    },
+    "questf8-which-total#66": {
+      "en": "Hire purchase is a loan",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:239:35"
+      ],
+      "af": "Huurkoop is 'n lening"
+    },
+    "questf8-which-total#67": {
+      "en": "A loan",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:239:91"
+      ],
+      "af": "'n Lening"
+    },
+    "questf8-which-total#68": {
+      "en": "T0, the start",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:240:26"
+      ],
+      "af": "T0, die begin"
+    },
+    "questf8-which-total#69": {
+      "en": "T${n}, the end",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:240:64"
+      ],
+      "af": "T${n}, die einde"
+    },
+    "questf8-which-total#70": {
+      "en": "First the idea. Then a finance question, cut into its sentences.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:243:27"
+      ],
+      "af": "Eers die idee. Dan 'n vraag oor finansies, in sy sinne opgesny."
+    },
+    "questf8-which-total#71": {
+      "en": "A finance question, cut into its sentences.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:243:166"
+      ],
+      "af": "'n Vraag oor finansies, in sy sinne opgesny."
+    },
+    "questf8-which-total#72": {
+      "en": "Find the jug in the words first: what someone has, borrows or wants to have.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:246:13"
+      ],
+      "af": "Vind eers die beker in die woorde: wat iemand het, leen of wil hê."
+    },
+    "questf8-which-total#73": {
+      "en": "The jug: “${jugChip.text}” ${kindWord}, so the jug is ${role}, at ${where}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:247:20"
+      ],
+      "af": "Die beker: “${jugChip.text}” ${kindWord}, so die beker is ${role}, by ${where}."
+    },
+    "questf8-which-total#74": {
+      "en": "${kindWord}: the bank hands over the full jug at the start, so the jug is P, at T0.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:250:21"
+      ],
+      "af": "${kindWord}: die bank gee die volle beker aan die begin oor, so die beker is P, by T0."
+    },
+    "questf8-which-total#75": {
+      "en": "Savings: the coins fill the jug, so the jug is A, at the end, T${n}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:251:21"
+      ],
+      "af": "Spaar: die munte vul die beker, so die beker is A, aan die einde, T${n}."
+    },
+    "questf8-which-total#76": {
+      "en": "in",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:274:23",
+        "questf8-which-total.js:275:24",
+        "questf8-which-total.js:276:23",
+        "questf8-which-total.js:324:23",
+        "questf8-which-total.js:326:28",
+        "questf8-which-total.js:383:25",
+        "questf8-which-total.js:384:25",
+        "questf8-which-total.js:387:23",
+        "questf8-which-total.js:388:23",
+        "questf8-which-total.js:427:80",
+        "questf8-which-total.js:434:53",
+        "questf8-which-total.js:435:119",
+        "questf8-which-total.js:436:71"
+      ],
+      "af": "in"
+    },
+    "questf8-which-total#77": {
+      "en": "${w.S} deposits ${money(d1)} into a savings account now.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:274:43"
+      ],
+      "af": "${w.S} deponeer nou ${money(d1)} in 'n spaarrekening."
+    },
+    "questf8-which-total#78": {
+      "en": "${w.S} deposits ${money(d1)} into the account now.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:275:44"
+      ],
+      "af": "${w.S} deponeer nou ${money(d1)} in die rekening."
+    },
+    "questf8-which-total#79": {
+      "en": "${w.S} deposits another ${money(d2)} after ${years(t2)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:276:43"
+      ],
+      "af": "${w.S} deponeer nog ${money(d2)} ná ${years(t2)}."
+    },
+    "questf8-which-total#80": {
+      "en": "How much will ${w.s} have in the account after ${years(n)}?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:279:9"
+      ],
+      "af": "Hoeveel sal ${w.s} ná ${years(n)} in die rekening hê?"
+    },
+    "questf8-which-total#81": {
+      "en": "${w.S} wants to know how much is in the account after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:280:9"
+      ],
+      "af": "${w.S} wil weet hoeveel ná ${years(n)} in die rekening is."
+    },
+    "questf8-which-total#82": {
+      "en": "What amount will ${w.s} have in the account after ${years(n)}?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:281:9"
+      ],
+      "af": "Watter bedrag sal ${w.s} ná ${years(n)} in die rekening hê?"
+    },
+    "questf8-which-total#83": {
+      "en": "${w.S} wants to know how much ${w.s === name ? WHO[name].he : w.s} will have in a savings account after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:282:40"
+      ],
+      "af": "${w.S} wil weet hoeveel ${w.s === name ? WHO[name].he : w.s} ná ${years(n)} in 'n spaarrekening sal hê."
+    },
+    "questf8-which-total#84": {
+      "en": "${w.S} borrows an amount, P, from the bank now.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:299:27"
+      ],
+      "af": "${w.S} leen nou 'n bedrag, P, by die bank."
+    },
+    "questf8-which-total#85": {
+      "en": "${w.S} borrows ${money(P)} from the bank now.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:300:33"
+      ],
+      "af": "${w.S} leen nou ${money(P)} by die bank."
+    },
+    "questf8-which-total#86": {
+      "en": "${w.S} borrows ${money(P)} from a bank to start a business.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:300:129"
+      ],
+      "af": "${w.S} leen ${money(P)} by 'n bank om 'n besigheid te begin."
+    },
+    "questf8-which-total#87": {
+      "en": "${w.S} pays back ${money(r1)} after ${years(t1)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:301:44"
+      ],
+      "af": "${w.S} betaal ${money(r1)} ná ${years(t1)} terug."
+    },
+    "questf8-which-total#88": {
+      "en": "${w.S} repays ${money(r1)} after ${years(t1)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:301:153"
+      ],
+      "af": "${w.S} betaal ${money(r1)} terug ná ${years(t1)}."
+    },
+    "questf8-which-total#89": {
+      "en": "${w.S} pays back ${money(r2)} after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:303:29"
+      ],
+      "af": "${w.S} betaal ${money(r2)} ná ${years(n)} terug."
+    },
+    "questf8-which-total#90": {
+      "en": "${w.S} pays back the rest, an amount x, after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:304:29"
+      ],
+      "af": "${w.S} betaal die res, 'n bedrag x, ná ${years(n)} terug."
+    },
+    "questf8-which-total#91": {
+      "en": "${s.S} deposits ${money(d1)} into ${first ? \"the\" : \"a savings\"} account now.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:324:43"
+      ],
+      "af": "${s.S} deponeer nou ${money(d1)} in ${first ? \"die \" : \"'n spaar\"}rekening.",
+      "nested": [
+        "the",
+        "a savings"
+      ]
+    },
+    "questf8-which-total#92": {
+      "en": "out",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:325:23",
+        "questf8-which-total.js:428:81",
+        "questf8-which-total.js:434:68",
+        "questf8-which-total.js:436:86"
+      ],
+      "af": "out"
+    },
+    "questf8-which-total#93": {
+      "en": "${s.S} withdraws ${money(w)} after ${years(tw)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:325:51"
+      ],
+      "af": "${s.S} onttrek ${money(w)} ná ${years(tw)}."
+    },
+    "questf8-which-total#94": {
+      "en": "${s.S} takes ${money(w)} out of the account after ${years(tw)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:325:153"
+      ],
+      "af": "${s.S} haal ${money(w)} ná ${years(tw)} uit die rekening."
+    },
+    "questf8-which-total#95": {
+      "en": "${s.S} deposits another ${money(d2)} after ${years(td)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:326:48"
+      ],
+      "af": "${s.S} deponeer nog ${money(d2)} ná ${years(td)}."
+    },
+    "questf8-which-total#96": {
+      "en": "How much will ${s.s} have in the account after ${years(n)}?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:330:9"
+      ],
+      "af": "Hoeveel sal ${s.s} ná ${years(n)} in die rekening hê?"
+    },
+    "questf8-which-total#97": {
+      "en": "${s.S} wants to know how much is in the account after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:331:9"
+      ],
+      "af": "${s.S} wil weet hoeveel ná ${years(n)} in die rekening is."
+    },
+    "questf8-which-total#98": {
+      "en": "${s.S} wants to know how much ${WHO[name].he} will have in a savings account after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:332:9"
+      ],
+      "af": "${s.S} wil weet hoeveel ${WHO[name].he} ná ${years(n)} in 'n spaarrekening sal hê."
+    },
+    "questf8-which-total#99": {
+      "en": "an",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:350:42"
+      ],
+      "af": "'n"
+    },
+    "questf8-which-total#100": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:350:58"
+      ],
+      "af": "'n"
+    },
+    "questf8-which-total#101": {
+      "en": "down",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:351:25",
+        "questf8-which-total.js:431:82",
+        "questf8-which-total.js:435:100",
+        "questf8-which-total.js:436:149"
+      ],
+      "af": "down"
+    },
+    "questf8-which-total#102": {
+      "en": "${s.S} buys ${a} ${item} for ${money(price)} and pays a down payment of ${money(down)} straight to the shop.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:351:49"
+      ],
+      "af": "${s.S} koop ${a} ${item} vir ${money(price)} en betaal 'n aanbetaling van ${money(down)} reguit aan die winkel."
+    },
+    "questf8-which-total#103": {
+      "en": "${s.S} borrows the rest, ${money(loan)}, from the bank.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:352:48"
+      ],
+      "af": "${s.S} leen die res, ${money(loan)}, by die bank."
+    },
+    "questf8-which-total#104": {
+      "en": "${s.S} borrows the rest of the price from the bank.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:352:164"
+      ],
+      "af": "${s.S} leen die res van die prys by die bank."
+    },
+    "questf8-which-total#105": {
+      "en": "${s.S} pays back ${money(r1)} after ${years(t1)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:354:30",
+        "questf8-which-total.js:402:38"
+      ],
+      "af": "${s.S} betaal ${money(r1)} ná ${years(t1)} terug."
+    },
+    "questf8-which-total#106": {
+      "en": "${s.S} pays the rest, an amount x, after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:354:158",
+        "questf8-which-total.js:403:38"
+      ],
+      "af": "${s.S} betaal die res, 'n bedrag x, ná ${years(n)}."
+    },
+    "questf8-which-total#107": {
+      "en": "${s.S} pays the loan back with two repayments: ${money(r1)} after ${years(t1)} and an amount x after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:355:30"
+      ],
+      "af": "${s.S} betaal die lening terug met twee terugbetalings: ${money(r1)} ná ${years(t1)} en 'n bedrag x ná ${years(n)}."
+    },
+    "questf8-which-total#108": {
+      "en": "${s.S} wants to have ${money(T)} in a savings account after ${years(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:380:35"
+      ],
+      "af": "${s.S} wil ${money(T)} ná ${years(n)} in 'n spaarrekening hê."
+    },
+    "questf8-which-total#109": {
+      "en": "${s.S} will also deposit ${money(d)} after ${years(t2)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:383:45"
+      ],
+      "af": "${s.S} sal ook ${money(d)} ná ${years(t2)} deponeer."
+    },
+    "questf8-which-total#110": {
+      "en": "How much must ${s.s} deposit now?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:384:45"
+      ],
+      "af": "Hoeveel moet ${s.s} nou deponeer?"
+    },
+    "questf8-which-total#111": {
+      "en": "${s.S} deposits ${money(d)} now.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:387:43"
+      ],
+      "af": "${s.S} deponeer nou ${money(d)}."
+    },
+    "questf8-which-total#112": {
+      "en": "${s.S} deposits an amount x after ${years(t2)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:388:49"
+      ],
+      "af": "${s.S} deponeer 'n bedrag x ná ${years(t2)}."
+    },
+    "questf8-which-total#113": {
+      "en": "${s.S} will deposit one more amount, x, after ${years(t2)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:388:151"
+      ],
+      "af": "${s.S} sal nog een bedrag, x, ná ${years(t2)} deponeer."
+    },
+    "questf8-which-total#114": {
+      "en": "${s.S} borrows ${money(P)} from the bank.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:400:35"
+      ],
+      "af": "${s.S} leen ${money(P)} by die bank."
+    },
+    "questf8-which-total#115": {
+      "en": "${s.S} pays back ${money(r0)} on the same day.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:401:44"
+      ],
+      "af": "${s.S} betaal ${money(r0)} op dieselfde dag terug."
+    },
+    "questf8-which-total#116": {
+      "en": "On the day of the loan ${s.s} pays back ${money(r0)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:401:151"
+      ],
+      "af": "Op die dag van die lening betaal ${s.s} ${money(r0)} terug."
+    },
+    "questf8-which-total#117": {
+      "en": "${who} has ${money(v)} in the account after ${years(y)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:421:94"
+      ],
+      "af": "${who} het ${money(v)} ná ${years(y)} in die rekening"
+    },
+    "questf8-which-total#118": {
+      "en": "${who} wants to have ${money(v)} after ${years(y)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:422:96"
+      ],
+      "af": "${who} wil ${money(v)} ná ${years(y)} hê"
+    },
+    "questf8-which-total#119": {
+      "en": "${who} borrows ${money(v)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:423:79"
+      ],
+      "af": "${who} leen ${money(v)}"
+    },
+    "questf8-which-total#120": {
+      "en": "${who} owes the bank ${money(v)} now",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:424:76"
+      ],
+      "af": "${who} skuld die bank nou ${money(v)}"
+    },
+    "questf8-which-total#121": {
+      "en": "${who} deposits ${money(v)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:427:101"
+      ],
+      "af": "${who} deponeer ${money(v)}"
+    },
+    "questf8-which-total#122": {
+      "en": "${who} withdraws ${money(v)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:428:104"
+      ],
+      "af": "${who} onttrek ${money(v)}"
+    },
+    "questf8-which-total#123": {
+      "en": "${who} pays ${money(v)} at T${t}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:429:117"
+      ],
+      "af": "${who} betaal ${money(v)} by T${t}"
+    },
+    "questf8-which-total#124": {
+      "en": "${who} pays back ${money(v)} after ${years(y)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:430:119"
+      ],
+      "af": "${who} betaal ${money(v)} ná ${years(y)} terug"
+    },
+    "questf8-which-total#125": {
+      "en": "${who} pays a down payment of ${money(v)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:431:107"
+      ],
+      "af": "${who} betaal 'n aanbetaling van ${money(v)}"
+    },
+    "questf8-which-total#126": {
+      "en": "payAt",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:434:85",
+        "questf8-which-total.js:435:79",
+        "questf8-which-total.js:436:103"
+      ],
+      "af": "payAt"
+    },
+    "questf8-which-total#127": {
+      "en": "payBack",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:435:54",
+        "questf8-which-total.js:436:124"
+      ],
+      "af": "payBack"
+    },
+    "questf8-which-total#128": {
+      "en": "Which of these is the jug?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:446:27"
+      ],
+      "af": "Watter een hiervan is die beker?"
+    },
+    "questf8-which-total#129": {
+      "en": "“${jug}” is the jug: the ONE total",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf8-which-total.js:448:22"
+      ],
+      "af": "“${jug}” is die beker: die EEN totaal"
+    },
+    "questf9-car-or-no-car#1": {
+      "en": "A car only if it has to move. Already there? No car.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:45:28"
+      ],
+      "af": "'n Kar net as dit moet skuif. Reeds daar? Geen kar nie."
+    },
+    "questf9-car-or-no-car#2": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:50:33"
+      ],
+      "af": "halfjaarliks"
+    },
+    "questf9-car-or-no-car#3": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:69:21"
+      ],
+      "af": "${r}%${NB}p.j."
+    },
+    "questf9-car-or-no-car#4": {
+      "en": "${y} year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:72:22"
+      ],
+      "af": "${y} jaar${y === 1 ? \"\" : \"\"}",
+      "nested": [
+        "s"
+      ]
+    },
+    "questf9-car-or-no-car#5": {
+      "en": "she",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:73:38",
+        "questf9-car-or-no-car.js:105:36"
+      ],
+      "af": "sy"
+    },
+    "questf9-car-or-no-car#6": {
+      "en": "her",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:73:61",
+        "questf9-car-or-no-car.js:105:59"
+      ],
+      "af": "haar"
+    },
+    "questf9-car-or-no-car#7": {
+      "en": "he",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:73:89"
+      ],
+      "af": "hy"
+    },
+    "questf9-car-or-no-car#8": {
+      "en": "his",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:73:111"
+      ],
+      "af": "sy"
+    },
+    "questf9-car-or-no-car#9": {
+      "en": "${r.r}% p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:115:65"
+      ],
+      "af": "${r.r}% p.j."
+    },
+    "questf9-car-or-no-car#10": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:118:21"
+      ],
+      "af": "T in jare"
+    },
+    "questf9-car-or-no-car#11": {
+      "en": "${pa(r0.r)} compounded ${HOW(r0.k)}${r1 ? `; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}` : \"\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:122:20"
+      ],
+      "af": "${pa(r0.r)} ${HOW(r0.k)} saamgestel${r1 ? `; vanaf T${r1.from} is die koers ${pa(r1.r)} ${HOW(r1.k)} saamgestel` : \"\"}",
+      "nested": [
+        "; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}"
+      ]
+    },
+    "questf9-car-or-no-car#12": {
+      "en": "${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:124:11"
+      ],
+      "af": "${cap(p.he)} spaar teen ${rate}. ${cap(p.his)} deposito's groei tot die totaal, A."
+    },
+    "questf9-car-or-no-car#13": {
+      "en": "${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:125:11"
+      ],
+      "af": "${cap(p.he)} leen die totaal, P, teen ${rate}, en betaal dit in dele terug."
+    },
+    "questf9-car-or-no-car#14": {
+      "en": "the ${l.r}% road",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:151:27"
+      ],
+      "af": "die ${l.r}%-pad"
+    },
+    "questf9-car-or-no-car#15": {
+      "en": "forward gear",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:152:38"
+      ],
+      "af": "vorentoe"
+    },
+    "questf9-car-or-no-car#16": {
+      "en": "reverse gear",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:152:72"
+      ],
+      "af": "trurat"
+    },
+    "questf9-car-or-no-car#17": {
+      "en": "The meeting day is T${meet}. The ${money(a.v)} stands at T${a.t}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:161:25"
+      ],
+      "af": "Die ontmoetingsdag is T${meet}. Die ${money(a.v)} staan by T${a.t}."
+    },
+    "questf9-car-or-no-car#18": {
+      "en": "it is already there",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:161:188"
+      ],
+      "af": "dit is reeds daar"
+    },
+    "questf9-car-or-no-car#19": {
+      "en": "it has to move",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:161:238"
+      ],
+      "af": "dit moet skuif"
+    },
+    "questf9-car-or-no-car#20": {
+      "en": "No car: in the one equation it is just ${nw(amt0(a.v))}, with no bracket.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:163:23"
+      ],
+      "af": "Geen kar nie: in die een vergelyking is dit net ${nw(amt0(a.v))}, sonder 'n hakie."
+    },
+    "questf9-car-or-no-car#21": {
+      "en": "it does not move",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:163:194"
+      ],
+      "af": "dit skuif nie"
+    },
+    "questf9-car-or-no-car#22": {
+      "en": "${cap(gearOf(tr.dir))}: T${meet} is ${tr.dir > 0 ? \"later\" : \"earlier\"}, so ${tr.dir > 0 ? \"multiply (×)\" : \"divide (÷)\"}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:165:23"
+      ],
+      "af": "${cap(gearOf(tr.dir))}: T${meet} is ${tr.dir > 0 ? \"later\" : \"vroeër\"}, dus ${tr.dir > 0 ? \"vermenigvuldig (×)\" : \"deel (÷)\"}.",
+      "nested": [
+        "later",
+        "earlier",
+        "multiply (×)",
+        "divide (÷)"
+      ]
+    },
+    "questf9-car-or-no-car#23": {
+      "en": "a positive exponent",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:166:27"
+      ],
+      "af": "'n positiewe eksponent"
+    },
+    "questf9-car-or-no-car#24": {
+      "en": "a negative exponent",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:166:82"
+      ],
+      "af": "'n negatiewe eksponent"
+    },
+    "questf9-car-or-no-car#25": {
+      "en": "${tr.legs.length > 1 ? (j === 0 ? \"Car 1, \" : \"Car 2, \") : \"\"}${roadName(l)}: ${yrs(l.years)} compounded ${HOW(l.k)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:168:14"
+      ],
+      "af": "${tr.legs.length > 1 ? (j === 0 ? \"Kar 1, \" : \"Kar 2, \") : \"\"}${roadName(l)}: ${yrs(l.years)} ${HOW(l.k)} saamgestel",
+      "nested": [
+        "Car 1, ",
+        "Car 2, "
+      ]
+    },
+    "questf9-car-or-no-car#26": {
+      "en": "exponent ${expText(l)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:169:41"
+      ],
+      "af": "eksponent ${expText(l)}"
+    },
+    "questf9-car-or-no-car#27": {
+      "en": "Its piece of the one equation: ${term(a.v, tr.legs)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:170:23"
+      ],
+      "af": "Sy deel van die een vergelyking: ${term(a.v, tr.legs)}"
+    },
+    "questf9-car-or-no-car#28": {
+      "en": "one car per road",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:170:166"
+      ],
+      "af": "een kar per pad"
+    },
+    "questf9-car-or-no-car#29": {
+      "en": "one road, one car",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:170:211"
+      ],
+      "af": "een pad, een kar"
+    },
+    "questf9-car-or-no-car#30": {
+      "en": "${story(sc)} Does the ${money(a.v, true)} need a car to reach the meeting day?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:215:17"
+      ],
+      "af": "${story(sc)} Het die ${money(a.v, true)} 'n kar nodig om by die ontmoetingsdag te kom?"
+    },
+    "questf9-car-or-no-car#31": {
+      "en": "Find the flag. Is the amount already standing on that T?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:217:32"
+      ],
+      "af": "Vind die vlag. Staan die bedrag reeds op daardie T?"
+    },
+    "questf9-car-or-no-car#32": {
+      "en": "Yes: it has to move from T${a.t} to T${meet}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:218:17"
+      ],
+      "af": "Ja: dit moet van T${a.t} na T${meet} skuif"
+    },
+    "questf9-car-or-no-car#33": {
+      "en": "No: it already stands on the meeting day, T${meet}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:218:117"
+      ],
+      "af": "Nee: dit staan reeds op die ontmoetingsdag, T${meet}"
+    },
+    "questf9-car-or-no-car#34": {
+      "en": "Forward gear (×): the meeting day is later",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:223:12"
+      ],
+      "af": "Vorentoe (×): die ontmoetingsdag is later"
+    },
+    "questf9-car-or-no-car#35": {
+      "en": "Reverse gear (÷): the meeting day is earlier",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:224:12"
+      ],
+      "af": "Trurat (÷): die ontmoetingsdag is vroeër"
+    },
+    "questf9-car-or-no-car#36": {
+      "en": "No car: it is already there",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:225:13",
+        "questf9-car-or-no-car.js:244:21"
+      ],
+      "af": "Geen kar nie: dit is reeds daar"
+    },
+    "questf9-car-or-no-car#37": {
+      "en": "${story(sc)} Which gear moves the ${money(a.v, true)} to the meeting day?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:237:9"
+      ],
+      "af": "${story(sc)} Watter rat skuif die ${money(a.v, true)} na die ontmoetingsdag?"
+    },
+    "questf9-car-or-no-car#38": {
+      "en": "A later date: forward gear (×). An earlier date: reverse gear (÷). Already there: no car.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:239:29"
+      ],
+      "af": "'n Latere datum: vorentoe (×). 'n Vroeëre datum: trurat (÷). Reeds daar: geen kar nie."
+    },
+    "questf9-car-or-no-car#39": {
+      "en": "No car: the ${money(a.v)} already stands on T${meet}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:240:26"
+      ],
+      "af": "Geen kar nie: die ${money(a.v)} staan reeds op T${meet}"
+    },
+    "questf9-car-or-no-car#40": {
+      "en": "${cap(gearOf(tr.dir))}: from T${a.t} to T${meet}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:240:147"
+      ],
+      "af": "${cap(gearOf(tr.dir))}: van T${a.t} na T${meet}"
+    },
+    "questf9-car-or-no-car#41": {
+      "en": "A car in forward gear",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:244:92"
+      ],
+      "af": "'n Kar wat vorentoe ry"
+    },
+    "questf9-car-or-no-car#42": {
+      "en": "A car in reverse gear",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:244:148"
+      ],
+      "af": "'n Kar in trurat"
+    },
+    "questf9-car-or-no-car#43": {
+      "en": "One car for each road",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:244:198"
+      ],
+      "af": "Een kar vir elke pad"
+    },
+    "questf9-car-or-no-car#44": {
+      "en": "Does it have to move at all?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:247:38"
+      ],
+      "af": "Moet dit enigsins skuif?"
+    },
+    "questf9-car-or-no-car#45": {
+      "en": "No car: the ${money(a.v)} already stands on the meeting day",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:247:103"
+      ],
+      "af": "Geen kar nie: die ${money(a.v)} staan reeds op die ontmoetingsdag"
+    },
+    "questf9-car-or-no-car#46": {
+      "en": "An amount standing on the meeting day, like the ${money(a.v, true)} here: does it need a car?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:250:17"
+      ],
+      "af": "'n Bedrag wat op die ontmoetingsdag staan, soos die ${money(a.v, true)} hier: het dit 'n kar nodig?"
+    },
+    "questf9-car-or-no-car#47": {
+      "en": "An amount standing on the meeting day, like the ${money(a.v, true)} here: car or no car?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:253:22"
+      ],
+      "af": "'n Bedrag wat op die ontmoetingsdag staan, soos die ${money(a.v, true)} hier: kar of geen kar?"
+    },
+    "questf9-car-or-no-car#48": {
+      "en": "${story(sc)} The ${money(a.v, true)} is moved to the meeting day. Its exponent is …",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:263:17"
+      ],
+      "af": "${story(sc)} Die ${money(a.v, true)} word na die ontmoetingsdag geskuif. Sy eksponent is …"
+    },
+    "questf9-car-or-no-car#49": {
+      "en": "Exponent = years × k on its road, with a minus sign for reverse gear.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:266:32"
+      ],
+      "af": "Eksponent = jare × k op sy pad, met 'n minusteken vir trurat."
+    },
+    "questf9-car-or-no-car#50": {
+      "en": "exponent ${expText(L)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:266:175"
+      ],
+      "af": "eksponent ${expText(L)}"
+    },
+    "questf9-car-or-no-car#51": {
+      "en": "The ${r.r}% road only",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:275:25"
+      ],
+      "af": "Net die ${r.r}%-pad"
+    },
+    "questf9-car-or-no-car#52": {
+      "en": "The ${A.r}% road, then the ${B.r}% road",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:276:33"
+      ],
+      "af": "Die ${A.r}%-pad, dan die ${B.r}%-pad"
+    },
+    "questf9-car-or-no-car#53": {
+      "en": "The ${B.r}% road, then the ${A.r}% road",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:276:122"
+      ],
+      "af": "Die ${B.r}%-pad, dan die ${A.r}%-pad"
+    },
+    "questf9-car-or-no-car#54": {
+      "en": "${story(sc)} Over which road(s) does the ${money(a.v, true)} travel to reach the meeting day?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:279:9"
+      ],
+      "af": "${story(sc)} Oor watter pad of paaie ry die ${money(a.v, true)} om by die ontmoetingsdag te kom?"
+    },
+    "questf9-car-or-no-car#55": {
+      "en": "No road: it is already on the meeting day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:280:41"
+      ],
+      "af": "Geen pad nie: dit is reeds op die ontmoetingsdag"
+    },
+    "questf9-car-or-no-car#56": {
+      "en": "Follow the line from the amount to the flag. Which colours does it drive over?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:281:29"
+      ],
+      "af": "Volg die lyn van die bedrag na die vlag. Oor watter kleure ry dit?"
+    },
+    "questf9-car-or-no-car#57": {
+      "en": "${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day? Pick the expression that shows them.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:291:9"
+      ],
+      "af": "${story(sc)} Hoeveel karre het die ${money(a.v, true)} nodig om by die ontmoetingsdag te kom? Kies die uitdrukking wat hulle wys."
+    },
+    "questf9-car-or-no-car#58": {
+      "en": "One car per road: every colour it drives over gets its own bracket, multiplied.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:293:29"
+      ],
+      "af": "Een kar per pad: elke kleur waaroor dit ry, kry sy eie hakie, vermenigvuldig."
+    },
+    "questf9-car-or-no-car#59": {
+      "en": "2 cars: ${right}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:293:198"
+      ],
+      "af": "2 karre: ${right}"
+    },
+    "questf9-car-or-no-car#60": {
+      "en": "${story(sc)} The ${money(a.v, true)} crosses the place where the road changes colour. On the <b>${L.r}% road</b>, its car's exponent is …",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:302:17"
+      ],
+      "af": "${story(sc)} Die ${money(a.v, true)} gaan oor die plek waar die pad van kleur verander. Op die <b>${L.r}%-pad</b> is sy kar se eksponent …"
+    },
+    "questf9-car-or-no-car#61": {
+      "en": "Count only the years on that colour, times that road's k. Reverse gear makes it negative.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:306:32"
+      ],
+      "af": "Tel net die jare op daardie kleur, maal daardie pad se k. Trurat maak dit negatief."
+    },
+    "questf9-car-or-no-car#62": {
+      "en": "exponent on ${roadName(L)}: ${expText(L)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:307:11"
+      ],
+      "af": "eksponent op ${roadName(L)}: ${expText(L)}"
+    },
+    "questf9-car-or-no-car#63": {
+      "en": "${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:321:17"
+      ],
+      "af": "${story(sc)} Hoeveel karre het die ${money(a.v, true)} nodig om by die ontmoetingsdag te kom?"
+    },
+    "questf9-car-or-no-car#64": {
+      "en": "Already there: no car. One colour: one car. Two colours: two cars.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:323:32"
+      ],
+      "af": "Reeds daar: geen kar nie. Een kleur: een kar. Twee kleure: twee karre."
+    },
+    "questf9-car-or-no-car#65": {
+      "en": "0 cars, it already stands on the meeting day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:324:24"
+      ],
+      "af": "0 karre, dit staan reeds op die ontmoetingsdag"
+    },
+    "questf9-car-or-no-car#66": {
+      "en": "1 car, it drives over one road",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:324:141"
+      ],
+      "af": "1 kar, dit ry oor een pad"
+    },
+    "questf9-car-or-no-car#67": {
+      "en": "2 cars, one car per road",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:324:210"
+      ],
+      "af": "2 karre, een kar per pad"
+    },
+    "questf11-meeting-day#1": {
+      "en": "The answer is the same wherever you meet; picking the day is only about typing less.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:75:28"
+      ],
+      "af": "Die antwoord bly dieselfde, waar jy ook al ontmoet; die keuse van die dag gaan net oor minder tikwerk."
+    },
+    "questf11-meeting-day#2": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:80:33"
+      ],
+      "af": "halfjaarliks"
+    },
+    "questf11-meeting-day#3": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:90:21"
+      ],
+      "af": "${r}%${NB}p.j."
+    },
+    "questf11-meeting-day#4": {
+      "en": "${r}%${NB}road",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:92:27"
+      ],
+      "af": "${r}%${NB}pad"
+    },
+    "questf11-meeting-day#5": {
+      "en": "she",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:95:38",
+        "questf11-meeting-day.js:207:44",
+        "questf11-meeting-day.js:222:47"
+      ],
+      "af": "sy"
+    },
+    "questf11-meeting-day#6": {
+      "en": "her",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:95:61",
+        "questf11-meeting-day.js:207:67",
+        "questf11-meeting-day.js:222:70"
+      ],
+      "af": "haar"
+    },
+    "questf11-meeting-day#7": {
+      "en": "he",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:95:89",
+        "questf11-meeting-day.js:215:44",
+        "questf11-meeting-day.js:229:47"
+      ],
+      "af": "hy"
+    },
+    "questf11-meeting-day#8": {
+      "en": "his",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:95:111",
+        "questf11-meeting-day.js:215:66",
+        "questf11-meeting-day.js:229:69"
+      ],
+      "af": "sy"
+    },
+    "questf11-meeting-day#9": {
+      "en": "${k}${NB}car${k === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:96:27"
+      ],
+      "af": "${k}${NB}kar${k === 1 ? \"\" : \"re\"}",
+      "nested": [
+        "s"
+      ]
+    },
+    "questf11-meeting-day#10": {
+      "en": "A car is the ${nw(pow(\"(1 + i)\", \"n\"))} bracket that moves an amount to the meeting day.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:99:20"
+      ],
+      "af": "'n Kar is die hakie ${nw(pow(\"(1 + i)\", \"n\"))} wat 'n bedrag na die ontmoetingsdag skuif.",
+      "nested": [
+        "(1 + i)",
+        "n"
+      ]
+    },
+    "questf11-meeting-day#11": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:100:21"
+      ],
+      "af": "T in jare"
+    },
+    "questf11-meeting-day#12": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:122:57",
+        "questf11-meeting-day.js:207:110",
+        "questf11-meeting-day.js:215:107",
+        "questf11-meeting-day.js:222:113",
+        "questf11-meeting-day.js:229:110"
+      ],
+      "af": "A"
+    },
+    "questf11-meeting-day#13": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:122:73"
+      ],
+      "af": "P"
+    },
+    "questf11-meeting-day#14": {
+      "en": "${r.r}% p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:153:65"
+      ],
+      "af": "${r.r}% p.j."
+    },
+    "questf11-meeting-day#15": {
+      "en": "${paU(r.r)} compounded ${HOW(r.k)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:239:24"
+      ],
+      "af": "${paU(r.r)} ${HOW(r.k)} saamgestel"
+    },
+    "questf11-meeting-day#16": {
+      "en": "${one(r0)}; from T${r1.from} the rate is ${one(r1)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:240:25"
+      ],
+      "af": "${one(r0)}; vanaf T${r1.from} is die koers ${one(r1)}"
+    },
+    "questf11-meeting-day#17": {
+      "en": "${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:242:11"
+      ],
+      "af": "${cap(p.he)} spaar teen ${rate}. ${cap(p.his)} deposito's groei tot die totaal, A."
+    },
+    "questf11-meeting-day#18": {
+      "en": "${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:243:11"
+      ],
+      "af": "${cap(p.he)} leen die totaal, P, teen ${rate}, en betaal dit in dele terug."
+    },
+    "questf11-meeting-day#19": {
+      "en": "already there: no car",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:245:23",
+        "questf11-meeting-day.js:246:23"
+      ],
+      "af": "reeds daar: geen kar nie"
+    },
+    "questf11-meeting-day#20": {
+      "en": "one colour: ${carsWord(1)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:245:81"
+      ],
+      "af": "een kleur: ${carsWord(1)}"
+    },
+    "questf11-meeting-day#21": {
+      "en": "across the colour change: ${carsWord(2)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:245:145"
+      ],
+      "af": "oor die kleurverandering: ${carsWord(2)}"
+    },
+    "questf11-meeting-day#22": {
+      "en": "it has to move: ${carsWord(1)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:246:81"
+      ],
+      "af": "dit moet skuif: ${carsWord(1)}"
+    },
+    "questf11-meeting-day#23": {
+      "en": "one road, one colour",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:246:154",
+        "questf11-meeting-day.js:340:30"
+      ],
+      "af": "een pad, een kleur"
+    },
+    "questf11-meeting-day#24": {
+      "en": "the total ${nw(`${it.role} at T${it.t}`)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:251:37"
+      ],
+      "af": "die totaal ${nw(`${it.role} by T${it.t}`)}",
+      "nested": [
+        "${it.role} at T${it.t}"
+      ]
+    },
+    "questf11-meeting-day#25": {
+      "en": "${rands(it.v)} at T${it.t}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:251:137"
+      ],
+      "af": "${rands(it.v)} by T${it.t}"
+    },
+    "questf11-meeting-day#26": {
+      "en": "no car",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:255:72",
+        "questf11-meeting-day.js:337:47"
+      ],
+      "af": "geen kar nie"
+    },
+    "questf11-meeting-day#27": {
+      "en": "Meet at T${D}${tag}: ${cars(countAt(sc, D))}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:259:12"
+      ],
+      "af": "Ontmoet by T${D}${tag}: ${cars(countAt(sc, D))}"
+    },
+    "questf11-meeting-day#28": {
+      "en": "count per amount",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:259:119"
+      ],
+      "af": "tel per bedrag"
+    },
+    "questf11-meeting-day#29": {
+      "en": "the road changes colour at T${b.D}, and ${whoAt(itemsAt(sc, b.D)[0])} already stands there",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:298:29"
+      ],
+      "af": "die pad verander van kleur by T${b.D}, en ${whoAt(itemsAt(sc, b.D)[0])} staan reeds daar"
+    },
+    "questf11-meeting-day#30": {
+      "en": "the road changes colour at T${b.D}: no amount crosses the change, so none needs two cars",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:299:27"
+      ],
+      "af": "die pad verander van kleur by T${b.D}: geen bedrag gaan oor die verandering nie, dus het geeneen twee karre nodig nie"
+    },
+    "questf11-meeting-day#31": {
+      "en": "two amounts already stand on T${b.D}: neither of them needs a car",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:300:23"
+      ],
+      "af": "twee bedrae staan reeds op T${b.D}: nie een van hulle het 'n kar nodig nie"
+    },
+    "questf11-meeting-day#32": {
+      "en": "${story(sc)} Which meeting day needs the fewest cars?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:304:17"
+      ],
+      "af": "${story(sc)} Watter ontmoetingsdag het die minste karre nodig?"
+    },
+    "questf11-meeting-day#33": {
+      "en": "T${D}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:305:42",
+        "questf11-meeting-day.js:409:42"
+      ],
+      "af": "T${D}"
+    },
+    "questf11-meeting-day#34": {
+      "en": "Count the cars for each day. An amount already there needs none; every other amount needs ${cars(1)}. The total counts too.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:308:13"
+      ],
+      "af": "Tel die karre vir elke dag. 'n Bedrag wat reeds daar is, het geeneen nodig nie; elke ander bedrag het ${cars(1)} nodig. Die totaal tel ook."
+    },
+    "questf11-meeting-day#35": {
+      "en": "Count the cars for each day. Already there: none. One colour: ${cars(1)}. Across the colour change: ${cars(2)}. The total counts too.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:309:13"
+      ],
+      "af": "Tel die karre vir elke dag. Reeds daar: geen. Een kleur: ${cars(1)}. Oor die kleurverandering: ${cars(2)}. Die totaal tel ook."
+    },
+    "questf11-meeting-day#36": {
+      "en": "T${b.D}: ${cars(b.min)}, the fewest",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:310:22"
+      ],
+      "af": "T${b.D}: ${cars(b.min)}, die minste"
+    },
+    "questf11-meeting-day#37": {
+      "en": "T${b.D} needs the fewest: ${cars(b.min)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:314:16"
+      ],
+      "af": "T${b.D} het die minste nodig: ${cars(b.min)}"
+    },
+    "questf11-meeting-day#38": {
+      "en": "it already stands on T${D}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:338:25"
+      ],
+      "af": "dit staan reeds op T${D}"
+    },
+    "questf11-meeting-day#39": {
+      "en": "it crosses the colour change at T${sc.c}: one car per road",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:339:26"
+      ],
+      "af": "dit gaan oor die kleurverandering by T${sc.c}: een kar per pad"
+    },
+    "questf11-meeting-day#40": {
+      "en": "it stays on the ${roadU(roadOf(sc, it.t, D).r)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:340:82"
+      ],
+      "af": "dit bly op die ${roadU(roadOf(sc, it.t, D).r)}"
+    },
+    "questf11-meeting-day#41": {
+      "en": "${story(sc)} If we meet at T${D}, how many cars are needed altogether?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:345:17"
+      ],
+      "af": "${story(sc)} As ons by T${D} ontmoet, hoeveel karre is altesaam nodig?"
+    },
+    "questf11-meeting-day#42": {
+      "en": "Go amount by amount, the total too. Already on T${D}: no car. One colour, so one car for each amount that has to move.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:350:13"
+      ],
+      "af": "Gaan bedrag vir bedrag, die totaal ook. Reeds op T${D}: geen kar nie. Een kleur, dus een kar vir elke bedrag wat moet skuif."
+    },
+    "questf11-meeting-day#43": {
+      "en": "Go amount by amount, the total too. Already on T${D}: no car. One colour: ${cars(1)}. Across the colour change: ${cars(2)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:351:13"
+      ],
+      "af": "Gaan bedrag vir bedrag, die totaal ook. Reeds op T${D}: geen kar nie. Een kleur: ${cars(1)}. Oor die kleurverandering: ${cars(2)}."
+    },
+    "questf11-meeting-day#44": {
+      "en": "${cars(k)} if we meet at T${D}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:352:22"
+      ],
+      "af": "${cars(k)} as ons by T${D} ontmoet"
+    },
+    "questf11-meeting-day#45": {
+      "en": "Meet at T${D}: ${cars(k)} altogether",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:356:16"
+      ],
+      "af": "Ontmoet by T${D}: altesaam ${cars(k)}"
+    },
+    "questf11-meeting-day#46": {
+      "en": "add them up",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:356:105"
+      ],
+      "af": "tel hulle op"
+    },
+    "questf11-meeting-day#47": {
+      "en": "The total, ${sc.total.role}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:377:21"
+      ],
+      "af": "Die totaal, ${sc.total.role}"
+    },
+    "questf11-meeting-day#48": {
+      "en": "Nothing: no amount stands on T${D}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:377:96"
+      ],
+      "af": "Niks: geen bedrag staan op T${D} nie"
+    },
+    "questf11-meeting-day#49": {
+      "en": "no amount",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:379:28",
+        "questf11-meeting-day.js:478:49"
+      ],
+      "af": "geen bedrag nie"
+    },
+    "questf11-meeting-day#50": {
+      "en": "the total, ${sc.total.role} (the ? in its ring)",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:379:77"
+      ],
+      "af": "die totaal, ${sc.total.role} (die ? in sy ring)"
+    },
+    "questf11-meeting-day#51": {
+      "en": "${story(sc)} Meeting where someone already stands saves a car. Which amount is already standing on T${D}?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:381:9"
+      ],
+      "af": "${story(sc)} As jy ontmoet waar iemand reeds staan, spaar jy 'n kar. Watter bedrag staan reeds op T${D}?"
+    },
+    "questf11-meeting-day#52": {
+      "en": "Look straight up from T${D}. The ? in its ring is the total.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:385:17"
+      ],
+      "af": "Kyk reguit op vanaf T${D}. Die ? in sy ring is die totaal."
+    },
+    "questf11-meeting-day#53": {
+      "en": "Nothing stands on T${D}: meeting there saves no car",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:386:30"
+      ],
+      "af": "Niks staan op T${D} nie: om daar te ontmoet, spaar geen kar nie"
+    },
+    "questf11-meeting-day#54": {
+      "en": "${at.total ? TOTAL : money(at.v)}: meet at T${D} and it needs no car",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:387:15"
+      ],
+      "af": "${at.total ? TOTAL : money(at.v)}: ontmoet by T${D} en dit het geen kar nodig nie"
+    },
+    "questf11-meeting-day#55": {
+      "en": "an amount already on the meeting day needs no car",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:389:29"
+      ],
+      "af": "'n bedrag wat reeds op die ontmoetingsdag is, het geen kar nodig nie"
+    },
+    "questf11-meeting-day#56": {
+      "en": "On T${D}: ${stands}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:390:18"
+      ],
+      "af": "Op T${D}: ${stands}"
+    },
+    "questf11-meeting-day#57": {
+      "en": "read straight up from the T label",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:390:72"
+      ],
+      "af": "lees reguit op vanaf die T-etiket"
+    },
+    "questf11-meeting-day#58": {
+      "en": "${story(sc)} Meeting where the road changes colour saves two‑car trips. Which T is that?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:408:17"
+      ],
+      "af": "${story(sc)} As jy ontmoet waar die pad van kleur verander, spaar jy ritte met twee karre. Watter T is dit?"
+    },
+    "questf11-meeting-day#59": {
+      "en": "Follow the road from T0. Where does its colour change? The story says it too: that is where the rate changes.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:411:15"
+      ],
+      "af": "Volg die pad vanaf T0. Waar verander sy kleur? Die storie sê dit ook: dit is waar die koers verander."
+    },
+    "questf11-meeting-day#60": {
+      "en": "T${c}: the ${roadU(r0.r)} ends and the ${roadU(r1.r)} starts",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:412:22"
+      ],
+      "af": "T${c}: die ${roadU(r0.r)} eindig en die ${roadU(r1.r)} begin"
+    },
+    "questf11-meeting-day#61": {
+      "en": "an amount that crosses the colour change needs two cars, one per road",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:414:27"
+      ],
+      "af": "'n bedrag wat oor die kleurverandering gaan, het twee karre nodig, een per pad"
+    },
+    "questf11-meeting-day#62": {
+      "en": "The road changes colour at T${c}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:415:16"
+      ],
+      "af": "Die pad verander van kleur by T${c}"
+    },
+    "questf11-meeting-day#63": {
+      "en": "the ${roadU(r0.r)} ends there and the ${roadU(r1.r)} starts",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:415:99"
+      ],
+      "af": "die ${roadU(r0.r)} eindig daar en die ${roadU(r1.r)} begin"
+    },
+    "questf11-meeting-day#64": {
+      "en": "Meet at T${c}: ${cars(k)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:416:16"
+      ],
+      "af": "Ontmoet by T${c}: ${cars(k)}"
+    },
+    "questf11-meeting-day#65": {
+      "en": "no amount crosses the change, so none needs two cars",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:416:85"
+      ],
+      "af": "geen bedrag gaan oor die verandering nie, dus het geeneen twee karre nodig nie"
+    },
+    "questf11-meeting-day#66": {
+      "en": "${story(sc)} If we meet at T${a} instead of T${b}, does the final answer for ${R} change?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:435:17"
+      ],
+      "af": "${story(sc)} As ons by T${a} in plaas van T${b} ontmoet, verander die finale antwoord vir ${R}?"
+    },
+    "questf11-meeting-day#67": {
+      "en": "Another meeting day changes the brackets you type, not the value of the total.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:438:15"
+      ],
+      "af": "'n Ander ontmoetingsdag verander die hakies wat jy intik, nie die waarde van die totaal nie."
+    },
+    "questf11-meeting-day#68": {
+      "en": "No: ${R} comes out the same; only the typing changes",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:439:22"
+      ],
+      "af": "Nee: ${R} kom dieselfde uit; net die tikwerk verander"
+    },
+    "questf11-meeting-day#69": {
+      "en": "The same ${R} either way: every amount moves at the same rates",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:444:16"
+      ],
+      "af": "Dieselfde ${R} in albei gevalle: elke bedrag skuif teen dieselfde koerse"
+    },
+    "questf11-meeting-day#70": {
+      "en": "${cars(ka)} either way",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:444:178"
+      ],
+      "af": "${cars(ka)} in albei gevalle"
+    },
+    "questf11-meeting-day#71": {
+      "en": "T${ka < kb ? a : b} has fewer cars: less to type",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:444:242"
+      ],
+      "af": "T${ka < kb ? a : b} het minder karre: minder om in te tik"
+    },
+    "questf11-meeting-day#72": {
+      "en": "An amount already stands there, so it needs no car",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:455:15"
+      ],
+      "af": "'n Bedrag staan reeds daar, dus het dit geen kar nodig nie"
+    },
+    "questf11-meeting-day#73": {
+      "en": "The road changes colour there, so no amount needs two cars",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:456:15"
+      ],
+      "af": "Die pad verander daar van kleur, dus het geen bedrag twee karre nodig nie"
+    },
+    "questf11-meeting-day#74": {
+      "en": "Both: an amount stands there, and the road changes colour there",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:457:13"
+      ],
+      "af": "Albei: 'n bedrag staan daar, en die pad verander daar van kleur"
+    },
+    "questf11-meeting-day#75": {
+      "en": "It is the end of the timeline",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:458:12"
+      ],
+      "af": "Dit is die einde van die tydlyn"
+    },
+    "questf11-meeting-day#76": {
+      "en": "The biggest amount stands there",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:459:16"
+      ],
+      "af": "Die grootste bedrag staan daar"
+    },
+    "questf11-meeting-day#77": {
+      "en": "${story(sc)} Why is T${D} a good meeting day here?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:480:9"
+      ],
+      "af": "${story(sc)} Hoekom is T${D} hier 'n goeie ontmoetingsdag?"
+    },
+    "questf11-meeting-day#78": {
+      "en": "Look at T${D}. Does an amount stand there? Does the road change colour there?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:484:17"
+      ],
+      "af": "Kyk na T${D}. Staan 'n bedrag daar? Verander die pad daar van kleur?"
+    },
+    "questf11-meeting-day#79": {
+      "en": "On T${D}: ${here}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:488:18"
+      ],
+      "af": "Op T${D}: ${here}"
+    },
+    "questf11-meeting-day#80": {
+      "en": "and the road changes colour at T${D}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:488:81"
+      ],
+      "af": "en die pad verander van kleur by T${D}"
+    },
+    "questf11-meeting-day#81": {
+      "en": "one road: the colour never changes",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:488:184"
+      ],
+      "af": "een pad: die kleur verander nooit"
+    },
+    "questf11-meeting-day#82": {
+      "en": "the road changes colour at T${sc.c}, not here",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:488:265"
+      ],
+      "af": "die pad verander van kleur by T${sc.c}, nie hier nie"
+    },
+    "questf11-meeting-day#83": {
+      "en": " (the end)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:490:31"
+      ],
+      "af": " (die einde)"
+    },
+    "questf11-meeting-day#84": {
+      "en": "T${D} needs ${cars(min)}, ${ties === 1 ? \"the fewest of any day\" : \"as few as any day\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:491:18"
+      ],
+      "af": "T${D} het ${cars(min)} nodig, ${ties === 1 ? \"die minste van enige dag\" : \"so min soos enige dag\"}",
+      "nested": [
+        "the fewest of any day",
+        "as few as any day"
+      ]
+    },
+    "questf11-meeting-day#85": {
+      "en": "an amount already stands there: it needs no car",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:492:38"
+      ],
+      "af": "'n bedrag staan reeds daar: dit het geen kar nodig nie"
+    },
+    "questf11-meeting-day#86": {
+      "en": "nobody crosses the colour change on the way there",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:493:39"
+      ],
+      "af": "niemand gaan op pad daarheen oor die kleurverandering nie"
+    },
+    "questf11-meeting-day#87": {
+      "en": "an amount stands there, and nobody crosses the colour change",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf11-meeting-day.js:494:19"
+      ],
+      "af": "'n bedrag staan daar, en niemand gaan oor die kleurverandering nie"
+    },
+    "questf12-build-timeline#1": {
+      "en": "Words first. Then the timeline. Then the one equation.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:98:26"
+      ],
+      "af": "Eers die woorde. Dan die tydlyn. Dan die een vergelyking."
+    },
+    "questf12-build-timeline#2": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:99:19"
+      ],
+      "af": "T in jare"
+    },
+    "questf12-build-timeline#3": {
+      "en": "nowhere: it never enters the account",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:103:19"
+      ],
+      "af": "nêrens: dit kom nooit in die rekening nie"
+    },
+    "questf12-build-timeline#4": {
+      "en": "no change",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:104:21"
+      ],
+      "af": "geen verandering nie"
+    },
+    "questf12-build-timeline#5": {
+      "en": "annually",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:106:20"
+      ],
+      "af": "jaarliks"
+    },
+    "questf12-build-timeline#6": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:106:50"
+      ],
+      "af": "halfjaarliks"
+    },
+    "questf12-build-timeline#7": {
+      "en": "quarterly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:106:87"
+      ],
+      "af": "kwartaalliks"
+    },
+    "questf12-build-timeline#8": {
+      "en": "monthly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:106:123"
+      ],
+      "af": "maandeliks"
+    },
+    "questf12-build-timeline#9": {
+      "en": "half‑years",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:107:20"
+      ],
+      "af": "halfjare"
+    },
+    "questf12-build-timeline#10": {
+      "en": "quarters",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:107:52"
+      ],
+      "af": "kwartale"
+    },
+    "questf12-build-timeline#11": {
+      "en": "months",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:107:83"
+      ],
+      "af": "maande"
+    },
+    "questf12-build-timeline#12": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:112:25"
+      ],
+      "af": "${r}%${NB}p.j."
+    },
+    "questf12-build-timeline#13": {
+      "en": "${y}${NB}year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:114:25"
+      ],
+      "af": "${y}${NB}jaar${y === 1 ? \"\" : \"\"}",
+      "nested": [
+        "s"
+      ]
+    },
+    "questf12-build-timeline#14": {
+      "en": "now",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:115:32",
+        "questf12-build-timeline.js:132:22"
+      ],
+      "af": "nou"
+    },
+    "questf12-build-timeline#15": {
+      "en": "after ${years(t)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:115:50"
+      ],
+      "af": "ná ${years(t)}"
+    },
+    "questf12-build-timeline#16": {
+      "en": "T${t}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:117:18"
+      ],
+      "af": "T${t}"
+    },
+    "questf12-build-timeline#17": {
+      "en": "deposit",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:120:23"
+      ],
+      "af": "deposito"
+    },
+    "questf12-build-timeline#18": {
+      "en": "withdrawal",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:120:53",
+        "questf12-build-timeline.js:311:6",
+        "questf12-build-timeline.js:311:37"
+      ],
+      "af": "onttrekking"
+    },
+    "questf12-build-timeline#19": {
+      "en": "repayment",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:120:92"
+      ],
+      "af": "terugbetaling"
+    },
+    "questf12-build-timeline#20": {
+      "en": "${money(x.v)} ${KIND[x.kind]}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:122:52"
+      ],
+      "af": "${money(x.v)}-${KIND[x.kind]}"
+    },
+    "questf12-build-timeline#21": {
+      "en": "the jug's day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:128:44"
+      ],
+      "af": "die beker se dag"
+    },
+    "questf12-build-timeline#22": {
+      "en": "the day of the ${coinName(x)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:129:73"
+      ],
+      "af": "die dag van die ${coinName(x)}"
+    },
+    "questf12-build-timeline#23": {
+      "en": "where the rate changes",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:130:66"
+      ],
+      "af": "waar die koers verander"
+    },
+    "questf12-build-timeline#24": {
+      "en": " and ",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:131:39"
+      ],
+      "af": " en "
+    },
+    "questf12-build-timeline#25": {
+      "en": "${years(t)} from now",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:132:40"
+      ],
+      "af": "${years(t)} van nou af"
+    },
+    "questf12-build-timeline#26": {
+      "en": "${T(t)} counts ${PER[k]}: this timeline counts years.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:165:57"
+      ],
+      "af": "${T(t)} tel ${PER[k]}: hierdie tydlyn tel jare."
+    },
+    "questf12-build-timeline#27": {
+      "en": "${T(t)} is past the end: nothing in the words happens ${when(t)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:166:17"
+      ],
+      "af": "${T(t)} is verby die einde: niks in die woorde gebeur ${when(t)} nie."
+    },
+    "questf12-build-timeline#28": {
+      "en": "${T(t)} is ${whatAt(sc, t, { jug: false })}, not the last day the words name.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:167:9"
+      ],
+      "af": "${T(t)} is ${whatAt(sc, t, { jug: false })}, nie die laaste dag wat die woorde noem nie."
+    },
+    "questf12-build-timeline#29": {
+      "en": "How far does the timeline go?<br><span class=\"muted small\">Pick the last T.</span>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:170:15"
+      ],
+      "af": "Hoe ver strek die tydlyn?<br><span class=\"muted small\">Kies die laaste T.</span>"
+    },
+    "questf12-build-timeline#30": {
+      "en": "The last day the words name is the end of the timeline. Count in years from now: now is T0.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:172:13"
+      ],
+      "af": "Die laaste dag wat die woorde noem, is die einde van die tydlyn. Tel in jare vanaf nou: nou is T0."
+    },
+    "questf12-build-timeline#31": {
+      "en": "${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:184:22"
+      ],
+      "af": "${T(t)} is ${whatAt(sc, t, { jug: false })}: 'n munt, nie 'n koersverandering nie."
+    },
+    "questf12-build-timeline#32": {
+      "en": "${T(t)} is ${years(t)} from now. The rate sentence says how long the first rate lasts.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:185:11"
+      ],
+      "af": "${T(t)} is ${years(t)} van nou af. Die koerssin sê hoe lank die eerste koers duur."
+    },
+    "questf12-build-timeline#33": {
+      "en": "${coinOn(t) ? `${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change. ` : \"\"}The words give ONE rate for the whole time: nothing changes at ${T(t)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:186:9"
+      ],
+      "af": "${coinOn(t) ? `${T(t)} is ${whatAt(sc, t, { jug: false })}: 'n munt, nie 'n koersverandering nie. ` : \"\"}Die woorde gee EEN koers vir die hele tyd: niks verander by ${T(t)} nie.",
+      "nested": [
+        "${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change. "
+      ]
+    },
+    "questf12-build-timeline#34": {
+      "en": "Where does the interest rate change?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:189:15"
+      ],
+      "af": "Waar verander die rentekoers?"
+    },
+    "questf12-build-timeline#35": {
+      "en": "The words give TWO rates: the rate does change.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:190:69"
+      ],
+      "af": "Die woorde gee TWEE koerse: die koers verander wel."
+    },
+    "questf12-build-timeline#36": {
+      "en": "Read the rate sentence. The first rate lasts the years it names, counted from T0. One rate for the whole time: no change.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:191:13"
+      ],
+      "af": "Lees die koerssin. Die eerste koers duur die jare wat dit noem, getel vanaf T0. Een koers vir die hele tyd: geen verandering nie."
+    },
+    "questf12-build-timeline#37": {
+      "en": "Which rate goes on which road?<br><span class=\"muted small\">Two roads: T0 to ${T(c)}, then ${T(c)} to ${T(sc.n)}.</span>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:201:21"
+      ],
+      "af": "Watter koers gaan op watter pad?<br><span class=\"muted small\">Twee paaie: T0 tot ${T(c)}, dan ${T(c)} tot ${T(sc.n)}.</span>"
+    },
+    "questf12-build-timeline#38": {
+      "en": "Which rate goes on which road?<br><span class=\"muted small\">One road: T0 to ${T(sc.n)}.</span>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:202:11"
+      ],
+      "af": "Watter koers gaan op watter pad?<br><span class=\"muted small\">Een pad: T0 tot ${T(sc.n)}.</span>"
+    },
+    "questf12-build-timeline#39": {
+      "en": "then",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:204:27"
+      ],
+      "af": "dan"
+    },
+    "questf12-build-timeline#40": {
+      "en": "The first road wears the rate the words give for the first years; the second road wears the rate after the change.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:206:19"
+      ],
+      "af": "Die eerste pad dra die koers wat die woorde vir die eerste jare gee; die tweede pad dra die koers ná die verandering."
+    },
+    "questf12-build-timeline#41": {
+      "en": "One rate for the whole time: the one the words give.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:207:11"
+      ],
+      "af": "Een koers vir die hele tyd: die een wat die woorde gee."
+    },
+    "questf12-build-timeline#42": {
+      "en": "Where does the total (the jug) go?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:216:15"
+      ],
+      "af": "Waar gaan die totaal (die beker)?"
+    },
+    "questf12-build-timeline#43": {
+      "en": "T0",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:218:13"
+      ],
+      "af": "T0"
+    },
+    "questf12-build-timeline#44": {
+      "en": "Savings fill the jug coin by coin: it is full at the END.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:218:48"
+      ],
+      "af": "Spaargeld vul die beker munt vir munt: dit is vol aan die EINDE."
+    },
+    "questf12-build-timeline#45": {
+      "en": "The bank hands you the full jug at the START: a loan's jug sits on the loan's own day.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:219:33"
+      ],
+      "af": "Die bank gee jou die volle beker aan die BEGIN: 'n lening se beker staan op die lening se eie dag."
+    },
+    "questf12-build-timeline#46": {
+      "en": "Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:221:13"
+      ],
+      "af": "Spaar: jy vul die beker, so dit staan aan die einde. 'n Lening: die bank gee jou die beker aan die begin."
+    },
+    "questf12-build-timeline#47": {
+      "en": "${first ? \"Where does each coin go?<br>\" : \"\"}${cap(coinName(x))}: which T?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:233:15"
+      ],
+      "af": "${first ? \"Waar gaan elke munt?<br>\" : \"\"}${cap(coinName(x))}: watter T?",
+      "nested": [
+        "Where does each coin go?<br>"
+      ]
+    },
+    "questf12-build-timeline#48": {
+      "en": "Find the coin's day in the words: now is T0, and “after so many years” is that many T's on from T0.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:235:13"
+      ],
+      "af": "Vind die munt se dag in die woorde: nou is T0, en “na soveel jaar” is soveel T's verder as T0."
+    },
+    "questf12-build-timeline#49": {
+      "en": "Paid on day one, but straight to the shop: it never enters the account, so the loan’s timeline has no place for it.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:244:33"
+      ],
+      "af": "Op dag een betaal, maar reguit aan die winkel: dit kom nooit in die rekening nie, dus het die lening se tydlyn geen plek daarvoor nie."
+    },
+    "questf12-build-timeline#50": {
+      "en": "${T(t)} is ${whatAt(sc, t)}. The down payment is paid straight to the shop.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:245:9"
+      ],
+      "af": "${T(t)} is ${whatAt(sc, t)}. Die aanbetaling word reguit aan die winkel betaal."
+    },
+    "questf12-build-timeline#51": {
+      "en": "${money(sc.down)} down payment: which T?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:248:15"
+      ],
+      "af": "Die aanbetaling van ${money(sc.down)}: watter T?"
+    },
+    "questf12-build-timeline#52": {
+      "en": "A down payment is paid straight to the shop: it never enters the account. It comes off the price: ${nw(\"loan = price − down payment\")}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:250:13"
+      ],
+      "af": "'n Aanbetaling word reguit aan die winkel betaal: dit kom nooit in die rekening nie. Dit kom van die prys af: ${nw(\"lening = prys − aanbetaling\")}.",
+      "nested": [
+        "loan = price − down payment"
+      ]
+    },
+    "questf12-build-timeline#53": {
+      "en": "the jug, ${role} = ${money(sc.total.value)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:280:46"
+      ],
+      "af": "die beker, ${role} = ${money(sc.total.value)}"
+    },
+    "questf12-build-timeline#54": {
+      "en": "the jug, ${role}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:280:146"
+      ],
+      "af": "die beker, ${role}"
+    },
+    "questf12-build-timeline#55": {
+      "en": "${when(x.t)}${x.kind === \"wd\" ? \"; a coin going out, drawn with its minus\" : typeof x.v === \"number\" ? \"\" : `; ${x.v} is still a coin, on its day`}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:283:10"
+      ],
+      "af": "${when(x.t)}${x.kind === \"wd\" ? \"; 'n munt wat uitgaan, met sy minus geteken\" : typeof x.v === \"number\" ? \"\" : `; ${x.v} is steeds 'n munt, op sy dag`}",
+      "nested": [
+        "wd",
+        "; a coin going out, drawn with its minus",
+        "number",
+        "; ${x.v} is still a coin, on its day"
+      ]
+    },
+    "questf12-build-timeline#56": {
+      "en": "The timeline runs from T0 to ${T(n)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:286:12"
+      ],
+      "af": "Die tydlyn loop van T0 tot ${T(n)}."
+    },
+    "questf12-build-timeline#57": {
+      "en": "the last day the words name: ${when(n)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:286:98"
+      ],
+      "af": "die laaste dag wat die woorde noem: ${when(n)}"
+    },
+    "questf12-build-timeline#58": {
+      "en": "The rate changes at ${T(c)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:287:18"
+      ],
+      "af": "Die koers verander by ${T(c)}."
+    },
+    "questf12-build-timeline#59": {
+      "en": "the first rate lasts the first ${years(c)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:287:90"
+      ],
+      "af": "die eerste koers duur die eerste ${years(c)}"
+    },
+    "questf12-build-timeline#60": {
+      "en": "The rate never changes.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:287:195"
+      ],
+      "af": "Die koers verander nooit."
+    },
+    "questf12-build-timeline#61": {
+      "en": "the words give one rate for the whole time",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:287:257"
+      ],
+      "af": "die woorde gee een koers vir die hele tyd"
+    },
+    "questf12-build-timeline#62": {
+      "en": "Road 1, T0 to ${T(c)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}. Road 2, ${T(c)} to ${T(n)}: ${paU(sc.roads[1].r)} compounded ${HOW[sc.roads[1].k]}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:289:16"
+      ],
+      "af": "Pad 1, T0 tot ${T(c)}: ${paU(sc.roads[0].r)} ${HOW[sc.roads[0].k]} saamgestel. Pad 2, ${T(c)} tot ${T(n)}: ${paU(sc.roads[1].r)} ${HOW[sc.roads[1].k]} saamgestel."
+    },
+    "questf12-build-timeline#63": {
+      "en": "each road one rate, in its own colour",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:289:354"
+      ],
+      "af": "elke pad een koers, in sy eie kleur"
+    },
+    "questf12-build-timeline#64": {
+      "en": "One road, T0 to ${T(n)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:290:16"
+      ],
+      "af": "Een pad, T0 tot ${T(n)}: ${paU(sc.roads[0].r)} ${HOW[sc.roads[0].k]} saamgestel."
+    },
+    "questf12-build-timeline#65": {
+      "en": "one rate, one colour",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:290:190"
+      ],
+      "af": "een koers, een kleur"
+    },
+    "questf12-build-timeline#66": {
+      "en": "${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? \", the day of the loan\" : \", the end\"}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:291:12"
+      ],
+      "af": "${cap(jugWord)}, staan by ${T(sc.total.t)}${loan ? \", die dag van die lening\" : \", die einde\"}.",
+      "nested": [
+        ", the day of the loan",
+        ", the end"
+      ]
+    },
+    "questf12-build-timeline#67": {
+      "en": "the bank hands over the full jug at the start; its day is the meeting day (the flag)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:291:217"
+      ],
+      "af": "die bank gee die volle beker aan die begin oor; sy dag is die ontmoetingsdag (die vlag)"
+    },
+    "questf12-build-timeline#68": {
+      "en": "savings fill the jug coin by coin; its day is the meeting day (the flag)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:291:400"
+      ],
+      "af": "spaargeld vul die beker munt vir munt; sy dag is die ontmoetingsdag (die vlag)"
+    },
+    "questf12-build-timeline#69": {
+      "en": "The ${money(sc.down)} down payment: nowhere on the timeline.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:294:45"
+      ],
+      "af": "Die aanbetaling van ${money(sc.down)}: nêrens op die tydlyn nie."
+    },
+    "questf12-build-timeline#70": {
+      "en": "paid straight to the shop, it never enters the account; it comes off the price",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:294:183"
+      ],
+      "af": "reguit aan die winkel betaal, kom dit nooit in die rekening nie; dit kom van die prys af"
+    },
+    "questf12-build-timeline#71": {
+      "en": "${f13Story(sc)}<br><span class=\"muted small\">Build its timeline first, tap by tap. No equation yet.</span>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:298:15"
+      ],
+      "af": "${f13Story(sc)}<br><span class=\"muted small\">Bou eers sy tydlyn, klik vir klik. Nog geen vergelyking nie.</span>"
+    },
+    "questf12-build-timeline#72": {
+      "en": "How far, where the rate changes, which rate on which road, where the jug goes, where each coin goes.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:301:13"
+      ],
+      "af": "Hoe ver, waar die koers verander, watter koers op watter pad, waar die beker gaan, waar elke munt gaan."
+    },
+    "questf12-build-timeline#73": {
+      "en": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no rate change\"}; ${jugWord}, at ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} at ${T(x.t)}`).join(\", \")}${sc.down != null ? `; the ${money(sc.down)} down payment: nowhere` : \"\"}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf12-build-timeline.js:302:20"
+      ],
+      "af": "T0 tot ${T(n)}; ${two ? `die koers verander by ${T(c)}` : \"geen koersverandering nie\"}; ${jugWord}, by ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} by ${T(x.t)}`).join(\", \")}${sc.down != null ? `; die aanbetaling van ${money(sc.down)}: nêrens` : \"\"}.",
+      "nested": [
+        "the rate changes at ${T(c)}",
+        "no rate change",
+        "${coinName(x)} at ${T(x.t)}",
+        "; the ${money(sc.down)} down payment: nowhere"
+      ]
+    },
+    "questf13-one-equation#1": {
+      "en": "Build the whole equation first. Type it once. Round once, at the end.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:87:28"
+      ],
+      "af": "Bou eers die hele vergelyking. Tik dit een keer in. Rond een keer af, aan die einde."
+    },
+    "questf13-one-equation#2": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:92:33"
+      ],
+      "af": "halfjaarliks"
+    },
+    "questf13-one-equation#3": {
+      "en": "lounge suite",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:105:20",
+        "questf13-one-equation.js:507:190"
+      ],
+      "af": "sitkamerstel"
+    },
+    "questf13-one-equation#4": {
+      "en": "motorbike",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:105:57"
+      ],
+      "af": "motorfiets"
+    },
+    "questf13-one-equation#5": {
+      "en": "laptop",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:105:89"
+      ],
+      "af": "skootrekenaar"
+    },
+    "questf13-one-equation#6": {
+      "en": "fridge",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:105:121"
+      ],
+      "af": "yskas"
+    },
+    "questf13-one-equation#7": {
+      "en": "TV",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:105:145"
+      ],
+      "af": "TV"
+    },
+    "questf13-one-equation#8": {
+      "en": "bed",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:105:162"
+      ],
+      "af": "bed"
+    },
+    "questf13-one-equation#9": {
+      "en": "she",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:112:23"
+      ],
+      "af": "sy"
+    },
+    "questf13-one-equation#10": {
+      "en": "he",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:112:66"
+      ],
+      "af": "hy"
+    },
+    "questf13-one-equation#11": {
+      "en": "Mvelo",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:114:33",
+        "questf13-one-equation.js:518:49"
+      ],
+      "af": "Mvelo"
+    },
+    "questf13-one-equation#12": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:124:21"
+      ],
+      "af": "${r}%${NB}p.j."
+    },
+    "questf13-one-equation#13": {
+      "en": "${y}${NB}year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:126:22"
+      ],
+      "af": "${y}${NB}jaar${y === 1 ? \"\" : \"\"}",
+      "nested": [
+        "s"
+      ]
+    },
+    "questf13-one-equation#14": {
+      "en": "${k}${NB}time${k === 1 ? \"\" : \"s\"}${NB}a${NB}year",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:127:26"
+      ],
+      "af": "${k}${NB}keer${k === 1 ? \"\" : \"\"}${NB}per${NB}jaar",
+      "nested": [
+        "s"
+      ]
+    },
+    "questf13-one-equation#15": {
+      "en": "2 decimal places",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:134:20"
+      ],
+      "af": "2 desimale plekke"
+    },
+    "questf13-one-equation#16": {
+      "en": "now",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:135:34"
+      ],
+      "af": "nou"
+    },
+    "questf13-one-equation#17": {
+      "en": "after ${years(t)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:135:54"
+      ],
+      "af": "ná ${years(t)}"
+    },
+    "questf13-one-equation#18": {
+      "en": "${xs.slice(0, -1).join(\", \")} and ${xs[xs.length - 1]}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:136:54"
+      ],
+      "af": "${xs.slice(0, -1).join(\", \")} en ${xs[xs.length - 1]}"
+    },
+    "questf13-one-equation#19": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:137:21"
+      ],
+      "af": "T in jare"
+    },
+    "questf13-one-equation#20": {
+      "en": "a car is the ${nw(pow(\"(1 + i)\", \"n\"))} bracket that moves an amount to the meeting day",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:139:20"
+      ],
+      "af": "die kar is die hakie ${nw(pow(\"(1 + i)\", \"n\"))} wat 'n bedrag na die ontmoetingsdag skuif",
+      "nested": [
+        "(1 + i)",
+        "n"
+      ]
+    },
+    "questf13-one-equation#21": {
+      "en": "${r.r}% p.a.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:319:67"
+      ],
+      "af": "${r.r}% p.j."
+    },
+    "questf13-one-equation#22": {
+      "en": "${paU(r.r)} compounded ${HOW(r.k)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:377:24"
+      ],
+      "af": "${paU(r.r)} ${HOW(r.k)} saamgestel"
+    },
+    "questf13-one-equation#23": {
+      "en": "The interest rate is ${one(a)} for the first ${years(a.to)}, then ${one(b)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:379:18"
+      ],
+      "af": "Die rentekoers is ${one(a)} vir die eerste ${years(a.to)}, dan ${one(b)}."
+    },
+    "questf13-one-equation#24": {
+      "en": "The interest rate is ${one(a)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:379:181"
+      ],
+      "af": "Die rentekoers is ${one(a)}."
+    },
+    "questf13-one-equation#25": {
+      "en": "an amount ${x.v} ${when(x.t)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:381:79"
+      ],
+      "af": "'n bedrag ${x.v} ${when(x.t)}"
+    },
+    "questf13-one-equation#26": {
+      "en": "${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:390:18"
+      ],
+      "af": "${N} wil ${money(sc.total.value)} ná ${years(sc.n)} in 'n spaarrekening hê. Dit is die totaal, A. ${rate} Hoeveel, P, moet ${p.he} nou deponeer?"
+    },
+    "questf13-one-equation#27": {
+      "en": "an",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:392:49"
+      ],
+      "af": "'n"
+    },
+    "questf13-one-equation#28": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:392:67"
+      ],
+      "af": "'n"
+    },
+    "questf13-one-equation#29": {
+      "en": "${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:393:18"
+      ],
+      "af": "${N} koop ${a} ${sc.item}. ${He} betaal 'n aanbetaling van ${money(sc.down)} reguit aan die winkel en leen die res. Die lening, P, is die totaal. ${He} betaal dit af met twee terugbetalings: ${andList(reps.map(at))}. ${rate} Vind die lening, P, en dan die prys van die ${sc.item}."
+    },
+    "questf13-one-equation#30": {
+      "en": "${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:396:18"
+      ],
+      "af": "${N} leen nou geld. Die lening, P, is die totaal. ${He} betaal dit af met twee terugbetalings: ${andList(reps.map(at))}. ${rate} Hoeveel het ${p.he} geleen?"
+    },
+    "questf13-one-equation#31": {
+      "en": "${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:398:18"
+      ],
+      "af": "${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}. ${He} wil ${money(sc.total.value)} ná ${years(sc.n)} in die rekening hê, net ná die laaste deposito. Dit is die totaal, A. ${rate} Vind x."
+    },
+    "questf13-one-equation#32": {
+      "en": " ${He} withdraws ${andList(wds.map(at))}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:400:36"
+      ],
+      "af": " ${He} onttrek ${andList(wds.map(at))}."
+    },
+    "questf13-one-equation#33": {
+      "en": "${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? \", straight after the last deposit\" : \"\"}? That is the total, A.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:401:18"
+      ],
+      "af": "${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}.${out} ${rate} Hoeveel is in die rekening ná ${years(sc.n)}${sameDay ? \", net ná die laaste deposito\" : \"\"}? Dit is die totaal, A.",
+      "nested": [
+        ", straight after the last deposit"
+      ]
+    },
+    "questf13-one-equation#34": {
+      "en": "the day of the loan",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:406:47"
+      ],
+      "af": "die dag van die lening"
+    },
+    "questf13-one-equation#35": {
+      "en": "the day of A",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:406:102"
+      ],
+      "af": "die dag van A"
+    },
+    "questf13-one-equation#36": {
+      "en": "the deposit",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:407:25"
+      ],
+      "af": "die deposito"
+    },
+    "questf13-one-equation#37": {
+      "en": "the withdrawal",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:407:65"
+      ],
+      "af": "die onttrekking"
+    },
+    "questf13-one-equation#38": {
+      "en": "the repayment",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:407:114"
+      ],
+      "af": "die terugbetaling"
+    },
+    "questf13-one-equation#39": {
+      "en": "no car: it already stands on the meeting day",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:412:34"
+      ],
+      "af": "geen kar nie: dit staan reeds op die ontmoetingsdag"
+    },
+    "questf13-one-equation#40": {
+      "en": "T${c.to} to T${c.from}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:414:32"
+      ],
+      "af": "T${c.to} tot T${c.from}"
+    },
+    "questf13-one-equation#41": {
+      "en": "T${c.from} to T${c.to}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:414:91"
+      ],
+      "af": "T${c.from} tot T${c.to}"
+    },
+    "questf13-one-equation#42": {
+      "en": "${span}: ${sum}${c.e < 0 ? `, written ${nw(`−${c.years * c.k}`)}` : \"\"}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:419:16"
+      ],
+      "af": "${span}: ${sum}${c.e < 0 ? `, geskryf as ${nw(`−${c.years * c.k}`)}` : \"\"}",
+      "nested": [
+        ", written ${nw(`−${c.years * c.k}`)}"
+      ]
+    },
+    "questf13-one-equation#43": {
+      "en": "${t.cars[0].e < 0 ? \"reverse gear\" : \"forward gear\"}, ${t.cars.length > 1 ? \"one car per road; \" : \"\"}${legs.join(\"; \")}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:421:14"
+      ],
+      "af": "${t.cars[0].e < 0 ? \"trurat\" : \"vorentoe\"}, ${t.cars.length > 1 ? \"een kar per pad; \" : \"\"}${legs.join(\"; \")}",
+      "nested": [
+        "reverse gear",
+        "forward gear",
+        "one car per road; "
+      ]
+    },
+    "questf13-one-equation#44": {
+      "en": "${cap(WHAT[t.kind])} of ${money(t.c)} at T${t.t}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:425:45"
+      ],
+      "af": "${cap(WHAT[t.kind])} van ${money(t.c)} by T${t.t}"
+    },
+    "questf13-one-equation#45": {
+      "en": "${cap(WHAT[t.kind])} ${t.c} at T${t.t}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:425:156"
+      ],
+      "af": "${cap(WHAT[t.kind])} ${t.c} by T${t.t}"
+    },
+    "questf13-one-equation#46": {
+      "en": "comes OUT, so minus",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:426:36"
+      ],
+      "af": "kom UIT, dus minus"
+    },
+    "questf13-one-equation#47": {
+      "en": "stands positive on the right",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:426:108"
+      ],
+      "af": "staan positief regs"
+    },
+    "questf13-one-equation#48": {
+      "en": "goes IN, so plus",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:426:169"
+      ],
+      "af": "gaan IN, dus plus"
+    },
+    "questf13-one-equation#49": {
+      "en": "The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car: ${CAR_IS}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:433:12"
+      ],
+      "af": "Die ontmoetingsdag is T${sc.meet}, ${dayOf(sc)}. Elke bedrag ry in sy kar daarheen: ${CAR_IS}."
+    },
+    "questf13-one-equation#50": {
+      "en": "back to T0: reverse gear, negative exponents",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:434:33"
+      ],
+      "af": "terug na T0: trurat, negatiewe eksponente"
+    },
+    "questf13-one-equation#51": {
+      "en": "everything moves forward to the end, so every exponent is positive",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:434:132"
+      ],
+      "af": "alles skuif vorentoe na die einde, dus is elke eksponent positief"
+    },
+    "questf13-one-equation#52": {
+      "en": "the loan, P, alone on the left; the repayments positive on the right",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:438:38"
+      ],
+      "af": "die lening, P, alleen links; die terugbetalings positief regs"
+    },
+    "questf13-one-equation#53": {
+      "en": "the total, A, alone on the left, even though it is known",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:439:42"
+      ],
+      "af": "die totaal, A, alleen links, al is dit bekend"
+    },
+    "questf13-one-equation#54": {
+      "en": "the total, A, alone on the left; a deposit plus, a withdrawal minus",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:440:14"
+      ],
+      "af": "die totaal, A, alleen links; 'n deposito plus, 'n onttrekking minus"
+    },
+    "questf13-one-equation#55": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:442:51",
+        "questf13-one-equation.js:496:72",
+        "questf13-one-equation.js:496:111",
+        "questf13-one-equation.js:506:148",
+        "questf13-one-equation.js:506:220",
+        "questf13-one-equation.js:548:85",
+        "questf13-one-equation.js:548:162"
+      ],
+      "af": "P"
+    },
+    "questf13-one-equation#56": {
+      "en": "The loan, P, alone on the left. Every repayment drives back to T0 in reverse gear (a negative exponent) and stands positive on the right.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:453:11"
+      ],
+      "af": "Die lening, P, alleen links. Elke terugbetaling ry in trurat terug na T0 ('n negatiewe eksponent) en staan positief regs."
+    },
+    "questf13-one-equation#57": {
+      "en": "The total alone on the left. Every other amount drives to the meeting day in forward gear: a deposit plus, a withdrawal minus. Already on the meeting day? No car.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:454:11"
+      ],
+      "af": "Die totaal alleen links. Elke ander bedrag ry vorentoe na die ontmoetingsdag: 'n deposito plus, 'n onttrekking minus. Reeds op die ontmoetingsdag? Geen kar nie."
+    },
+    "questf13-one-equation#58": {
+      "en": "How much is the loan, P?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:455:40"
+      ],
+      "af": "Hoeveel is die lening, P?"
+    },
+    "questf13-one-equation#59": {
+      "en": "How much is A?",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:456:32"
+      ],
+      "af": "Hoeveel is A?"
+    },
+    "questf13-one-equation#60": {
+      "en": "${U} sits inside the one equation: SHIFT SOLVE finds it. How much is x?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:457:32"
+      ],
+      "af": "${U} sit binne-in die een vergelyking: SHIFT SOLVE vind dit. Hoeveel is x?"
+    },
+    "questf13-one-equation#61": {
+      "en": "${U} sits inside the one equation: SHIFT SOLVE finds it. How much must ${p.he} deposit now?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:458:11"
+      ],
+      "af": "${U} sit binne-in die een vergelyking: SHIFT SOLVE vind dit. Hoeveel moet ${p.he} nou deponeer?"
+    },
+    "questf13-one-equation#62": {
+      "en": "The meeting day is T${sc.meet}, ${dayOf(sc)}. Which line is the one equation?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:460:16"
+      ],
+      "af": "Die ontmoetingsdag is T${sc.meet}, ${dayOf(sc)}. Watter reël is die een vergelyking?"
+    },
+    "questf13-one-equation#63": {
+      "en": "${ask} Give it in rand, to ${DP2}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:461:15"
+      ],
+      "af": "${ask} Gee dit in rand, tot ${DP2}."
+    },
+    "questf13-one-equation#64": {
+      "en": "Type the whole equation, then SHIFT SOLVE. Never round along the way: round once, at the end.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:462:24"
+      ],
+      "af": "Tik die hele vergelyking in, dan SHIFT SOLVE. Moenie langs die pad afrond nie: rond een keer af, aan die einde."
+    },
+    "questf13-one-equation#65": {
+      "en": "Type the whole right side in one go. Never round along the way: round once, at the end.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:463:15"
+      ],
+      "af": "Tik die hele regterkant in een slag in. Moenie langs die pad afrond nie: rond een keer af, aan die einde."
+    },
+    "questf13-one-equation#66": {
+      "en": "Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to ${DP2}?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:465:43"
+      ],
+      "af": "Prys = lening +${NB}aanbetaling. Wat is die prys van die ${sc.item}, in rand, tot ${DP2}?"
+    },
+    "questf13-one-equation#67": {
+      "en": "The down payment never enters the account: it just adds on to the loan.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:466:9"
+      ],
+      "af": "Die aanbetaling kom nooit in die rekening nie: dit tel net by die lening by."
+    },
+    "questf13-one-equation#68": {
+      "en": "The one equation: ${right}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:471:14"
+      ],
+      "af": "Die een vergelyking: ${right}"
+    },
+    "questf13-one-equation#69": {
+      "en": "${solves(sc) ? \"SHIFT SOLVE on the one line\" : \"typed in once\"}, rounded once, at the end (${DP2})",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:472:25"
+      ],
+      "af": "${solves(sc) ? \"SHIFT SOLVE op die een reël\" : \"een keer ingetik\"}, een keer afgerond, aan die einde (${DP2})",
+      "nested": [
+        "SHIFT SOLVE on the one line",
+        "typed in once"
+      ]
+    },
+    "questf13-one-equation#70": {
+      "en": "Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:475:12"
+      ],
+      "af": "Prys${NB}=${NB}lening +${NB}aanbetaling${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}"
+    },
+    "questf13-one-equation#71": {
+      "en": "the down payment never enters the account: no car, no sign",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:476:12"
+      ],
+      "af": "die aanbetaling kom nooit in die rekening nie: geen kar nie, geen teken nie"
+    },
+    "questf13-one-equation#72": {
+      "en": "Meeting day, cars, then ONE line: the total alone on the left, the payments on the right. Type it once, round once.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:485:15"
+      ],
+      "af": "Ontmoetingsdag, karre, dan EEN reël: die totaal alleen links, die paaiemente regs. Tik dit een keer in, rond een keer af."
+    },
+    "questf13-one-equation#73": {
+      "en": "${answer}, so the price is ${money(price, 2)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questf13-one-equation.js:486:38"
+      ],
+      "af": "${answer}, dus is die prys ${money(price, 2)}"
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "questf5-timeline-build.js:110:169",
+      "text": "the <b>same</b> value",
+      "in": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. Moving <"
+    },
+    {
+      "where": "questf5-timeline-build.js:110:195",
+      "text": "<b>different</b> values",
+      "in": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. Moving <"
+    },
+    {
+      "where": "questf8-which-total.js:128:16",
+      "text": "<p>Payments are <b>coins</b>. The${NB}total is <b>the${NB}jug</b>.</p>"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:122:63",
+      "text": "; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}",
+      "in": "${pa(r0.r)} compounded ${HOW(r0.k)}${r1 ? `; from T${r1.from"
+    },
+    {
+      "where": "questf11-meeting-day.js:491:60",
+      "text": "the fewest of any day",
+      "in": "T${D} needs ${cars(min)}, ${ties === 1 ? \"the fewest of any "
+    },
+    {
+      "where": "questf11-meeting-day.js:491:86",
+      "text": "as few as any day",
+      "in": "T${D} needs ${cars(min)}, ${ties === 1 ? \"the fewest of any "
+    },
+    {
+      "where": "questf12-build-timeline.js:186:24",
+      "text": "${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change. ",
+      "in": "${coinOn(t) ? `${T(t)} is ${whatAt(sc, t, { jug: false })}: "
+    },
+    {
+      "where": "questf12-build-timeline.js:233:26",
+      "text": "Where does each coin go?<br>",
+      "in": "${first ? \"Where does each coin go?<br>\" : \"\"}${cap(coinName"
+    },
+    {
+      "where": "questf12-build-timeline.js:250:117",
+      "text": "loan = price − down payment",
+      "in": "A down payment is paid straight to the shop: it never enters"
+    },
+    {
+      "where": "questf12-build-timeline.js:283:43",
+      "text": "; a coin going out, drawn with its minus",
+      "in": "${when(x.t)}${x.kind === \"wd\" ? \"; a coin going out, drawn w"
+    },
+    {
+      "where": "questf12-build-timeline.js:283:119",
+      "text": "; ${x.v} is still a coin, on its day",
+      "in": "${when(x.t)}${x.kind === \"wd\" ? \"; a coin going out, drawn w"
+    },
+    {
+      "where": "questf12-build-timeline.js:291:63",
+      "text": ", the day of the loan",
+      "in": "${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? \", the day"
+    },
+    {
+      "where": "questf12-build-timeline.js:291:89",
+      "text": ", the end",
+      "in": "${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? \", the day"
+    },
+    {
+      "where": "questf12-build-timeline.js:302:44",
+      "text": "the rate changes at ${T(c)}",
+      "in": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no r"
+    },
+    {
+      "where": "questf12-build-timeline.js:302:76",
+      "text": "no rate change",
+      "in": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no r"
+    },
+    {
+      "where": "questf12-build-timeline.js:302:207",
+      "text": "; the ${money(sc.down)} down payment: nowhere",
+      "in": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no r"
+    },
+    {
+      "where": "questf13-one-equation.js:401:163",
+      "text": ", straight after the last deposit",
+      "in": "${N} opens a savings account. ${He} deposits ${andList(deps."
+    },
+    {
+      "where": "questf13-one-equation.js:421:35",
+      "text": "reverse gear",
+      "in": "${t.cars[0].e < 0 ? \"reverse gear\" : \"forward gear\"}, ${t.ca"
+    },
+    {
+      "where": "questf13-one-equation.js:421:52",
+      "text": "forward gear",
+      "in": "${t.cars[0].e < 0 ? \"reverse gear\" : \"forward gear\"}, ${t.ca"
+    },
+    {
+      "where": "questf13-one-equation.js:421:91",
+      "text": "one car per road; ",
+      "in": "${t.cars[0].e < 0 ? \"reverse gear\" : \"forward gear\"}, ${t.ca"
+    },
+    {
+      "where": "questf13-one-equation.js:472:41",
+      "text": "SHIFT SOLVE on the one line",
+      "in": "${solves(sc) ? \"SHIFT SOLVE on the one line\" : \"typed in onc"
+    },
+    {
+      "where": "questf13-one-equation.js:472:73",
+      "text": "typed in once",
+      "in": "${solves(sc) ? \"SHIFT SOLVE on the one line\" : \"typed in onc"
+    }
+  ],
+  "words": 3134,
+  "afConflicts": [
+    "questf12-build-timeline.js: withdrawal"
+  ]
+}

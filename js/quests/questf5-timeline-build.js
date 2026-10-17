@@ -27,7 +27,8 @@ const money = (v, dp = 0, bold = false) => nw(bold ? `<b>${rands(v, dp)}</b>` : 
 const amt0 = v => rands(v, 0).slice(1);           // "1 000" — the way she writes P in an equation (no R on the left)
 const term = (v, ...brackets) => nw(amt0(v) + brackets.join(""));     // "1 000(1 + 0,08)²": the amount and its brackets, one unit
 const pa = r => nw(L(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`));                                  // "12% p.a.", one unit
-const HOW = o => o.label.replace(/-/g, "\u2011");                     // "semi‑annually (half‑yearly)": no-break hyphens (finlib's label is left alone)
+const HOW_AF = { 2: "halfjaarliks", 4: "kwartaalliks", 12: "maandeliks" };   // T93: the Afrikaans word per k (OPTS holds 2, 4, 12)
+const HOW = o => L(o.label.replace(/-/g, "\u2011"), HOW_AF[o.k]);                     // "semi‑annually (half‑yearly)": no-break hyphens (finlib's label is left alone)
 /* two money values are "the same value" (float noise only) */
 const agrees = (a, b) => Math.abs(a - b) <= 1e-6 * Math.max(1, Math.abs(a));
 
@@ -101,7 +102,7 @@ const SKILLS = {
       { s: L(`Back: ${term(P, pow(`(1 + ${iC})`, T), pow(`(1 + ${iC})`, `−${back}`))} = ${term(P, pow(`(1 + ${iC})`, k))}`, `Terug: ${term(P, pow(`(1 + ${iC})`, T), pow(`(1 + ${iC})`, `−${back}`))} = ${term(P, pow(`(1 + ${iC})`, k))}`),
         r: L(`${T} − ${back} = ${k}, so it is the same value: ${money(fwd, 2)}`, `${T} − ${back} = ${k}, so dit is dieselfde waarde: ${money(fwd, 2)}`) },
     ];
-    if (claim === "plusExp") steps.push({ s: `A plus exponent gives ${money(wrongBack, 2)} — that is moving forward again.` });
+    if (claim === "plusExp") steps.push({ s: L(`A plus exponent gives ${money(wrongBack, 2)} — that is moving forward again.`, `'n Plus-eksponent gee ${money(wrongBack, 2)}: dit skuif weer vorentoe.`) });
     return {
       type: "yesno", concept: MOVE,
       prompt: claim === "plusExp"
@@ -175,7 +176,7 @@ const SKILLS = {
       [term(P, pow(`(1 + ${i1}/${o1.k})`, `${y1 + y2}×${o1.k}`)),
        `${term(P, b1)} + ${term(P, b2)}`,
        term(P, b1, pow(`(1 + ${i2}/${o2.k})`, `−${y2}×${o2.k}`))],
-      { graph: tl(y1 + y2, [{ t: 0, amount: P, dp: 0 }, { t: y1, label: "rate changes" }, { t: y1 + y2, label: "?", role: "A" }]),
+      { graph: tl(y1 + y2, [{ t: 0, amount: P, dp: 0 }, { t: y1, label: L("rate changes", "koers verander") }, { t: y1 + y2, label: "?", role: "A" }]),
         hint: L("Split the timeline where the rate changes: ONE bracket per segment, multiplied together.", "Verdeel die tydlyn waar die koers verander: EEN hakie per segment, met mekaar vermenigvuldig."),
         answerLabel: right,
         solution: [

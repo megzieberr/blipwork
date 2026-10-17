@@ -42,11 +42,12 @@ import { rand, toFrac, COMPOUNDING, pow } from "../finlib.js";
 import { L as afL } from "../lang.js";
 
 const CAR = "carOrNoCar";
-export const REFRAIN = "A car only if it has to move. Already there? No car.";
+export const REFRAIN = afL("A car only if it has to move. Already there? No car.", "'n Kar net as dit moet skuif. Reeds daar? Geen kar nie.");
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = COMPOUNDING.filter(c => [1, 2, 4, 12].includes(c.k)).map(c => c.k);
-const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (Fix A review, as f10)
+const HOW_AF = { 1: "jaarliks", 4: "kwartaalliks", 12: "maandeliks" };   // T93: the Afrikaans word for finlib's English label
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : afL(COMPOUNDING.find(c => c.k === k).label, HOW_AF[k]));   // a non-breaking hyphen (Fix A review, as f10)
 const SAVE_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000, 10000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500];
 /* every amount stays under R100 000 (7 glyphs at most), n ≤ 6: two labels
@@ -68,8 +69,8 @@ const amt0 = v => rand(v, 0).slice(1).replace(/ /g, NB);               // "8 000
 const pa = r => afL(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`);
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, j) => lo + j);
-const yrs = y => `${y} year${y === 1 ? "" : "s"}`;
-const person = () => pick([{ he: "she", his: "her" }, { he: "he", his: "his" }]);
+const yrs = y => afL(`${y} year${y === 1 ? "" : "s"}`, `${y} jaar${y === 1 ? "" : ""}`);
+const person = () => pick([{ he: afL("she", "sy"), his: afL("her", "haar") }, { he: afL("he", "hy"), his: afL("his", "sy") }]);
 
 /* ---------- the scene: a story, its roads, its payments, the total ---------- */
 
@@ -101,7 +102,7 @@ function rollScene(two, sameDay = false) {
    saving, 8% quarterly to T3, then 10% monthly; deposits R5 000 at T1,
    R3 000 at T4 and R2 000 on the day of A (T6) */
 const FIX_SCENE = () => ({
-  saving: true, n: 6, p: { he: "she", his: "her" }, total: { t: 6, role: "A" },
+  saving: true, n: 6, p: { he: afL("she", "sy"), his: afL("her", "haar") }, total: { t: 6, role: "A" },
   roads: [{ from: 0, to: 3, r: 8, k: 4 }, { from: 3, to: 6, r: 10, k: 12 }],
   pays: [{ t: 1, v: 5000 }, { t: 4, v: 3000 }, { t: 6, v: 2000 }],
 });
@@ -111,7 +112,7 @@ const FIX_SCENE = () => ({
 const graphOf = (sc, meet) => ({
   type: "timeline", n: sc.n, meet,
   nodes: [{ t: sc.total.t, label: "?", role: sc.total.role }, ...sc.pays.map(p => ({ t: p.t, amount: p.v, dp: 0 }))],
-  roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: `${r.r}% p.a.`, k: r.k })),
+  roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: afL(`${r.r}% p.a.`, `${r.r}% p.j.`), k: r.k })),
   leaders: true,                                   // a thin line from each lone amount down to its own T
 });
 const CAPTION = afL("T in years", "T in jare");
@@ -159,14 +160,14 @@ function carSolution(sc, a, meet, quiet = null) {
   const tr = trip(sc, a.t, meet);
   const out = [{ s: afL(`The meeting day is T${meet}. The ${money(a.v)} stands at T${a.t}.`, `Die ontmoetingsdag is T${meet}. Die ${money(a.v)} staan by T${a.t}.`), r: tr.dir === 0 ? afL("it is already there", "dit is reeds daar") : afL("it has to move", "dit moet skuif") }];
   if (tr.dir === 0) {
-    out.push({ s: `No car: in the one equation it is just ${nw(amt0(a.v))}, with no bracket.`, r: "it does not move" });
+    out.push({ s: afL(`No car: in the one equation it is just ${nw(amt0(a.v))}, with no bracket.`, `Geen kar nie: in die een vergelyking is dit net ${nw(amt0(a.v))}, sonder 'n hakie.`), r: afL("it does not move", "dit skuif nie") });
   } else {
-    out.push({ s: `${cap(gearOf(tr.dir))}: T${meet} is ${tr.dir > 0 ? "later" : "earlier"}, so ${tr.dir > 0 ? "multiply (×)" : "divide (÷)"}.`,
-      r: tr.dir > 0 ? "a positive exponent" : "a negative exponent" });
+    out.push({ s: afL(`${cap(gearOf(tr.dir))}: T${meet} is ${tr.dir > 0 ? "later" : "earlier"}, so ${tr.dir > 0 ? "multiply (×)" : "divide (÷)"}.`, `${cap(gearOf(tr.dir))}: T${meet} is ${tr.dir > 0 ? "later" : "vroeër"}, dus ${tr.dir > 0 ? "vermenigvuldig (×)" : "deel (÷)"}.`),
+      r: tr.dir > 0 ? afL("a positive exponent", "'n positiewe eksponent") : afL("a negative exponent", "'n negatiewe eksponent") });
     tr.legs.forEach((l, j) => out.push({
-      s: `${tr.legs.length > 1 ? (j === 0 ? "Car 1, " : "Car 2, ") : ""}${roadName(l)}: ${yrs(l.years)} compounded ${HOW(l.k)}`,
-      ...(quiet === l.r ? {} : { r: `exponent ${expText(l)}` }) }));
-    out.push({ s: `Its piece of the one equation: ${term(a.v, tr.legs)}`, r: tr.legs.length > 1 ? "one car per road" : "one road, one car" });
+      s: afL(`${tr.legs.length > 1 ? (j === 0 ? "Car 1, " : "Car 2, ") : ""}${roadName(l)}: ${yrs(l.years)} compounded ${HOW(l.k)}`, `${tr.legs.length > 1 ? (j === 0 ? "Kar 1, " : "Kar 2, ") : ""}${roadName(l)}: ${yrs(l.years)} ${HOW(l.k)} saamgestel`),
+      ...(quiet === l.r ? {} : { r: afL(`exponent ${expText(l)}`, `eksponent ${expText(l)}`) }) }));
+    out.push({ s: afL(`Its piece of the one equation: ${term(a.v, tr.legs)}`, `Sy deel van die een vergelyking: ${term(a.v, tr.legs)}`), r: tr.legs.length > 1 ? afL("one car per road", "een kar per pad") : afL("one road, one car", "een pad, een kar") });
   }
   out.push({ s: REFRAIN });
   return out;

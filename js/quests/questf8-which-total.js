@@ -75,16 +75,16 @@ const TOTAL = "theTotal";
    "the total" on every card. The per-position hook stays (a static round
    deals def.skills IN ORDER, so a card's position is its skill's index,
    js/play.js renderPlay): it is how card 1 knows to open on the discovery slide. */
-export const totalWordAt = () => "the total";
+export const totalWordAt = () => L("the total", "die totaal");
 
 /* ---------- words and numbers ---------- */
 const NB = " ";
 const nw = s => `<span class="nowrap">${s}</span>`;                    // ONE unbreakable unit
 const money = v => nw(rand(v, 0).replace(/ /g, NB));                   // "R8 000", the space a literal U+00A0
-const paU = r => nw(`${r}%${NB}p.a.`);
-const years = y => nw(`${y}${NB}year${y === 1 ? "" : "s"}`);
+const paU = r => nw(L(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`));
+const years = y => nw(L(`${y}${NB}year${y === 1 ? "" : "s"}`, `${y}${NB}jaar${y === 1 ? "" : ""}`));
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-const HOW = { 1: "annually", 2: "half‑yearly", 4: "quarterly", 12: "monthly" };   // a non-breaking hyphen
+const HOW = { 1: L("annually", "jaarliks"), 2: L("half‑yearly", "halfjaarliks"), 4: L("quarterly", "kwartaalliks"), 12: L("monthly", "maandeliks") };   // a non-breaking hyphen
 const RATES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18];
 const KS = [1, 2, 4, 12];
 const step500 = (lo, hi) => 500 * randInt(Math.ceil(lo / 500), Math.floor(hi / 500));
@@ -92,13 +92,13 @@ const grow = (v, r, k, yrs) => v * Math.pow(1 + toFrac(r) / k, k * yrs);
 
 /* the ten textbook names of the class bank (f13) and their pronouns;
    Mvelo is named again rather than given a pronoun */
-const SHE = { he: "she", his: "her" }, HE = { he: "he", his: "his" };
+const SHE = { he: L("she", "sy"), his: L("her", "haar") }, HE = { he: L("he", "hy"), his: L("his", "sy") };
 const WHO = {
-  Brenda: SHE, Mvelo: { he: "Mvelo", his: "Mvelo’s" }, Bradley: HE, Jason: HE, Mandy: SHE,
+  Brenda: SHE, Mvelo: { he: "Mvelo", his: L("Mvelo’s", "Mvelo se") }, Bradley: HE, Jason: HE, Mandy: SHE,
   Brian: HE, Stephanie: SHE, Bob: HE, Arnold: HE, David: HE,
 };
 export const F8_NAMES = Object.keys(WHO);
-const ITEMS = [L("lounge suite", "lounge suite"), L("motorbike", "motorbike"), L("laptop", "laptop"), L("fridge", "fridge"), L("TV", "TV"), L("bed", "bed")];   // never "car": f9 to f13's car is the bracket
+const ITEMS = [L("lounge suite", "sitkamerstel"), L("motorbike", "motorfiets"), L("laptop", "skootrekenaar"), L("fridge", "yskas"), L("TV", "TV"), L("bed", "bed")];   // never "car": f9 to f13's car is the bracket
 
 /* ---------- card 1 opens on a DISCOVERY slide (her notes, 11 Oct 16:54, 16:56) ----------
    "Make the first slide just the jug": three frames, one jug at a time
@@ -191,8 +191,8 @@ function tell(order, name) {
 }
 
 const rateSen = (r, k, loan) => sen("rate", () => pick(loan
-  ? [`The bank charges ${paU(r)}, compounded ${HOW[k]}.`, `The interest rate is ${paU(r)}, compounded ${HOW[k]}.`]
-  : [`The account earns interest at ${paU(r)}, compounded ${HOW[k]}.`, `The interest rate is ${paU(r)}, compounded ${HOW[k]}.`]));
+  ? [L(`The bank charges ${paU(r)}, compounded ${HOW[k]}.`, `Die bank vra rente teen ${paU(r)}, ${HOW[k]} saamgestel.`), L(`The interest rate is ${paU(r)}, compounded ${HOW[k]}.`, `Die rentekoers is ${paU(r)}, ${HOW[k]} saamgestel.`)]
+  : [L(`The account earns interest at ${paU(r)}, compounded ${HOW[k]}.`, `Die rekening verdien rente teen ${paU(r)}, ${HOW[k]} saamgestel.`), L(`The interest rate is ${paU(r)}, compounded ${HOW[k]}.`, `Die rentekoers is ${paU(r)}, ${HOW[k]} saamgestel.`)]));
 
 /* ---------- the paragraph card ---------- */
 function paragraphCard(pos, { name, loan, hp = false, n, order }) {
@@ -271,15 +271,15 @@ function jugTwoDeposits(pos) {
   };
   const make = ({ name, n, r, k, d1, d2, t2, shape, ask }) => {
     if (d1 === d2) return null;
-    const in1 = sen(L("in", "in"), w => `${w.S} deposits ${money(d1)} into a savings account now.`);
-    const in1b = sen(L("in", "in"), w => `${w.S} deposits ${money(d1)} into the account now.`);
-    const in2 = sen(L("in", "in"), w => `${w.S} deposits another ${money(d2)} after ${years(t2)}.`);
+    const in1 = sen(L("in", "in"), w => L(`${w.S} deposits ${money(d1)} into a savings account now.`, `${w.S} deponeer nou ${money(d1)} in 'n spaarrekening.`));
+    const in1b = sen(L("in", "in"), w => L(`${w.S} deposits ${money(d1)} into the account now.`, `${w.S} deponeer nou ${money(d1)} in die rekening.`));
+    const in2 = sen(L("in", "in"), w => L(`${w.S} deposits another ${money(d2)} after ${years(t2)}.`, `${w.S} deponeer nog ${money(d2)} ná ${years(t2)}.`));
     const rate = rateSen(r, k, false);
     const jugEnd = sen("jug", w => [
-      `How much will ${w.s} have in the account after ${years(n)}?`,
-      `${w.S} wants to know how much is in the account after ${years(n)}.`,
-      `What amount will ${w.s} have in the account after ${years(n)}?`][ask]);
-    const jugFirst = sen("jug", w => `${w.S} wants to know how much ${w.s === name ? WHO[name].he : w.s} will have in a savings account after ${years(n)}.`);
+      L(`How much will ${w.s} have in the account after ${years(n)}?`, `Hoeveel sal ${w.s} ná ${years(n)} in die rekening hê?`),
+      L(`${w.S} wants to know how much is in the account after ${years(n)}.`, `${w.S} wil weet hoeveel ná ${years(n)} in die rekening is.`),
+      L(`What amount will ${w.s} have in the account after ${years(n)}?`, `Watter bedrag sal ${w.s} ná ${years(n)} in die rekening hê?`)][ask]);
+    const jugFirst = sen("jug", w => L(`${w.S} wants to know how much ${w.s === name ? WHO[name].he : w.s} will have in a savings account after ${years(n)}.`, `${w.S} wil weet hoeveel ${w.s === name ? WHO[name].he : w.s} ná ${years(n)} in 'n spaarrekening sal hê.`));
     const order = [[in1, in2, rate, jugEnd], [in1, rate, in2, jugEnd], [rate, in1, in2, jugEnd], [jugFirst, in1b, in2, rate]][shape];
     return paragraphCard(pos, { name, loan: false, n, order });
   };
@@ -296,12 +296,12 @@ function jugLoan(pos) {
   const make = ({ name, n, r, k, P, r1, r2, t1, unknownP, shape }) => {
     if (r1 === r2) return null;
     const jug = unknownP
-      ? sen("jug", w => `${w.S} borrows an amount, P, from the bank now.`)
-      : sen("jug", w => pick([`${w.S} borrows ${money(P)} from the bank now.`, `${w.S} borrows ${money(P)} from a bank to start a business.`]));
-    const rep1 = sen("repay", w => pick([`${w.S} pays back ${money(r1)} after ${years(t1)}.`, `${w.S} repays ${money(r1)} after ${years(t1)}.`]));
+      ? sen("jug", w => L(`${w.S} borrows an amount, P, from the bank now.`, `${w.S} leen nou 'n bedrag, P, by die bank.`))
+      : sen("jug", w => pick([L(`${w.S} borrows ${money(P)} from the bank now.`, `${w.S} leen nou ${money(P)} by die bank.`), L(`${w.S} borrows ${money(P)} from a bank to start a business.`, `${w.S} leen ${money(P)} by 'n bank om 'n besigheid te begin.`)]));
+    const rep1 = sen("repay", w => pick([L(`${w.S} pays back ${money(r1)} after ${years(t1)}.`, `${w.S} betaal ${money(r1)} ná ${years(t1)} terug.`), L(`${w.S} repays ${money(r1)} after ${years(t1)}.`, `${w.S} betaal ${money(r1)} terug ná ${years(t1)}.`)]));
     const rep2 = unknownP
-      ? sen("repay", w => `${w.S} pays back ${money(r2)} after ${years(n)}.`)
-      : sen("repay", w => `${w.S} pays back the rest, an amount x, after ${years(n)}.`);
+      ? sen("repay", w => L(`${w.S} pays back ${money(r2)} after ${years(n)}.`, `${w.S} betaal ${money(r2)} ná ${years(n)} terug.`))
+      : sen("repay", w => L(`${w.S} pays back the rest, an amount x, after ${years(n)}.`, `${w.S} betaal die res, 'n bedrag x, ná ${years(n)} terug.`));
     /* honest: with P known, x is what is left of P after r1, grown to T n: positive */
     if (!unknownP && !(grow(P, r, k, t1) > r1)) return null;
     const rate = rateSen(r, k, true);
@@ -321,15 +321,15 @@ function jugWithdrawal(pos) {
   const make = ({ name, n, r, k, d1, w, d2, tw, td, rateAt, ask }) => {
     if (w === d1 || w === d2 || d1 === d2) return null;
     const first = ask === 2;                                          // the jug can open the paragraph too
-    const in1 = sen(L("in", "in"), s => `${s.S} deposits ${money(d1)} into ${first ? "the" : "a savings"} account now.`);
-    const out = sen(L("out", "out"), s => pick([`${s.S} withdraws ${money(w)} after ${years(tw)}.`, `${s.S} takes ${money(w)} out of the account after ${years(tw)}.`]));
-    const in2 = d2 ? sen(L("in", "in"), s => `${s.S} deposits another ${money(d2)} after ${years(td)}.`) : null;
+    const in1 = sen(L("in", "in"), s => L(`${s.S} deposits ${money(d1)} into ${first ? "the" : "a savings"} account now.`, `${s.S} deponeer nou ${money(d1)} in ${first ? "die " : "'n spaar"}rekening.`));
+    const out = sen(L("out", "out"), s => pick([L(`${s.S} withdraws ${money(w)} after ${years(tw)}.`, `${s.S} onttrek ${money(w)} ná ${years(tw)}.`), L(`${s.S} takes ${money(w)} out of the account after ${years(tw)}.`, `${s.S} haal ${money(w)} ná ${years(tw)} uit die rekening.`)]));
+    const in2 = d2 ? sen(L("in", "in"), s => L(`${s.S} deposits another ${money(d2)} after ${years(td)}.`, `${s.S} deponeer nog ${money(d2)} ná ${years(td)}.`)) : null;
     const coins = [in1, ...[{ t: tw, x: out }, ...(in2 ? [{ t: td, x: in2 }] : [])].sort((a, b) => a.t - b.t).map(c => c.x)];
     const rate = rateSen(r, k, false);
     const jug = sen("jug", s => [
-      `How much will ${s.s} have in the account after ${years(n)}?`,
-      `${s.S} wants to know how much is in the account after ${years(n)}.`,
-      `${s.S} wants to know how much ${WHO[name].he} will have in a savings account after ${years(n)}.`][ask]);
+      L(`How much will ${s.s} have in the account after ${years(n)}?`, `Hoeveel sal ${s.s} ná ${years(n)} in die rekening hê?`),
+      L(`${s.S} wants to know how much is in the account after ${years(n)}.`, `${s.S} wil weet hoeveel ná ${years(n)} in die rekening is.`),
+      L(`${s.S} wants to know how much ${WHO[name].he} will have in a savings account after ${years(n)}.`, `${s.S} wil weet hoeveel ${WHO[name].he} ná ${years(n)} in 'n spaarrekening sal hê.`)][ask]);
     const body = coins.slice();
     body.splice(Math.min(rateAt + 1, body.length), 0, rate);          // the rate after the first deposit, or later
     return paragraphCard(pos, { name, loan: false, n, order: first ? [jug, ...body] : [...body, jug] });
@@ -347,17 +347,17 @@ function jugHirePurchase(pos) {
   const make = ({ name, item, n, r, k, price, down, r1, t1, statedLoan, split, rateFirst }) => {
     const loan = price - down;
     if (!(down > 0 && loan > 0) || !(grow(loan, r, k, t1) > r1)) return null;      // honest: x, the last repayment, is positive
-    const a = /^[aeiou]/i.test(item) ? "an" : "a";
-    const downS = sen(L("down", "down"), s => `${s.S} buys ${a} ${item} for ${money(price)} and pays a down payment of ${money(down)} straight to the shop.`);
-    const jug = sen("jug", s => statedLoan ? `${s.S} borrows the rest, ${money(loan)}, from the bank.` : `${s.S} borrows the rest of the price from the bank.`);
+    const a = /^[aeiou]/i.test(item) ? L("an", "'n") : L("a", "'n");
+    const downS = sen(L("down", "down"), s => L(`${s.S} buys ${a} ${item} for ${money(price)} and pays a down payment of ${money(down)} straight to the shop.`, `${s.S} koop ${a} ${item} vir ${money(price)} en betaal 'n aanbetaling van ${money(down)} reguit aan die winkel.`));
+    const jug = sen("jug", s => statedLoan ? L(`${s.S} borrows the rest, ${money(loan)}, from the bank.`, `${s.S} leen die res, ${money(loan)}, by die bank.`) : L(`${s.S} borrows the rest of the price from the bank.`, `${s.S} leen die res van die prys by die bank.`));
     const reps = split
-      ? [sen("repay", s => `${s.S} pays back ${money(r1)} after ${years(t1)}.`), sen("repay", s => `${s.S} pays the rest, an amount x, after ${years(n)}.`)]
-      : [sen("repay", s => `${s.S} pays the loan back with two repayments: ${money(r1)} after ${years(t1)} and an amount x after ${years(n)}.`)];
+      ? [sen("repay", s => L(`${s.S} pays back ${money(r1)} after ${years(t1)}.`, `${s.S} betaal ${money(r1)} ná ${years(t1)} terug.`)), sen("repay", s => L(`${s.S} pays the rest, an amount x, after ${years(n)}.`, `${s.S} betaal die res, 'n bedrag x, ná ${years(n)}.`))]
+      : [sen("repay", s => L(`${s.S} pays the loan back with two repayments: ${money(r1)} after ${years(t1)} and an amount x after ${years(n)}.`, `${s.S} betaal die lening terug met twee terugbetalings: ${money(r1)} ná ${years(t1)} en 'n bedrag x ná ${years(n)}.`))];
     const rate = rateSen(r, k, true);
     const order = rateFirst ? [rate, downS, jug, ...reps] : [downS, jug, ...reps, rate];
     return paragraphCard(pos, { name, loan: true, hp: true, n, order });
   };
-  return rolled(roll, make, { name: "Brenda", item: L("lounge suite", "lounge suite"), n: 3, r: 14, k: 12, price: 18000, down: 3000, r1: 6000, t1: 1, statedLoan: true, split: true, rateFirst: false });
+  return rolled(roll, make, { name: "Brenda", item: L("lounge suite", "sitkamerstel"), n: 3, r: 14, k: 12, price: 18000, down: 3000, r1: 6000, t1: 1, statedLoan: true, split: true, rateFirst: false });
 }
 
 /* ⑤ a target amount ("wants to have", the jug, known) with one unknown
@@ -377,15 +377,15 @@ function jugTarget(pos) {
        and x comes at t2 */
     const known = askNow ? grow(d, r, k, n - t2) : grow(d, r, k, n);
     if (!(known < T * 0.8)) return null;
-    const jug = sen("jug", s => `${s.S} wants to have ${money(T)} in a savings account after ${years(n)}.`);
+    const jug = sen("jug", s => L(`${s.S} wants to have ${money(T)} in a savings account after ${years(n)}.`, `${s.S} wil ${money(T)} ná ${years(n)} in 'n spaarrekening hê.`));
     const rate = rateSen(r, k, false);
     if (askNow) {
-      const inK = sen(L("in", "in"), s => `${s.S} will also deposit ${money(d)} after ${years(t2)}.`);
-      const ask = sen(L("in", "in"), s => `How much must ${s.s} deposit now?`);
+      const inK = sen(L("in", "in"), s => L(`${s.S} will also deposit ${money(d)} after ${years(t2)}.`, `${s.S} sal ook ${money(d)} ná ${years(t2)} deponeer.`));
+      const ask = sen(L("in", "in"), s => L(`How much must ${s.s} deposit now?`, `Hoeveel moet ${s.s} nou deponeer?`));
       return paragraphCard(pos, { name, loan: false, n, order: [jug, inK, rate, ask] });
     }
-    const in1 = sen(L("in", "in"), s => `${s.S} deposits ${money(d)} now.`);
-    const inX = sen(L("in", "in"), s => pick([`${s.S} deposits an amount x after ${years(t2)}.`, `${s.S} will deposit one more amount, x, after ${years(t2)}.`]));
+    const in1 = sen(L("in", "in"), s => L(`${s.S} deposits ${money(d)} now.`, `${s.S} deponeer nou ${money(d)}.`));
+    const inX = sen(L("in", "in"), s => pick([L(`${s.S} deposits an amount x after ${years(t2)}.`, `${s.S} deponeer 'n bedrag x ná ${years(t2)}.`), L(`${s.S} will deposit one more amount, x, after ${years(t2)}.`, `${s.S} sal nog een bedrag, x, ná ${years(t2)} deponeer.`)]));
     return paragraphCard(pos, { name, loan: false, n, order: jugFirst ? [jug, in1, inX, rate] : [in1, inX, rate, jug] });
   };
   return rolled(roll, make, { name: "Mandy", n: 6, r: 9, k: 4, T: 60000, d: 15000, t2: 3, askNow: false, jugFirst: true });
@@ -397,10 +397,10 @@ function jugSameDay(pos) {
   };
   const make = ({ name, n, r, k, P, r0, r1, t1, shape }) => {
     if (r0 === r1 || !(grow(P - r0, r, k, t1) > r1)) return null;      // honest: x is positive
-    const jug = sen("jug", s => `${s.S} borrows ${money(P)} from the bank.`);
-    const same = sen("repay", s => pick([`${s.S} pays back ${money(r0)} on the same day.`, `On the day of the loan ${s.s} pays back ${money(r0)}.`]));
-    const rep1 = sen("repay", s => `${s.S} pays back ${money(r1)} after ${years(t1)}.`);
-    const repX = sen("repay", s => `${s.S} pays the rest, an amount x, after ${years(n)}.`);
+    const jug = sen("jug", s => L(`${s.S} borrows ${money(P)} from the bank.`, `${s.S} leen ${money(P)} by die bank.`));
+    const same = sen("repay", s => pick([L(`${s.S} pays back ${money(r0)} on the same day.`, `${s.S} betaal ${money(r0)} op dieselfde dag terug.`), L(`On the day of the loan ${s.s} pays back ${money(r0)}.`, `Op die dag van die lening betaal ${s.s} ${money(r0)} terug.`)]));
+    const rep1 = sen("repay", s => L(`${s.S} pays back ${money(r1)} after ${years(t1)}.`, `${s.S} betaal ${money(r1)} ná ${years(t1)} terug.`));
+    const repX = sen("repay", s => L(`${s.S} pays the rest, an amount x, after ${years(n)}.`, `${s.S} betaal die res, 'n bedrag x, ná ${years(n)}.`));
     const rate = rateSen(r, k, true);
     /* "on the same day" right after the loan, so the day it means is plain */
     const order = [[jug, same, rep1, repX, rate], [rate, jug, same, rep1, repX]][shape];
@@ -412,23 +412,23 @@ function jugSameDay(pos) {
 /* ---------- the recall card: "Which of these is the jug?" ----------
    FOUR short phrases, one jug (a state), three coins (actions), each with
    fresh numbers; mc() shuffles, so the jug lands in a different slot */
-const someone = () => pick(["she", "he"]);
+const someone = () => pick([L("she", "sy"), L("he", "hy")]);
 /* S7 (2026-10-17): every draw sits in a const just above its phrase, made
    in the order the phrase used to make it (who, then the amount, then the
    year or T), so the words hold no draw and an L(en, af) twin of a phrase
    draws once for both sides. Same words, same odds, same cards */
 const JUGS = {
-  has: () => { const who = someone(), v = step500(10000, 90000), y = randInt(3, 8); return `${who} has ${money(v)} in the account after ${years(y)}`; },
-  wants: () => { const who = someone(), v = 5000 * randInt(4, 30), y = randInt(3, 8); return `${who} wants to have ${money(v)} after ${years(y)}`; },
-  borrows: () => { const who = someone(), v = 5000 * randInt(4, 30); return `${who} borrows ${money(v)}`; },
-  owes: () => { const who = someone(), v = step500(10000, 90000); return `${who} owes the bank ${money(v)} now`; },
+  has: () => { const who = someone(), v = step500(10000, 90000), y = randInt(3, 8); return L(`${who} has ${money(v)} in the account after ${years(y)}`, `${who} het ${money(v)} ná ${years(y)} in die rekening`); },
+  wants: () => { const who = someone(), v = 5000 * randInt(4, 30), y = randInt(3, 8); return L(`${who} wants to have ${money(v)} after ${years(y)}`, `${who} wil ${money(v)} ná ${years(y)} hê`); },
+  borrows: () => { const who = someone(), v = 5000 * randInt(4, 30); return L(`${who} borrows ${money(v)}`, `${who} leen ${money(v)}`); },
+  owes: () => { const who = someone(), v = step500(10000, 90000); return L(`${who} owes the bank ${money(v)} now`, `${who} skuld die bank nou ${money(v)}`); },
 };
 const COINS = {
-  in: () => { const who = someone(), v = step500(1000, 9000); return { kind: L("in", "in"), text: `${who} deposits ${money(v)}` }; },
-  out: () => { const who = someone(), v = step500(1000, 9000); return { kind: L("out", "out"), text: `${who} withdraws ${money(v)}` }; },
-  payAt: () => { const who = someone(), v = step500(2000, 9000), t = randInt(1, 6); return { kind: "repay", text: `${who} pays ${money(v)} at T${t}` }; },
-  payBack: () => { const who = someone(), v = step500(2000, 9000), y = randInt(1, 6); return { kind: "repay", text: `${who} pays back ${money(v)} after ${years(y)}` }; },
-  down: () => { const who = someone(), v = step500(1000, 6000); return { kind: L("down", "down"), text: `${who} pays a down payment of ${money(v)}` }; },
+  in: () => { const who = someone(), v = step500(1000, 9000); return { kind: L("in", "in"), text: L(`${who} deposits ${money(v)}`, `${who} deponeer ${money(v)}`) }; },
+  out: () => { const who = someone(), v = step500(1000, 9000); return { kind: L("out", "out"), text: L(`${who} withdraws ${money(v)}`, `${who} onttrek ${money(v)}`) }; },
+  payAt: () => { const who = someone(), v = step500(2000, 9000), t = randInt(1, 6); return { kind: "repay", text: L(`${who} pays ${money(v)} at T${t}`, `${who} betaal ${money(v)} by T${t}`) }; },
+  payBack: () => { const who = someone(), v = step500(2000, 9000), y = randInt(1, 6); return { kind: "repay", text: L(`${who} pays back ${money(v)} after ${years(y)}`, `${who} betaal ${money(v)} ná ${years(y)} terug`) }; },
+  down: () => { const who = someone(), v = step500(1000, 6000); return { kind: L("down", "down"), text: L(`${who} pays a down payment of ${money(v)}`, `${who} betaal 'n aanbetaling van ${money(v)}`) }; },
 };
 const RECALL = {
   recallSaving: { jugs: ["has", "wants"], coins: [L("in", "in"), L("out", "out"), L("payAt", "payAt")] },

@@ -84,11 +84,12 @@ import { computeTimeline, verifyTimeline } from "../engine/timeline-graph.js";
 import { L as afL } from "../lang.js";
 
 const CON = "oneEquation";
-export const REFRAIN = "Build the whole equation first. Type it once. Round once, at the end.";
+export const REFRAIN = afL("Build the whole equation first. Type it once. Round once, at the end.", "Bou eers die hele vergelyking. Tik dit een keer in. Rond een keer af, aan die einde.");
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20];        // whole % only
 const KS = [1, 2, 4, 12];                                               // annually, half-yearly, quarterly, monthly
-const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const HOW_AF = { 1: "jaarliks", 4: "kwartaalliks", 12: "maandeliks" };   // T93: the Afrikaans word for finlib's English label
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : afL(COMPOUNDING.find(c => c.k === k).label, HOW_AF[k]));   // a non-breaking hyphen (f10 review 1)
 const CALC_TOL = 0.001;                                                 // the app's calc tolerance (TOL.calcEps): the cent must match
 /* the keypad lets in 6 digits unless told more; an answer to the cent here
    runs to 8 (R104 072,38), so every typed step asks for 9 (js/keypad.js) */
@@ -131,7 +132,7 @@ const perYear = k => afL(`${k}${NB}time${k === 1 ? "" : "s"}${NB}a${NB}year`, `$
 const years = y => nw(yrs(y));
 const paU = r => nw(pa(r));
 const DP2 = nw(afL("2 decimal places", "2 desimale plekke"));
-const when = t => (t === 0 ? "now" : `after ${years(t)}`);
+const when = t => (t === 0 ? afL("now", "nou") : afL(`after ${years(t)}`, `ná ${years(t)}`));
 const andList = xs => (xs.length === 1 ? xs[0] : afL(`${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`, `${xs.slice(0, -1).join(", ")} en ${xs[xs.length - 1]}`));
 const CAPTION = afL("T in years", "T in jare");
 /* f10 review 1: the first time a solution says "car", it says what one is */
@@ -315,7 +316,7 @@ function graphOf(sc) {
   return {
     type: "timeline", n: sc.n, meet: sc.meet,
     nodes: [tot, ...pays],
-    roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: `${r.r}% p.a.`, k: r.k })),
+    roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: afL(`${r.r}% p.a.`, `${r.r}% p.j.`), k: r.k })),
     leaders: true,
     /* f10 review 1: a deposit stacked above the "?" ring draws its own leader.
        Above a KNOWN total (David's wide "R300 000") the leader could not start
@@ -377,7 +378,7 @@ function rateSentence(roads) {
   const [a, b] = roads;
   return b ? afL(`The interest rate is ${one(a)} for the first ${years(a.to)}, then ${one(b)}.`, `Die rentekoers is ${one(a)} vir die eerste ${years(a.to)}, dan ${one(b)}.`) : afL(`The interest rate is ${one(a)}.`, `Die rentekoers is ${one(a)}.`);
 }
-const at = x => (typeof x.v === "number" ? `${money(x.v)} ${when(x.t)}` : `an amount ${x.v} ${when(x.t)}`);
+const at = x => (typeof x.v === "number" ? `${money(x.v)} ${when(x.t)}` : afL(`an amount ${x.v} ${when(x.t)}`, `'n bedrag ${x.v} ${when(x.t)}`));
 
 function story(sc) {
   const p = WHO[sc.name], He = cap(p.he), N = sc.name;
@@ -386,7 +387,7 @@ function story(sc) {
   const sameDay = sc.pays.some(x => x.t === sc.n && sc.kind === "save");
   switch (sc.fam) {
     case "targetAmount":
-      return afL(`${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`, `${N} wil ${money(sc.total.value)} na ${years(sc.n)} in 'n spaarrekening hê. Dit is die totaal, A. ${rate} Hoeveel, P, moet ${p.he} nou deponeer?`);
+      return afL(`${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`, `${N} wil ${money(sc.total.value)} ná ${years(sc.n)} in 'n spaarrekening hê. Dit is die totaal, A. ${rate} Hoeveel, P, moet ${p.he} nou deponeer?`);
     case "hirePurchase": {
       const a = /^[aeiou]/i.test(sc.item) ? afL("an", "'n") : afL("a", "'n");
       return afL(`${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.`, `${N} koop ${a} ${sc.item}. ${He} betaal 'n aanbetaling van ${money(sc.down)} reguit aan die winkel en leen die res. Die lening, P, is die totaal. ${He} betaal dit af met twee terugbetalings: ${andList(reps.map(at))}. ${rate} Vind die lening, P, en dan die prys van die ${sc.item}.`);
@@ -394,10 +395,10 @@ function story(sc) {
     case "loanTwoRepayments":
       return afL(`${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?`, `${N} leen nou geld. Die lening, P, is die totaal. ${He} betaal dit af met twee terugbetalings: ${andList(reps.map(at))}. ${rate} Hoeveel het ${p.he} geleen?`);
     case "unknownPayment":
-      return afL(`${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`, `${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}. ${He} wil ${money(sc.total.value)} na ${years(sc.n)} in die rekening hê, net na die laaste deposito. Dit is die totaal, A. ${rate} Vind x.`);
+      return afL(`${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`, `${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}. ${He} wil ${money(sc.total.value)} ná ${years(sc.n)} in die rekening hê, net ná die laaste deposito. Dit is die totaal, A. ${rate} Vind x.`);
     default: {                                                        // twoDeposits, withdrawal, mixed: find A
       const out = wds.length ? afL(` ${He} withdraws ${andList(wds.map(at))}.`, ` ${He} onttrek ${andList(wds.map(at))}.`) : "";
-      return afL(`${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`, `${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}.${out} ${rate} Hoeveel is in die rekening na ${years(sc.n)}${sameDay ? ", net na die laaste deposito" : ""}? Dit is die totaal, A.`);
+      return afL(`${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`, `${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}.${out} ${rate} Hoeveel is in die rekening ná ${years(sc.n)}${sameDay ? ", net ná die laaste deposito" : ""}? Dit is die totaal, A.`);
     }
   }
 }
@@ -408,21 +409,21 @@ const WHAT = { dep: afL("the deposit", "die deposito"), wd: afL("the withdrawal"
 /* "3 years × 12 times a year = 36", one per car, with the stretch of the
    line it drives over (two roads may share a rate) */
 function carNote(t) {
-  if (!t.cars.length) return "no car: it already stands on the meeting day";
+  if (!t.cars.length) return afL("no car: it already stands on the meeting day", "geen kar nie: dit staan reeds op die ontmoetingsdag");
   const legs = t.cars.map(c => {
-    const span = c.e < 0 ? `T${c.to} to T${c.from}` : `T${c.from} to T${c.to}`;
+    const span = c.e < 0 ? afL(`T${c.to} to T${c.from}`, `T${c.to} tot T${c.from}`) : afL(`T${c.from} to T${c.to}`, `T${c.from} tot T${c.to}`);
     /* the whole sum is ONE unit: formulaHtml makes each number an inline-block,
        and a line may break before one even after a no-break space, so f10's
        glue alone left "3 years ×" at a line end at 360 px */
     const sum = nw(`${yrs(c.years)} × ${perYear(c.k)} = ${c.years * c.k}`);
-    return `${span}: ${sum}${c.e < 0 ? `, written ${nw(`−${c.years * c.k}`)}` : ""}`;
+    return afL(`${span}: ${sum}${c.e < 0 ? `, written ${nw(`−${c.years * c.k}`)}` : ""}`, `${span}: ${sum}${c.e < 0 ? `, geskryf as ${nw(`−${c.years * c.k}`)}` : ""}`);
   });
-  return `${t.cars[0].e < 0 ? "reverse gear" : "forward gear"}, ${t.cars.length > 1 ? "one car per road; " : ""}${legs.join("; ")}`;
+  return afL(`${t.cars[0].e < 0 ? "reverse gear" : "forward gear"}, ${t.cars.length > 1 ? "one car per road; " : ""}${legs.join("; ")}`, `${t.cars[0].e < 0 ? "trurat" : "vorentoe"}, ${t.cars.length > 1 ? "een kar per pad; " : ""}${legs.join("; ")}`);
 }
 function termLine(t) {
   const sign = t.s < 0 ? "−" : "+";
-  const who = typeof t.c === "number" ? `${cap(WHAT[t.kind])} of ${money(t.c)} at T${t.t}` : `${cap(WHAT[t.kind])} ${t.c} at T${t.t}`;
-  const io = t.kind === "wd" ? "comes OUT, so minus" : t.kind === "repay" ? "stands positive on the right" : "goes IN, so plus";
+  const who = typeof t.c === "number" ? afL(`${cap(WHAT[t.kind])} of ${money(t.c)} at T${t.t}`, `${cap(WHAT[t.kind])} van ${money(t.c)} by T${t.t}`) : afL(`${cap(WHAT[t.kind])} ${t.c} at T${t.t}`, `${cap(WHAT[t.kind])} ${t.c} by T${t.t}`);
+  const io = t.kind === "wd" ? afL("comes OUT, so minus", "kom UIT, dus minus") : t.kind === "repay" ? afL("stands positive on the right", "staan positief regs") : afL("goes IN, so plus", "gaan IN, dus plus");
   return { s: `${who} ${io}: ${EQ(unitsHtml(termUnits(t, sign)))}`, r: carNote(t) };
 }
 function meetLine(sc) {
@@ -471,8 +472,8 @@ function build(sc, { timeline = false } = {}) {
     { s: answer, r: afL(`${solves(sc) ? "SHIFT SOLVE on the one line" : "typed in once"}, rounded once, at the end (${DP2})`, `${solves(sc) ? "SHIFT SOLVE op die een reël" : "een keer ingetik"}, een keer afgerond, aan die einde (${DP2})`) },
   ];
   if (price != null) solution.push({
-    s: `Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}`,
-    r: "the down payment never enters the account: no car, no sign",
+    s: afL(`Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}`, `Prys${NB}=${NB}lening +${NB}aanbetaling${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}`),
+    r: afL("the down payment never enters the account: no car, no sign", "die aanbetaling kom nooit in die rekening nie: geen kar nie, geen teken nie"),
   });
   solution.push({ s: REFRAIN });
   return {

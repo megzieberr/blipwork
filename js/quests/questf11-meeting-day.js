@@ -76,7 +76,8 @@ export const REFRAIN = afL("The answer is the same wherever you meet; picking th
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = [1, 2, 4, 12];                                              // annually, half-yearly, quarterly, monthly
-const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const HOW_AF = { 1: "jaarliks", 4: "kwartaalliks", 12: "maandeliks" };   // T93: the Afrikaans word for finlib's English label
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : afL(COMPOUNDING.find(c => c.k === k).label, HOW_AF[k]));   // a non-breaking hyphen (f10 review 1)
 const SAVE_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000, 10000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500];
 
@@ -91,7 +92,7 @@ const paU = r => nw(pa(r));                                            // f12 re
 const roadU = r => nw(afL(`${r}%${NB}road`, `${r}%${NB}pad`));                               // "the 8% road"
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, j) => lo + j);
-const person = () => pick([{ he: "she", his: "her" }, { he: "he", his: "his" }]);
+const person = () => pick([{ he: afL("she", "sy"), his: afL("her", "haar") }, { he: afL("he", "hy"), his: afL("his", "sy") }]);
 const carsWord = k => afL(`${k}${NB}car${k === 1 ? "" : "s"}`, `${k}${NB}kar${k === 1 ? "" : "re"}`);            // "2 cars"
 const cars = k => nw(carsWord(k));
 /* f10 review 1: the first time a solution says "car", it says what one is */
@@ -149,7 +150,7 @@ const countsAll = sc => range(0, sc.n).map(D => countAt(sc, D));
 const graphOf = sc => ({
   type: "timeline", n: sc.n,
   nodes: [{ t: sc.total.t, label: "?", role: sc.total.role }, ...sc.pays.map(p => ({ t: p.t, amount: p.v, dp: 0 }))],
-  roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: `${r.r}% p.a.`, k: r.k })),
+  roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: afL(`${r.r}% p.a.`, `${r.r}% p.j.`), k: r.k })),
   leaders: true,                                   // a thin line from each lone amount down to its own T
   stackLeaders: true,                              // a deposit stacked above the "?" draws its own leader (f10 review 1)
 });
@@ -203,7 +204,7 @@ const FIX = {
      A at T6. Counts T0..T6: 4 3 4 2 4 4 3, so T3 alone needs 2 cars
      (the road changes colour there AND R3 000 stands there) */
   colourStands: () => ({
-    saving: true, n: 6, c: 3, p: { he: "she", his: "her" }, total: { t: 6, role: afL("A", "A") },
+    saving: true, n: 6, c: 3, p: { he: afL("she", "sy"), his: afL("her", "haar") }, total: { t: 6, role: afL("A", "A") },
     roads: [{ from: 0, to: 3, r: 8, k: 4 }, { from: 3, to: 6, r: 10, k: 12 }],
     pays: [{ t: 1, v: 5000 }, { t: 3, v: 3000 }],
   }),
@@ -211,21 +212,21 @@ const FIX = {
      T1, R6 000 at T5, A at T6. Counts: 5 5 6 4 6 5 5, so T3 alone needs 4
      (two amounts on each side, nobody crosses) */
   colourOnly: () => ({
-    saving: true, n: 6, c: 3, p: { he: "he", his: "his" }, total: { t: 6, role: afL("A", "A") },
+    saving: true, n: 6, c: 3, p: { he: afL("he", "hy"), his: afL("his", "sy") }, total: { t: 6, role: afL("A", "A") },
     roads: [{ from: 0, to: 3, r: 9, k: 2 }, { from: 3, to: 6, r: 12, k: 12 }],
     pays: [{ t: 0, v: 2000 }, { t: 1, v: 4000 }, { t: 5, v: 6000 }],
   }),
   /* saving, one road 9% quarterly; R3 000 at T1, R5 000 at T3, R2 000 on the
      day of A (T5). Counts: 4 3 4 3 4 2, so T5 alone needs 2 */
   shared: () => ({
-    saving: true, n: 5, c: null, p: { he: "she", his: "her" }, total: { t: 5, role: afL("A", "A") },
+    saving: true, n: 5, c: null, p: { he: afL("she", "sy"), his: afL("her", "haar") }, total: { t: 5, role: afL("A", "A") },
     roads: [{ from: 0, to: 5, r: 9, k: 4 }],
     pays: [{ t: 1, v: 3000 }, { t: 3, v: 5000 }, { t: 5, v: 2000 }],
   }),
   /* saving, one road 8% monthly; R4 000 at T2, R6 000 at T4, A at T6.
      Counts: 3 3 2 3 2 3 2 (T2, T4 and T6 tie at 2) */
   oneRoad: () => ({
-    saving: true, n: 6, c: null, p: { he: "he", his: "his" }, total: { t: 6, role: afL("A", "A") },
+    saving: true, n: 6, c: null, p: { he: afL("he", "hy"), his: afL("his", "sy") }, total: { t: 6, role: afL("A", "A") },
     roads: [{ from: 0, to: 6, r: 8, k: 12 }],
     pays: [{ t: 2, v: 4000 }, { t: 4, v: 6000 }],
   }),
@@ -294,9 +295,9 @@ function fewestCars() {
   }
   opts.sort((x, y) => x - y);
   const WHY = {
-    colourStands: () => `the road changes colour at T${b.D}, and ${whoAt(itemsAt(sc, b.D)[0])} already stands there`,
-    colourOnly: () => `the road changes colour at T${b.D}: no amount crosses the change, so none needs two cars`,
-    shared: () => `two amounts already stand on T${b.D}: neither of them needs a car`,
+    colourStands: () => afL(`the road changes colour at T${b.D}, and ${whoAt(itemsAt(sc, b.D)[0])} already stands there`, `die pad verander van kleur by T${b.D}, en ${whoAt(itemsAt(sc, b.D)[0])} staan reeds daar`),
+    colourOnly: () => afL(`the road changes colour at T${b.D}: no amount crosses the change, so none needs two cars`, `die pad verander van kleur by T${b.D}: geen bedrag gaan oor die verandering nie, dus het geeneen twee karre nodig nie`),
+    shared: () => afL(`two amounts already stand on T${b.D}: neither of them needs a car`, `twee bedrae staan reeds op T${b.D}: nie een van hulle het 'n kar nodig nie`),
   };
   return {
     type: "mc", concept: CON, layout: "grid2",
