@@ -68,7 +68,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T38 | exam: func-siblings-nature-of-roots | ~1 689 words | verify-exam.html
 - ☑ 2026-10-17 T39 | exam: func-siblings-reflections | ~3 175 words | verify-exam.html
 - ☑ 2026-10-17 T40 | exam: func-siblings-shift | ~1 985 words | verify-exam.html
-- ⏳ 2026-10-17 20:42 T41 | exam: func-siblings-sketch | ~3 900 words | verify-exam.html
+- ☑ 2026-10-17 T41 | exam: func-siblings-sketch | ~3 900 words | verify-exam.html
 - ☑ 2026-10-17 T42 | exam: func-siblings-topup | ~2 253 words | verify-exam.html
 
 ### 2D Trigonometry
@@ -77,7 +77,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Trig Graphs
 - ⏳ 2026-10-17 20:48 T45 | concepts: the `tgraph` block (js/concepts/tgraph.js after S4) | ~576 words | counted by af_extract 2026-10-17
-- ☐ T46 | hub rounds: questtg1-parents … questtg7-mixed (7 files) | ~1 528 words | verify page: verify-tgraph.html
+- ⏳ 2026-10-17 20:48 T46 | hub rounds: questtg1-parents … questtg7-mixed (7 files) | ~1 528 words | verify page: verify-tgraph.html
 - ☐ T47 | exam: cards-tgraph, tgraph-level4 (2 files) | ~2 962 words | verify-exam.html
 - ☐ T48 | exam: tgraph-siblings-intersections-inequalities | ~3 186 words | verify-exam.html
 - ☐ T49 | exam: tgraph-siblings-period-amplitude-range | ~3 535 words | verify-exam.html
