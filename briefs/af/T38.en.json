@@ -1,0 +1,452 @@
+{
+  "unit": "T38",
+  "generated": "2026-10-17T18:36:33.448Z",
+  "files": [
+    "js/exam/func-siblings-nature-of-roots.js"
+  ],
+  "items": {
+    "func-siblings-nature-of-roots#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = −x² + 4x + 5, &nbsp;cutting the x-axis at (−1 ; 0) and (5 ; 0). The dashed line is &nbsp;y = k, &nbsp;drawn at one possible height — it may slide up and down.<br><br>Determine the value of k for which the equation &nbsp;f(x) = k&nbsp; will have equal roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:114:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#2": {
+      "en": "The roots of f(x) = k are the places where the sliding line cuts the parabola. Picture it sliding upwards — there is exactly one height where two cuts become one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:117:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#3": {
+      "en": "f(x) = k is the horizontal line y = k sliding across f, and the roots are where it cuts. Equal roots means the line touches f at exactly ONE point, which happens only at the turning point — so find it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:120:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#4": {
+      "en": "x = −b/(2a) = −4/(2(−1)) = 2 &nbsp;&nbsp;⟹&nbsp;&nbsp; y = −(2)² + 4(2) + 5 = −4 + 8 + 5 = 9 &nbsp;&nbsp;TP(2 ; 9)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:121:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#5": {
+      "en": "∴ k = 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:122:39"
+      ]
+    },
+    "func-siblings-nature-of-roots#6": {
+      "en": "WATCH OUT: k is a HEIGHT, so it is the y of the turning point, not the x. Answering k = 2 is the standard slip — 2 is where the touching happens, 9 is how high up it happens.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:124:15"
+      ]
+    },
+    "func-siblings-nature-of-roots#7": {
+      "en": "Do not solve −x² + 4x + 5 = k for x. Picture the line instead. Every horizontal line either cuts this parabola twice, touches it once, or misses it altogether, and which of the three happens depends on nothing but the height. Because a is negative, f is sad — it climbs to a peak and falls away — so the peak is a ceiling. Slide the line up from the bottom and it keeps cutting twice, until the moment it arrives at the peak and the two cutting points squash into one. That single moment is what “equal roots” means on a picture. So the whole question is really “how high is the peak”, and the answer is the y of the turning point. The x you find on the way there is only the road; the height is the answer. If you would rather do it with algebra, the same 9 comes out of Δ = 0 for x² − 4x + k − 5 = 0, and both roads earn full marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:128:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#8": {
+      "en": "Hence write down the values of k for which the equation &nbsp;f(x) = k&nbsp; will have NO real roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:136:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#9": {
+      "en": "You have just found the one height where the line touches. Keep sliding it in the direction where the parabola is not there any more.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:139:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#10": {
+      "en": "f is <b>sad</b>, so 9 is its maximum — a ceiling. Any line drawn ABOVE that ceiling passes over the whole graph and never meets it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:142:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#11": {
+      "en": "∴ k &gt; 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:143:39"
+      ]
+    },
+    "func-siblings-nature-of-roots#12": {
+      "en": "REMEMBER: at k = 9 exactly the line still touches f, and touching counts as meeting — that is one real root, not none. So the answer is strictly greater than 9, with no equals sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:145:15"
+      ]
+    },
+    "func-siblings-nature-of-roots#13": {
+      "en": "Once the boundary is found, the rest of the sliding-line family sorts itself into three groups and you only have to say which side you want. Below 9 the line cuts twice, so there are two real roots. At exactly 9 it rests on the peak, so there is one repeated root. Above 9 there is simply no parabola left to meet, so there are no real roots at all. The one decision worth slowing down for is the boundary itself: an equal root is still a root, so 9 belongs to the touching case and not to this one, which is why the bracket stays open. Worth noticing too that on a HAPPY parabola the same question has the answer the other way round — the turning value is a floor, and the misses are the lines below it. The sign of a is what decides which.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:149:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#14": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² + 1, &nbsp;together with the line &nbsp;y = kx, &nbsp;drawn dashed at one possible gradient. The line always passes through the origin, but k may change.<br><br>Determine the values of k for which the line will NOT cut f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:201:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#15": {
+      "en": "“Does not cut” means the two equations have no solution together. Set them equal, bring everything to one side so you have an ordinary quadratic in x, and then ask what the discriminant must do. Watch out at the end — you will be left with a quadratic in k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:204:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#16": {
+      "en": "“Does not cut” means the two equations have <b>no real solution</b> together. Set them equal:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:207:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#17": {
+      "en": "x² + 1 = kx &nbsp;⟹&nbsp; x² − kx + 1 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:208:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#18": {
+      "en": "No real roots means Δ &lt; 0, with a = 1, b = −k, c = 1:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:209:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#19": {
+      "en": "Δ = (−k)² − 4(1)(1) = k² − 4 = (k − 2)(k + 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:210:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#20": {
+      "en": "(k − 2)(k + 2) &lt; 0 &nbsp;&nbsp;— a happy parabola in k, and “less than zero” is the inside of the bowl",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:211:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#21": {
+      "en": "∴ −2 &lt; k &lt; 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:212:39"
+      ]
+    },
+    "func-siblings-nature-of-roots#22": {
+      "en": "WATCH OUT: k² &lt; 4 does NOT give k &lt; 2 on its own. It gives −2 &lt; k &lt; 2 — a two-sided answer — because a steep NEGATIVE gradient misses the graph just as a steep positive one cuts it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:214:15"
+      ]
+    },
+    "func-siblings-nature-of-roots#23": {
+      "en": "Two ideas are stacked in this question, which is what makes it the hard one on this tile. The first is the usual translation: “cutting” and “solving together” are the same thing said two ways, so setting the equations equal turns a picture question into an ordinary quadratic, and the discriminant then reports how many crossings there are. Δ negative means none, which is what was asked. The second idea is the twist. Because the k lives in the GRADIENT rather than being added on, it ends up squared inside Δ — and that means the last line is not a plain inequality but a quadratic one. Factorise it, treat it as its own happy parabola in k, and remember that “less than zero” is the piece between the two roots. Picture the line turning about the origin and it makes sense: lie it almost flat and it passes under the whole parabola, tilt it steeply either way and it eventually catches the arm. So the misses are the shallow gradients in the middle, positive and negative alike.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:218:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#24": {
+      "en": "Write down the values of k for which the line will be a tangent to f, and determine the coordinates of the point of contact for the positive value of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:226:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#25": {
+      "en": "A tangent touches once, which is equal roots — so use the same discriminant, but set it to zero this time. Then put that k back into your quadratic and solve it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:229:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#26": {
+      "en": "A tangent touches f exactly once, so the roots are equal and Δ = 0: &nbsp;k² − 4 = 0 &nbsp;⟹&nbsp; k = 2 &nbsp;or&nbsp; k = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:232:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#27": {
+      "en": "for k = 2: &nbsp;x² − 2x + 1 = 0 &nbsp;⟹&nbsp; (x − 1)² = 0 &nbsp;⟹&nbsp; x = 1, &nbsp;and&nbsp; y = (1)² + 1 = 2 &nbsp;&nbsp;∴&nbsp; (1 ; 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:233:39"
+      ]
+    },
+    "func-siblings-nature-of-roots#28": {
+      "en": "REMEMBER: k² = 4 has TWO answers, 2 and −2. Taking only the positive square root throws away the tangent on the left-hand side of the graph — and here nothing rules it out, unlike the base of an exponential.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:235:15"
+      ]
+    },
+    "func-siblings-nature-of-roots#29": {
+      "en": "The tangent case is the boundary between the two cases in part (a), so it costs almost no new work — the same discriminant, set to zero instead of pushed below it. What is worth practising is the second half. Once k is known the quadratic stops having a letter in it, and because Δ is zero it collapses into a perfect square, which is the algebraic fingerprint of touching: one repeated solution instead of two different ones. That solution is the x where the touching happens, and substituting it into either equation gives the height. Doing it in f is usually safer, because the line's equation still has the k in it. And notice how the picture confirms the pair: the two tangents are mirror images of each other in the y-axis, touching at (1 ; 2) and (−1 ; 2), which is exactly what you would expect from a parabola that is itself symmetrical about that axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:239:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#30": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 3x + 6, &nbsp;and the line &nbsp;y = x + k, &nbsp;drawn dashed at one possible position. The line keeps its gradient of 1 but slides up and down as k changes.<br><br>Determine the value of k for which the line will be a tangent to f, and the coordinates of the point of contact.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:299:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#31": {
+      "en": "A tangent touches the graph exactly once, so the two equations must have equal roots. Set them equal, tidy into a quadratic in x, then force the discriminant to be zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:302:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#32": {
+      "en": "Where the line meets f, both equations hold at once. Set them equal:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:305:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#33": {
+      "en": "x² − 3x + 6 = x + k &nbsp;⟹&nbsp; x² − 4x + (6 − k) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:306:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#34": {
+      "en": "A tangent touches once, so the roots are equal and Δ = 0:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:307:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#35": {
+      "en": "Δ = (−4)² − 4(1)(6 − k) = 16 − 24 + 4k = 4k − 8 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:308:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#36": {
+      "en": "∴ k = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:309:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#37": {
+      "en": "put k = 2 back: &nbsp;x² − 4x + 4 = 0 &nbsp;⟹&nbsp; (x − 2)² = 0 &nbsp;⟹&nbsp; x = 2, &nbsp;and&nbsp; y = (2)² − 3(2) + 6 = 4 &nbsp;&nbsp;∴&nbsp; (2 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:310:39"
+      ]
+    },
+    "func-siblings-nature-of-roots#38": {
+      "en": "WATCH OUT: Δ = 0, not Δ &gt; 0. A tangent meets the graph once, and once means the two roots have collapsed into one — that is exactly what a zero discriminant says.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:312:15"
+      ]
+    },
+    "func-siblings-nature-of-roots#39": {
+      "en": "Every question of this kind runs on one sentence: where the graphs meet, both equations are true, so setting them equal turns a picture into a quadratic whose solutions are the x-values of the meeting points. From there the discriminant does all the reporting. Two different roots means the line cuts through; one repeated root means it just grazes; no real roots means it sails past. A tangent is the middle case, so Δ = 0 is the condition, and solving that gives the one height at which this particular gradient can rest on the curve. The second half of the answer is the part people forget. The question asked WHERE it touches, so substitute the k you found back into the quadratic — it will factorise into a perfect square, which is the algebra confirming the graph — and take that x into f for the height. A perfect square appearing at that point is a free check that k is right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:316:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#40": {
+      "en": "Write down the values of k for which the line will cut f at two different points, and hence state whether the line &nbsp;y = x + 6&nbsp; cuts f, touches f, or misses it completely.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:324:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#41": {
+      "en": "Two different cutting points means two different roots. You already have Δ in terms of k, so ask what it has to be — then compare 6 with the boundary you found in (a).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:327:13"
+      ]
+    },
+    "func-siblings-nature-of-roots#42": {
+      "en": "Two different cutting points means two unequal real roots, so Δ &gt; 0: &nbsp;4k − 8 &gt; 0 &nbsp;⟹&nbsp; k &gt; 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:330:37"
+      ]
+    },
+    "func-siblings-nature-of-roots#43": {
+      "en": "6 &gt; 2, so the line y = x + 6 <b>cuts</b> f at two different points — and indeed it does, at (0 ; 6) and (4 ; 10).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:331:39"
+      ]
+    },
+    "func-siblings-nature-of-roots#44": {
+      "en": "The discriminant you built in (a) is not used up — it is a machine that answers every version of the question at once, and all that changes is what you make it do. Force it to zero and you get the tangent. Push it above zero and you get the lines that cut twice, which here is everything above the tangent, k greater than 2. Push it below and you get the misses, k less than 2 — which is why the dashed line drawn on the sketch at k = 0 passes underneath the parabola without touching it. So the last part is just a comparison: 6 sits above the boundary, so that particular line must cut. If you want to see it, solve x² − 4x + 6 − 6 = 0, which factorises to x(x − 4) and gives the two crossings at x = 0 and x = 4. That check is quick and it is the honest way to be sure you have the inequality the right way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-nature-of-roots.js:334:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1603
+}
