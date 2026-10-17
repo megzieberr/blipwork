@@ -1,0 +1,956 @@
+{
+  "unit": "T48",
+  "generated": "2026-10-17T18:55:19.462Z",
+  "files": [
+    "js/exam/tgraph-siblings-intersections-inequalities.js"
+  ],
+  "items": {
+    "tgraph-siblings-intersections-inequalities#1": {
+      "en": "The sketch shows the graphs of &nbsp;f(x) = 2 sin x&nbsp; and &nbsp;g(x) = 2 cos x&nbsp; for &nbsp;x ∈ [−180° ; 180°]. &nbsp;The graphs cut each other at A(45° ; 1,41) and at one other point.<br><br>Write down the period of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:68:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#2": {
+      "en": "Nothing is multiplying the x, so this is a plain sine graph as far as its width goes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:69:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#3": {
+      "en": "b = 1, so the period is &nbsp;360° ÷ 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:71:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#4": {
+      "en": "period = <b>360°</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:72:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#5": {
+      "en": "When a question hands you two graphs at once, the first thing to do is read each equation on its own and note what is different about it. Here f has a 2 in front, which is about height, and nothing at all with the x, which means its width is untouched. So its period is the plain 360°, and the sketch agrees: exactly one complete wave of f fits across the whole interval. The 2 in front is a decoy for this particular question, and being able to say confidently that it does not affect the period is what the mark is really for.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:74:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#6": {
+      "en": "Write down the amplitude of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:78:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#7": {
+      "en": "Careful which graph you are answering about. Amplitude is the size of the number in front of the cos.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:79:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#8": {
+      "en": "For &nbsp;g(x) = 2 cos x, &nbsp;amplitude = |a| = |2|.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:81:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#9": {
+      "en": "amplitude = <b>2</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:82:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#10": {
+      "en": "The commonest way to lose this mark is to answer about the wrong graph, so check the letter in the question before you look at anything else. Here it is g, and g is the cosine. Its amplitude is the size of the number in front, which is 2, and the picture backs that up — g reaches up to 2 and down to −2. The two graphs on this sketch happen to have the same amplitude, which makes them the same height as each other; that is a coincidence of this question, not a rule, and on most exam sketches the two curves have different amplitudes on purpose.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:84:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#11": {
+      "en": "For how many values of x in the given interval is &nbsp;f(x) = g(x)?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:88:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#12": {
+      "en": "Two graphs are equal exactly where they cut each other. Count the crossing points on the sketch — do not solve anything.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:89:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#13": {
+      "en": "f(x) = g(x)&nbsp; happens where the two curves cut each other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:91:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#14": {
+      "en": "They cut twice in the interval &nbsp;∴&nbsp; <b>2</b> values of x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:92:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#15": {
+      "en": "The whole idea behind reading a graph is that a picture answers some questions faster than algebra ever could, and this is one of them. Asking where f equals g is asking where the two curves have the same height at the same x, which is exactly where they cross. So you count crossings. The question gave you one of them, A, and the sketch shows a second down in the bottom left. There are no others inside this interval. Get into the habit of tracing across the whole interval with a finger rather than glancing — a crossing hiding near the edge of the picture is easy to miss, and it changes the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:94:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#16": {
+      "en": "The sketch shows the graphs of &nbsp;f(x) = cos x&nbsp; and &nbsp;g(x) = cos 2x&nbsp; for &nbsp;x ∈ [−180° ; 180°]. &nbsp;A(120° ; −0,5) is one of the points where the graphs cut each other, and B is another.<br><br>Write down the coordinates of B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:146:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#17": {
+      "en": "Both of these graphs are mirror images of themselves in the y-axis. So if they cut each other at 120°, where else must they cut each other?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:147:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#18": {
+      "en": "Both f and g are cosine graphs, and every cosine graph is symmetrical about the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:149:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#19": {
+      "en": "So B is the mirror image of A: &nbsp;B(−120° ; −0,5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:150:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#20": {
+      "en": "WATCH OUT: only the x-coordinate changes sign. The mirror is the y-AXIS, so a point reflects sideways and keeps its height. Writing B(−120° ; 0,5) flips the wrong coordinate.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:151:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#21": {
+      "en": "Symmetry is the fastest tool on a graph-reading question, and here both curves have the same one: a cosine graph always looks the same on the left of the y-axis as it does on the right. If you folded the page along the y-axis, f would land on itself and so would g. That means every crossing point also lands on another crossing point. A is 120° to the right of the fold, so its partner is 120° to the left, at −120°. The height does not change, because folding sideways does not move anything up or down, so B keeps A's y-value of −0,5. Say the reason out loud when you write it: the mark is for knowing WHY, not just for the coordinates.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:153:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#22": {
+      "en": "Write down the values of x for which &nbsp;f(x) = g(x)&nbsp; in the given interval.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:157:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#23": {
+      "en": "You already have two of them. Look carefully at the y-axis — do the two graphs meet there as well?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:158:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#24": {
+      "en": "The curves meet at A, at B, and once more on the y-axis, where both graphs are at their maximum of 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:160:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#25": {
+      "en": "x = −120°, &nbsp;x = 0° &nbsp;and&nbsp; x = 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:161:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#26": {
+      "en": "The crossing on the y-axis is the one people miss, because it does not look like a crossing — the two curves touch there and separate again rather than passing through each other. It counts all the same. Both f and g are at their highest point when x is zero: cos 0° is 1 and cos 0° is also 1, so both graphs are at a height of 1 at the same moment, which is exactly what f(x) = g(x) means. The lesson is to read a graph for equal heights rather than for dramatic crossings. Anywhere the two curves touch, meet or cross, they are equal there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:163:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#27": {
+      "en": "For which values of x is &nbsp;f(x) ≥ g(x)?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:167:21",
+        "tgraph-siblings-intersections-inequalities.js:298:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#28": {
+      "en": "Draw a light vertical cut line through every point where the graphs meet. Then look at each strip in turn and ask one question: which curve is on top here?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:168:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#29": {
+      "en": "Cut the interval at the meeting points: &nbsp;x = −120°, 0° and 120°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:170:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#30": {
+      "en": "In the strips between −120° and 120° the f curve is on top (or level with g at the meeting points). Outside them, g is on top.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:171:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#31": {
+      "en": "−120° ≤ x ≤ 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:172:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#32": {
+      "en": "REMEMBER: the sign is ≥, not >, so the meeting points themselves are INCLUDED — at −120° and 120° the two graphs are equal, which still satisfies \\\"f is greater than or equal to g\\\". Use ≤ signs in your answer, not < signs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:173:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#33": {
+      "en": "This is her cut-line-and-paint method, and it works on trig graphs exactly as it does on parabolas. First find every place the two graphs meet, and rule a light vertical line through each one — those are the only places where the answer can change from true to false. Here that gives cut lines at −120°, 0° and 120°, which chop the interval into four strips. Then walk the strips one at a time and ask which curve is higher. Nothing has to be calculated; you are reading. Between −120° and 120°, f sits at or above g the whole way, including at the touching point on the y-axis, so those two strips join into one answer. Outside them g is higher. Last, match your brackets to the sign in the question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:175:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#34": {
+      "en": "The sketch shows the graphs of &nbsp;f(x) = cos x&nbsp; and &nbsp;g(x) = sin x&nbsp; for &nbsp;x ∈ [0° ; 360°].<br><br>Write down the coordinates of the x-intercepts of f in the given interval.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:220:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#35": {
+      "en": "An x-intercept is where the graph is at height zero. Read them straight off the sketch — a cosine crosses the axis a quarter of a period in, and every half period after that.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:221:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#36": {
+      "en": "cos x = 0&nbsp; at a quarter of a period and again three quarters of the way through.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:223:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#37": {
+      "en": "(90° ; 0) &nbsp;and&nbsp; (270° ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:224:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#38": {
+      "en": "Finding where each graph crosses the x-axis is the setting-up step for every product question, so it is worth doing carefully even when it looks trivial. A cosine starts at its maximum and first reaches zero a quarter of a period later, which here is 90°. After that it crosses every half period, so the next one is at 270°. The question asked for coordinates, not just x-values, so write them as ordered pairs with the zero included. It is also worth noting g's intercepts while you are here — sin x is zero at 0°, 180° and 360° — because part (b) needs both lists.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:226:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#39": {
+      "en": "For which values of x is &nbsp;f(x)·g(x) &lt; 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:230:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#40": {
+      "en": "A product is negative when the two things being multiplied have OPPOSITE signs. So look for the stretches where one curve is above the x-axis while the other is below it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:231:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#41": {
+      "en": "A product is negative when one factor is positive and the other is negative — so look for where one curve is ABOVE the x-axis and the other is BELOW it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:233:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#42": {
+      "en": "Cut the interval at every x-intercept of either graph: &nbsp;x = 0°, 90°, 180°, 270°, 360°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:234:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#43": {
+      "en": "90° to 180°: &nbsp;g is above, f is below &nbsp;⟹&nbsp; product negative ✔<br>270° to 360°: &nbsp;f is above, g is below &nbsp;⟹&nbsp; product negative ✔<br>the other two strips have both curves on the same side ⟹ product positive",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:235:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#44": {
+      "en": "90° &lt; x &lt; 180° &nbsp;&nbsp;or&nbsp;&nbsp; 270° &lt; x &lt; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:236:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#45": {
+      "en": "WATCH OUT: the sign is &lt;, so the ends are NOT included. At x = 90°, 180° and 270° one of the graphs is exactly zero, which makes the product zero — and zero is not less than zero. Use round brackets or strict inequality signs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:237:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#46": {
+      "en": "A product question is a signs question, so stop thinking about heights and think only about above or below. The rule is the one you already know from multiplying numbers: two positives give a positive, two negatives give a positive, and one of each gives a negative. So you are hunting for the stretches where one curve is above the axis while the other is below it. The setting up is what makes it manageable. Rule a cut line at every x-intercept of EITHER graph, because those are the only places a sign can change, and then walk the strips one at a time writing a plus or a minus for each curve. Multiply the two signs in each strip and collect the strips that came out negative. Finally check the ends: where either graph is zero the product is zero, so a strict inequality leaves those points out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:239:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#47": {
+      "en": "The sketch shows the graphs of &nbsp;f(x) = sin x&nbsp; and &nbsp;g(x) = sin 2x&nbsp; for &nbsp;x ∈ [−90° ; 180°]. &nbsp;The dots mark three of the points where the graphs meet; they also meet at &nbsp;x = 180°.<br><br>Write down the period of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:288:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#48": {
+      "en": "The 2 is with the x, so it squashes the graph. Divide 360° by it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:289:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#49": {
+      "en": "Period of g = 360° ÷ 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:291:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#50": {
+      "en": "period of g = <b>180°</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:292:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#51": {
+      "en": "Note that this part is about g, the squashed one, not about f. Its b is 2, so its period is 180° — half of f's. On the sketch that shows up as g completing a whole wave in the space f only gets halfway through, which is what makes the two curves cross each other several times instead of once or twice. Working out both periods before you start an inequality question is worth the ten seconds: the ratio between them tells you roughly how many crossings to expect, so you know whether you have found them all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:294:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#52": {
+      "en": "Cut the picture at every point where the graphs meet — there are four of them in this interval — and then walk the strips asking which curve is on top.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:299:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#53": {
+      "en": "Cut lines at every meeting point: &nbsp;x = −60°, 0°, 60° and 180°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:301:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#54": {
+      "en": "−90° to −60°: g on top ✘ &nbsp;&nbsp;|&nbsp;&nbsp; −60° to 0°: f on top ✔<br>0° to 60°: g on top ✘ &nbsp;&nbsp;|&nbsp;&nbsp; 60° to 180°: f on top ✔",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:302:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#55": {
+      "en": "−60° ≤ x ≤ 0° &nbsp;&nbsp;or&nbsp;&nbsp; 60° ≤ x ≤ 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:303:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#56": {
+      "en": "WATCH OUT: two separate strips means two separate pieces in your answer, joined by the word OR. Writing −60° ≤ x ≤ 180° would claim the middle strip as well, where g is actually the higher graph.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:304:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#57": {
+      "en": "The more often two graphs cross, the more the cut-line habit earns its keep. Start by marking every place the curves meet, because between two meetings the same curve stays on top the whole way — it cannot overtake without crossing. Here there are four meetings, which cut the interval into four strips, and you only need to check one point in each strip to know which curve wins there. Then collect the winning strips. Two of them are not next to each other, so the answer has two separate pieces and needs the word or between them, not a single long inequality. Last, look at the sign in the question: it is greater-than-or-equal, so the meeting points themselves belong in the answer and the brackets are the closed kind.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:306:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#58": {
+      "en": "The sketch shows the graphs of &nbsp;f(x) = sin x&nbsp; and &nbsp;g(x) = cos 2x&nbsp; for &nbsp;x ∈ [0° ; 360°].<br><br>For which values of x is f increasing?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:358:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#59": {
+      "en": "\\\"Increasing\\\" means the curve is going UP as you read from left to right. Trace f with your finger and mark where it climbs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:359:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#60": {
+      "en": "f climbs from the origin up to its maximum, then falls to its minimum, then climbs again to the end of the interval.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:361:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#61": {
+      "en": "0° &lt; x &lt; 90° &nbsp;&nbsp;or&nbsp;&nbsp; 270° &lt; x &lt; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:362:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#62": {
+      "en": "Increasing and decreasing are read left to right, exactly like reading a sentence. Put your finger at the left-hand end of the graph and drag it along the curve: wherever your finger rises, the graph is increasing, and wherever it drops, the graph is decreasing. The change always happens at a turning point, which is why turning points are the natural cut lines for this kind of question. Here f rises out of the origin to its maximum at 90°, then falls all the way to its minimum at 270°, then rises again to the end. So there are two separate rising stretches. Turning points themselves are neither rising nor falling, which is why the ends are left out with strict inequality signs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:364:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#63": {
+      "en": "For which values of x is g decreasing?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:368:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#64": {
+      "en": "g completes two whole waves in this interval, so it falls twice. Find its turning points first — they are the places where falling turns into rising.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:369:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#65": {
+      "en": "g has period 360° ÷ 2 = 180°, so it makes two complete waves. Its turning points are at &nbsp;x = 0°, 90°, 180°, 270° and 360°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:371:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#66": {
+      "en": "It falls from each maximum to the next minimum.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:372:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#67": {
+      "en": "0° &lt; x &lt; 90° &nbsp;&nbsp;or&nbsp;&nbsp; 180° &lt; x &lt; 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:373:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#68": {
+      "en": "The squashed graph is the one that catches people out, because it turns twice as often as they expect. Work out its period first: 180°, so it fits two whole waves into the interval and therefore has twice as many turning points as f does. A cosine starts at a maximum, so g starts high, falls to a minimum at 90°, rises back to a maximum at 180°, falls again to a minimum at 270°, and finishes back at the top. The falling stretches are therefore from 0° to 90° and from 180° to 270°. Reading it off the picture is fine, but knowing the period first tells you how many falling stretches to expect, so you know when to stop looking.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:375:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#69": {
+      "en": "Hence write down the values of x for which f is increasing while g is decreasing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:379:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#70": {
+      "en": "You want the x-values that appear in BOTH of your previous answers. Sketch the two answers as strips on a number line and look for the overlap.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:380:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#71": {
+      "en": "f increasing: &nbsp;0° &lt; x &lt; 90°&nbsp; or &nbsp;270° &lt; x &lt; 360°<br>g decreasing: &nbsp;0° &lt; x &lt; 90°&nbsp; or &nbsp;180° &lt; x &lt; 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:382:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#72": {
+      "en": "The only stretch that appears in both lists: &nbsp;0° &lt; x &lt; 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:383:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#73": {
+      "en": "REMEMBER: the word \\\"while\\\" means BOTH things are happening at once, so you want the OVERLAP of your two answers, not both of them put together. Adding the strips up instead of overlapping them is the standard mistake here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:384:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#74": {
+      "en": "The word while is doing all the work in this question. It means both conditions have to be true at the same x, so you want the part the two answers share, not everything they cover between them. The safest way to find it is to draw a short number line from 0° to 360°, mark your f answer above the line and your g answer below it, and look for where the two markings sit over each other. Here f rises on two stretches and g falls on two stretches, and only one stretch is common to both, from 0° to 90°. This overlap-versus-add distinction comes up in every subject that uses intervals, and getting into the number-line habit now saves marks later in inequalities and in domain questions.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:386:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#75": {
+      "en": "The sketch shows the graphs of &nbsp;f(x) = sin x&nbsp; and &nbsp;g(x) = cos x&nbsp; for &nbsp;x ∈ [0° ; 360°]. &nbsp;The graphs cut each other at A(45° ; 0,71) and at B.<br><br>Determine the coordinates of B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:437:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#76": {
+      "en": "The graphs are equal where &nbsp;sin x = cos x, &nbsp;which is where &nbsp;tan x = 1. &nbsp;That happens once every 180°, so B is half a turn along from A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:438:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#77": {
+      "en": "sin x = cos x &nbsp;⟹&nbsp; tan x = 1, &nbsp;which repeats every 180°: &nbsp;x = 45° + 180° = 225°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:440:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#78": {
+      "en": "y = sin 225° = −0,71 &nbsp;&nbsp;∴&nbsp; B(225° ; −0,71)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:441:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#79": {
+      "en": "REMEMBER: B is NOT the mirror image of A in the y-axis. A sine graph and a cosine graph are not symmetrical about the y-axis in the same way, so the mirror trick that works on two cosines does not work here. Use the tangent repeat of 180° instead — or just read the second crossing off the sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:442:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#80": {
+      "en": "The two curves are equal where their heights match, so start from sin x = cos x. Dividing both sides by cos x turns that into tan x = 1, and a tangent repeats itself every 180°. So once you know one solution at 45°, the next is 180° later at 225°, and that is B's x-coordinate. For the height, put 225° back into either graph — both must give the same answer, which is a free check — and sin 225° is −0,71 to two decimal places. Reading it off the sketch is also allowed and gives the same answer: the second crossing is clearly down in the negative part of the picture, roughly two-thirds of a unit below the axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:444:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#81": {
+      "en": "For which values of x is &nbsp;f(x) &gt; g(x)?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:448:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#82": {
+      "en": "Cut the picture at the two crossings, then look at each strip and ask which curve is on top.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:449:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#83": {
+      "en": "Cut lines at &nbsp;x = 45°&nbsp; and &nbsp;x = 225°. &nbsp;Between them the sine graph is the higher one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:451:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#84": {
+      "en": "45° &lt; x &lt; 225°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:452:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#85": {
+      "en": "WATCH OUT: the sign is strictly greater than, so the crossing points are left out — at 45° and 225° the graphs are EQUAL, not one above the other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:453:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#86": {
+      "en": "Two crossings cut the interval into three strips, and only one of them is the answer. Check one easy point in each strip rather than trying to picture the whole thing. At 0° the cosine is at its maximum and the sine is at zero, so g is on top and that strip fails. At 90° the sine is at its maximum and the cosine is at zero, so f is on top and that strip is in. At 360° the cosine is back at its maximum and the sine is at zero, so g wins again. That gives a single stretch, from 45° to 225°, with the ends excluded because the question asks for strictly greater. One tidy answer, one strip, no or needed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:455:22"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#87": {
+      "en": "How many solutions does the equation &nbsp;sin x = cos x&nbsp; have for &nbsp;x ∈ [−360° ; 360°]?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:459:21"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#88": {
+      "en": "The sketch only shows one turn. Ask how many crossings there are per 360°, and then how many 360° stretches fit into the new interval.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:460:19"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#89": {
+      "en": "Both graphs repeat every 360°, and the sketch shows <b>2</b> crossings in one 360° stretch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:462:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#90": {
+      "en": "The interval &nbsp;[−360° ; 360°]&nbsp; is 720° wide, which is TWO of those stretches.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:463:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#91": {
+      "en": "2 × 2 = <b>4</b> solutions &nbsp;&nbsp;<i>(at −315°, −135°, 45° and 225°)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:464:39"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#92": {
+      "en": "WATCH OUT: count in whole periods, not by doubling whatever you can see. This works cleanly here because the crossings sit 180° apart and none of them lands exactly on −360° or 360°. Always check the two ends of a widened interval before you multiply.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:465:37"
+      ]
+    },
+    "tgraph-siblings-intersections-inequalities#93": {
+      "en": "When a question widens the interval past what the sketch shows, use the repeating nature of the graphs instead of drawing more picture. Both sine and cosine repeat exactly every 360°, so whatever happens in one 360° stretch happens again in the next one. The sketch shows two crossings in the stretch from 0° to 360°. The new interval runs from −360° to 360°, which is 720° wide, or two such stretches, so there are two lots of two crossings — four in all. The one thing to check before multiplying is the ends: if a crossing happened to sit exactly on −360° or 360° it would be shared between stretches and the count would be off by one. Here the crossings are at 45° plus multiples of 180°, so none of them lands on the ends.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-intersections-inequalities.js:467:22"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "tgraph-siblings-intersections-inequalities.js:60:80",
+      "text": "period of f = 360°"
+    },
+    {
+      "where": "tgraph-siblings-intersections-inequalities.js:275:79",
+      "text": "period of g = 180°"
+    },
+    {
+      "where": "tgraph-siblings-intersections-inequalities.js:429:54",
+      "text": "one turn: 2 crossings"
+    }
+  ],
+  "words": 3000
+}
