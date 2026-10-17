@@ -1,0 +1,1154 @@
+{
+  "unit": "T16",
+  "generated": "2026-10-17T17:57:47.433Z",
+  "files": [
+    "js/exam/eqn-siblings-delta-in-p.js",
+    "js/exam/eqn-siblings-fraction-equations.js"
+  ],
+  "items": {
+    "eqn-siblings-delta-in-p#1": {
+      "en": "Determine Δ, the discriminant of &nbsp;3x² − 2px + (p − 1) = 0, &nbsp;in terms of p. Give your answer in simplified form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:81:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#2": {
+      "en": "Write a, b and c down first — b is the whole of −2p, minus sign included, and c is the whole bracket. Then substitute, keeping every negative inside its own brackets.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:84:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#3": {
+      "en": "a = 3 ; &nbsp;b = −2p ; &nbsp;c = p − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:87:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#4": {
+      "en": "Δ = b² − 4ac = (−2p)² − 4(3)(p − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:88:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#5": {
+      "en": "(−2p)² = 4p², &nbsp;and &nbsp;−12(p − 1) = −12p + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:89:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#6": {
+      "en": "∴ Δ = 4p² − 12p + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:90:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#7": {
+      "en": "WATCH OUT: (−2p)² is 4p². The bracket squares the minus AND the 2 AND the p — writing −2p² or −4p² is the classic way to lose this whole question in its first line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:92:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#8": {
+      "en": "There is nothing new to learn on this card; it is the ordinary discriminant substitution with a letter where a number usually sits. What makes it worth practising on its own is that every mistake people make with parameters happens right here, in the substitution line. Write a, b and c on their own line first so you can see that b carries its minus sign and that c is the whole bracket. Then put brackets around anything negative before you square or multiply it, because minus two p squared is four p squared — the squaring reaches the sign and the number as well as the letter. What comes out is not a number but an expression, and later questions on this skill are all about what that expression can and cannot do.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:96:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#9": {
+      "en": "Given: &nbsp;x² + 2px + (p² − 3) = 0, &nbsp;where p is a real number.<br><br>Show that &nbsp;Δ = 12, &nbsp;whatever real value p takes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:121:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#10": {
+      "en": "Substitute as usual and then look carefully at the two p² terms. Do they survive?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:124:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#11": {
+      "en": "a = 1 ; &nbsp;b = 2p ; &nbsp;c = p² − 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:127:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#12": {
+      "en": "Δ = b² − 4ac = (2p)² − 4(1)(p² − 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:128:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#13": {
+      "en": "= 4p² − 4p² + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:129:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#14": {
+      "en": "the two p² terms cancel &nbsp;&nbsp;∴ Δ = 12, &nbsp;with no p left in it at all",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:130:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#15": {
+      "en": "WATCH OUT: −4(p² − 3) is −4p² <b>+</b> 12. The minus reaches the −3 as well and turns it positive — get that sign wrong and Δ comes out as 4p² − 4p² − 12 = −12, which would have you claiming the roots are never real.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:132:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#16": {
+      "en": "Most parameter questions leave you with an expression in p and a bit of work still to do. This one is a small surprise: the p squared from squaring two p and the p squared from the four a c term are exactly the same size, so they wipe each other out and what is left is a plain number. That is worth pausing on, because it means the discriminant does not depend on p at all. Whatever p you choose, the equation's roots behave in exactly the same way — the graph slides sideways as p changes, but its shape and how it meets the x-axis never change. The only thing to be careful about is the sign on the minus three, which the minus four flips to plus twelve.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:136:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#17": {
+      "en": "Hence determine the nature of the roots of the equation for every real value of p. Give a full reason.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:144:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#18": {
+      "en": "Run the usual two checks on the number 12 — the sign first, then the perfect-square question. Because Δ has no p in it, one answer covers every p at once.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:147:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#19": {
+      "en": "Δ = 12 &gt; 0, so the roots are real and unequal",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:150:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#20": {
+      "en": "12 is not a perfect □ (3² = 9 and 4² = 16), so the roots are irrational",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:151:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#21": {
+      "en": "∴ for <b>every</b> real value of p the roots are real, irrational and unequal",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:152:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#22": {
+      "en": "REMEMBER: “for every real value of p” has to be part of the sentence you write down. The marks here are not for saying what kind of roots 12 gives — they are for noticing that Δ carries no p, so the answer can never change.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:154:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#23": {
+      "en": "Once the discriminant turns out to be a bare number, the “for all p” part of the question answers itself. There is nothing left to test, no range to find, no boundary to hunt for. Twelve is positive, so the roots are real and different. Twelve is not any whole number squared, so the square root in the formula stays a surd and the roots are irrational. Say both, and then say the sentence that actually earns the last mark: this is true for every real value of p, because p has disappeared from the discriminant. You can see it in the roots too — solving gives x equals minus p plus or minus root three, so the pair of roots simply slides along the axis as p changes, always root three apart.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:158:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#24": {
+      "en": "Given: &nbsp;2x² + (p + 2)x + (p − 1) = 0, &nbsp;where p is a real number.<br><br>Show that &nbsp;Δ = p² − 4p + 12.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:184:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#25": {
+      "en": "b is a whole bracket, so squaring it needs its middle term. And a is 2 here, so 4ac is 8 times the c bracket, not 4 times it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:187:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#26": {
+      "en": "a = 2 ; &nbsp;b = p + 2 ; &nbsp;c = p − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:190:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#27": {
+      "en": "Δ = b² − 4ac = (p + 2)² − 4(2)(p − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:191:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#28": {
+      "en": "= p² + 4p + 4 − 8p + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:192:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#29": {
+      "en": "∴ Δ = p² − 4p + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:193:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#30": {
+      "en": "WATCH OUT twice in one line. (p + 2)² is p² + 4p + 4, not p² + 4 — a squared bracket always has a middle term. And a = 2, so −4ac is −8(p − 1) = −8p + 8, not −4p + 4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:195:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#31": {
+      "en": "Two habits are being tested here at once, and both of them are about brackets. Squaring b means multiplying the bracket by itself, which gives three terms, not two: the first squared, twice the product, and the last squared. And the a is two rather than one, so the four a c term is eight times the c bracket. Write a, b and c out before you start, keep every bracket in place while you expand, and collect the p terms last. What comes out is a quadratic in p, and the next part is about squeezing one very specific fact out of it — the smallest value it can ever take.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:199:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#32": {
+      "en": "By completing the square, write Δ in the form &nbsp;(p − m)² + n, &nbsp;and hence prove that the roots of the equation are real for every real value of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:207:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#33": {
+      "en": "Δ is itself a quadratic — in p this time — so complete the square on IT. Work out b/2 first, then add and subtract its square on the same line, because Δ is an expression and not an equation. Then ask how small a squared bracket can ever be.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:210:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#34": {
+      "en": "Δ is itself a quadratic, in p, so complete the square on it. &nbsp;b/2 = −4/2 = −2:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:213:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#35": {
+      "en": "Δ = p² − 4p + (−2)² − (−2)² + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:214:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#36": {
+      "en": "= (p − 2)² − 4 + 12 &nbsp;=&nbsp; (p − 2)² + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:215:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#37": {
+      "en": "(p − 2)² ≥ 0 for every real p — a square is never negative — so &nbsp;Δ ≥ 0 + 8 = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:216:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#38": {
+      "en": "∴ Δ ≥ 8, so Δ &gt; 0 for every real value of p &nbsp;⟹&nbsp; the roots are real (and unequal) for all real p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:217:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#39": {
+      "en": "WATCH OUT: Δ is an EXPRESSION here, not an equation, so (b/2)² is <b>added and subtracted</b> on the same side. Adding it to “both sides” is the equation version of the method and would change what Δ is worth.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:219:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#40": {
+      "en": "You cannot test every value of p, because there are infinitely many of them, so this question needs a move that covers all of them in one line. Hers is to notice that the discriminant is itself a quadratic, and to complete the square on it. Sketched as a graph of Δ against p, that gives a happy parabola with its turning point at p equals two, Δ equals eight — and the turning point of a happy parabola is its lowest point. So the smallest the discriminant can ever be is eight. Eight is comfortably above zero, so the discriminant is positive no matter what p does, and positive means two real, different roots. One inequality has settled every value of p at once.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:223:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#41": {
+      "en": "Hence explain why this equation can never have equal roots, whatever real value p takes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:231:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#42": {
+      "en": "Equal roots need Δ to be exactly zero. From (b) you know the smallest Δ can ever be — can it reach zero?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:234:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#43": {
+      "en": "Equal roots need &nbsp;Δ = 0&nbsp; exactly, but from (b) the smallest Δ can ever be is 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:237:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#44": {
+      "en": "∴ Δ can never reach 0, so no real value of p gives equal roots — the equation never has equal roots",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:238:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#45": {
+      "en": "REMEMBER: p = 2 is where Δ is SMALLEST, not where it is zero. At p = 2 the discriminant is 8, which still gives real and UNEQUAL roots. Handing in p = 2 as “the value that gives equal roots” is the trap this part is built to catch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:240:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#46": {
+      "en": "This part is the payoff for the completing-the-square work. Once you know the floor the discriminant sits on, a question like “can Δ ever be zero” becomes a one-line check instead of a fresh calculation. The floor is eight, and eight is not zero, so the answer is no — and “no” with a reason is the whole answer here. The tempting wrong move is to hand in p equals two, because that is the value that makes Δ as small as it can get. But smallest is not the same as zero. At p equals two the discriminant is still eight, and the equation still has two different real roots. Say what the minimum is, and then say that even the minimum is too big.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:244:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#47": {
+      "en": "Given: &nbsp;x² + (p + 1)x + p = 0, &nbsp;where p is a real number.<br><br>Show that &nbsp;Δ = (p − 1)².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:270:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#48": {
+      "en": "Expand the squared bracket first and collect the p terms. Then look at what you have — the three terms should fold back up into a square.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:273:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#49": {
+      "en": "a = 1 ; &nbsp;b = p + 1 ; &nbsp;c = p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:276:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#50": {
+      "en": "Δ = (p + 1)² − 4(1)(p) = p² + 2p + 1 − 4p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:277:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#51": {
+      "en": "= p² − 2p + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:278:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#52": {
+      "en": "which is a perfect □: &nbsp;∴ Δ = (p − 1)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:279:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#53": {
+      "en": "WATCH OUT: the sign inside the final bracket is MINUS, even though the bracket you started with had a plus. Check the middle term before you commit: 2(p)(−1) = −2p ✓, which matches. Writing (p + 1)² here would be right for the b you started with and wrong for the Δ you ended with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:281:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#54": {
+      "en": "Two things are happening in this short piece of work and they are worth separating. The first is ordinary expanding: square the bracket, remembering its middle term, then take away four p. The second is recognising the answer. Three terms where the first and last are both perfect squares and the middle is twice their product is a squared bracket in disguise, and folding it back up is what makes the next part easy. Check the sign by rebuilding it rather than guessing: p minus one, all squared, gives p squared minus two p plus one, which is exactly what you have. That kind of check takes five seconds and catches the most common slip on this question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:285:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#55": {
+      "en": "Hence determine the value of p for which the equation has equal roots, and write down that equal root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:293:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#56": {
+      "en": "Equal roots need Δ = 0. A squared bracket is zero only where the bracket itself is zero — and that happens in exactly one place.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:296:13"
+      ]
+    },
+    "eqn-siblings-delta-in-p#57": {
+      "en": "Equal roots need &nbsp;Δ = 0: &nbsp;&nbsp;(p − 1)² = 0 &nbsp;⟹&nbsp; p − 1 = 0 &nbsp;⟹&nbsp; p = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:299:37"
+      ]
+    },
+    "eqn-siblings-delta-in-p#58": {
+      "en": "With p = 1 the equation is &nbsp;x² + 2x + 1 = 0, &nbsp;so the equal root is &nbsp;x = −b/(2a) = −2/2 = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:300:39"
+      ]
+    },
+    "eqn-siblings-delta-in-p#59": {
+      "en": "REMEMBER: (p − 1)² = 0 has only ONE answer, p = 1. The ± only turns up when a squared bracket equals a POSITIVE number — zero has just one square root, itself.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:302:15"
+      ]
+    },
+    "eqn-siblings-delta-in-p#60": {
+      "en": "Put this card next to the last one and the pair covers both possible outcomes of the same question. There the discriminant was a square plus eight, so it never reached zero and equal roots were impossible. Here it is a square with nothing added, so it does reach zero — at the one place where the bracket itself is zero, which is p equal to one. Notice that there is only one answer, not two. A squared bracket equal to a positive number gives a plus-or-minus, but a squared bracket equal to zero gives a single value, because zero has only one square root. Substituting p back in gives x squared plus two x plus one, which is x plus one all squared, so the repeated root is minus one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-delta-in-p.js:306:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#1": {
+      "en": "Given: &nbsp;3/x + 1/2 = 2<br><br>Write down the limit — the value x is not allowed to take.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:66:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#2": {
+      "en": "Look at the denominators. One of them is a plain 2, which can never be zero — the other one is the whole question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:69:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#3": {
+      "en": "The denominator x may not be zero &nbsp;&nbsp;∴ x ≠ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:72:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#4": {
+      "en": "The limits line is the first thing on the page, before any solving happens, and it is a mark of its own in every one of her memos. It comes from the denominators and nowhere else: any value of x that would make a denominator zero has to be ruled out, because dividing by zero is undefined. Here there are two denominators. The 2 is a plain number and can never be zero, so it contributes nothing. The x can be zero, so it does — x may not be zero. Write it at the top of your page now, even when it looks obvious, because at the end you have to check your answer against it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:75:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#5": {
+      "en": "Solve for x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:83:13",
+        "eqn-siblings-fraction-equations.js:264:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#6": {
+      "en": "The LCD is the smallest thing both denominators divide into — here that is 2x. Multiply EVERY term by it, including the 2 on the right, which secretly has a denominator of 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:86:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#7": {
+      "en": "LCD = 2x &nbsp;&nbsp;·&nbsp;&nbsp; limits: x ≠ 0. &nbsp;Multiply every term by 2x; the denominators cancel and only the numerators are left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:89:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#8": {
+      "en": "6 + x = 4x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:90:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#9": {
+      "en": "6 = 3x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:91:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#10": {
+      "en": "∴ x = 2 &nbsp;— and 2 is not a limit, so it stands",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:92:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#11": {
+      "en": "WATCH OUT: the 2 on the right-hand side gets multiplied by the LCD too. It has an invisible denominator of 1, so 2 × 2x = 4x. Multiplying only the fractions away leaves 6 + x = 2, which is a different equation and a wrong answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:94:15"
+      ]
+    },
+    "eqn-siblings-fraction-equations#12": {
+      "en": "Multiplying by the LCD is legal because every single term on both sides gets the same treatment, so the balance never tips — and it is worth doing because fractions turn into an ordinary equation you already know how to solve. The piece people forget is the whole number. A 2 on its own is really 2 over 1, so it gets multiplied by the LCD exactly like the fractions do. Work through the three terms one at a time: 3 over x times 2x leaves 6, 1 over 2 times 2x leaves x, and 2 times 2x is 4x. Then it is a two-line linear equation, and the answer gets checked against the limits before it is written down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:98:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#13": {
+      "en": "Given: &nbsp;5/(x − 2) + 3/(2 − x) = x − 3<br><br>Show that &nbsp;3/(2 − x)&nbsp; can be written as &nbsp;−3/(x − 2), &nbsp;and write down the limit.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:123:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#14": {
+      "en": "The two denominators look different and are really the same thing back to front. Take a −1 out of 2 − x and see what is left inside the bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:126:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#15": {
+      "en": "2 − x = −(x − 2), &nbsp;so &nbsp;3/(2 − x) = 3/(−(x − 2)) = −3/(x − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:129:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#16": {
+      "en": "Both denominators are now x − 2, which may not be zero &nbsp;&nbsp;∴ x ≠ 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:130:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#17": {
+      "en": "WATCH OUT: 2 − x is NOT the same as x − 2 — it is the negative of it. Taking the −1 out and carrying it up into the numerator is where the sign is won or lost, and it is the step she highlights in colour on her own page.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:132:15"
+      ]
+    },
+    "eqn-siblings-fraction-equations#18": {
+      "en": "Two denominators that are each other back to front are the same denominator wearing a minus sign. Two minus x equals minus one times x minus two, so a fraction with two minus x underneath is the same as minus that fraction with x minus two underneath. Doing that swap first is what makes the whole question easy, because now both fractions share one denominator and there is nothing to build an LCD out of. It also means there is only one forbidden value, not two: x may not be two, and that single limit covers both fractions. If you skip the swap and treat them as different denominators, you end up multiplying by something twice as big and fighting signs all the way down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:136:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#19": {
+      "en": "Hence solve for x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:144:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#20": {
+      "en": "With both denominators the same, the left-hand side collapses into one fraction. Then multiply both sides by that denominator and solve the quadratic that appears.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:147:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#21": {
+      "en": "Using the negative twin from (a): &nbsp;5/(x − 2) − 3/(x − 2) = 2/(x − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:150:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#22": {
+      "en": "LCD = x − 2 &nbsp;&nbsp;·&nbsp;&nbsp; limits: x ≠ 2 &nbsp;&nbsp;⟹&nbsp;&nbsp; 2 = (x − 3)(x − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:151:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#23": {
+      "en": "2 = x² − 5x + 6 &nbsp;⟹&nbsp; x² − 5x + 4 = 0 &nbsp;⟹&nbsp; (x − 1)(x − 4) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:152:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#24": {
+      "en": "∴ x = 1 &nbsp;&nbsp;or&nbsp;&nbsp; x = 4 &nbsp;— neither one is the limit x = 2, so both stand",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:153:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#25": {
+      "en": "REMEMBER to check BOTH answers against the limit, not just the one that looks suspicious. Here both survive — but the checking line is a mark whether or not it changes the answer, and leaving it out is the most common way to lose the last mark on this kind of question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:155:15"
+      ]
+    },
+    "eqn-siblings-fraction-equations#26": {
+      "en": "Once the two fractions share a denominator, five of them take away three of them leaves two of them — the same as five sevenths minus three sevenths being two sevenths. That single fraction is much easier to work with than the pair. Multiplying both sides by x minus two clears it, and the right-hand side, which had no denominator, picks the bracket up. Multiplying out gives a quadratic, and a quadratic that factorises gives two roots. The last line is the one the mark scheme cares about: both roots have to be held up against the limit before they are handed in. Neither of them is two, so both are genuine solutions of the equation you were actually given.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:159:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#27": {
+      "en": "Given: &nbsp;1/(x + 3) + 1/(x − 3) = 6/(x² − 9)<br><br>Factorise &nbsp;x² − 9, &nbsp;and hence write down the limits.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:184:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#28": {
+      "en": "x² − 9 is a difference of squares. Once it is in brackets, the forbidden values are whatever would make any denominator equal zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:187:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#29": {
+      "en": "x² − 9 is a difference of squares: &nbsp;x² − 9 = (x + 3)(x − 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:190:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#30": {
+      "en": "limits: &nbsp;x ≠ −3 ; &nbsp;x ≠ 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:191:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#31": {
+      "en": "REMEMBER: the limits come from EVERY denominator, not only the big one. Here x + 3 and x − 3 each appear on their own as well, and they give the same two values — which is the clue that the third denominator is just those two multiplied together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:193:15"
+      ]
+    },
+    "eqn-siblings-fraction-equations#32": {
+      "en": "Factorising the messiest denominator does two jobs at once. It shows you the forbidden values, because a product is zero exactly when one of its brackets is zero, so this fraction breaks at three and at minus three. And it hands you the LCD for free, because those same two brackets are already sitting under the other two fractions. That is not a coincidence — questions are built this way on purpose, so that the difference of squares is the piece of Grade 10 work that unlocks the rest. Write the limits down at the top of your page now; on this particular question they are going to matter more than usual.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:197:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#33": {
+      "en": "Solve for x, and state clearly what your answer means.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:205:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#34": {
+      "en": "The denominators are already factorised, so the LCD is just the two brackets multiplied. Multiply everything by it — and then hold whatever you get up against your limits line before you write it down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:208:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#35": {
+      "en": "LCD = (x + 3)(x − 3) &nbsp;&nbsp;·&nbsp;&nbsp; limits: x ≠ −3 ; x ≠ 3. &nbsp;Multiply every term by the LCD; the denominators cancel and only the numerators are left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:211:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#36": {
+      "en": "(x − 3) + (x + 3) = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:212:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#37": {
+      "en": "2x = 6 &nbsp;⟹&nbsp; x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:213:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#38": {
+      "en": "But x = 3 is a limit — it makes x − 3 and x² − 9 equal to zero, so it must be thrown away",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:214:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#39": {
+      "en": "∴ the equation has NO solution — its only root is a forbidden value",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:215:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#40": {
+      "en": "WATCH OUT: x = 3 solves the tidied-up equation perfectly, and it is still not an answer. Put it back into the equation you were GIVEN and the second fraction reads 1 divided by 0 — undefined. That is exactly why the limits line goes down first: the tidied-up equation has forgotten a rule that the original one never dropped.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:217:15"
+      ]
+    },
+    "eqn-siblings-fraction-equations#41": {
+      "en": "This is the card that shows why the limits line is not a polite formality. Multiplying by the LCD is a legal move, but the equation you are left with is not quite the same animal as the one you started with — it has forgotten that x could never be three. So it happily offers three back to you as an answer, and it is your job to refuse it. Once that root is thrown away there is nothing left, and that is a complete and correct answer: this equation has no solution. Say it in words rather than leaving the page blank. And notice the difference between the two ideas: x equals three is not a wrong root, it is a value where the equation does not exist at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:221:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#42": {
+      "en": "Given: &nbsp;(x + 4)/(x − 1) = (x + 2)/(x − 2)<br><br>Write down the limits.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:246:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#43": {
+      "en": "Each side has its own denominator, and each one gives its own forbidden value.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:249:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#44": {
+      "en": "A fraction is undefined where its denominator is zero: &nbsp;x − 1 = 0 &nbsp;or&nbsp; x − 2 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:252:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#45": {
+      "en": "limits: &nbsp;x ≠ 1 ; &nbsp;x ≠ 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:253:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#46": {
+      "en": "There are two denominators here and neither of them is more important than the other, so both give a limit. It is worth saying why this line exists at all rather than treating it as a ritual. The equation you are about to write down, once the fractions are gone, will be a perfectly ordinary one, and it has no memory of where the original was broken. The limits line is that memory, written on your own page. Two forbidden values, one and two, and they get held up against your answer at the very end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:256:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#47": {
+      "en": "The LCD is the two denominators multiplied together. Multiply both sides by it, expand carefully, and then look at the two x² terms.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:267:13"
+      ]
+    },
+    "eqn-siblings-fraction-equations#48": {
+      "en": "LCD = (x − 1)(x − 2) &nbsp;&nbsp;·&nbsp;&nbsp; limits: x ≠ 1 ; x ≠ 2. &nbsp;Multiply both sides by the LCD; each denominator cancels against its own bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:270:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#49": {
+      "en": "(x + 4)(x − 2) = (x + 2)(x − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:271:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#50": {
+      "en": "x² + 2x − 8 = x² + x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:272:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#51": {
+      "en": "The x² terms are the same on both sides, so they cancel: &nbsp;2x − 8 = x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:273:37"
+      ]
+    },
+    "eqn-siblings-fraction-equations#52": {
+      "en": "∴ x = 6 &nbsp;— and 6 is not a limit, so it stands",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:274:39"
+      ]
+    },
+    "eqn-siblings-fraction-equations#53": {
+      "en": "REMEMBER: a fraction equation with exactly ONE fraction on each side may be cross-multiplied, and that is what the LCD step comes to here. The moment there are THREE terms, cross-multiplying stops working and the LCD is the only safe road — which is why her method always writes the LCD line, whatever the shape.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:276:15"
+      ]
+    },
+    "eqn-siblings-fraction-equations#54": {
+      "en": "Multiplying both sides by the two denominators is what the phrase “cross-multiply” really means, and it is safe here because there is one fraction on each side and nothing else. Expand both products carefully — each bracket has two terms, so there are four little products a side. Then comes the pleasant surprise: both sides have an x squared and it is exactly the same size, so subtracting it from both sides makes it disappear. What was starting to look like a quadratic collapses into a two-line linear equation. One answer, not two, and it clears both limits, so it stands. If the x squared terms had not matched you would have carried on with an ordinary quadratic instead — either way, nothing about the method changes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-fraction-equations.js:280:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3254
+}
