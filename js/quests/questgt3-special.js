@@ -23,7 +23,7 @@ function reveal(q, frames, mode) { q.reveal = frames; if (mode) q.revealMode = m
 const TRIANGLE_FRAMES = [
   renderTriangle(special45Spec()),
   renderTriangle(special30Spec()),
-  `<div style="font-size:14.5px;line-height:1.6">Where they come from: cut a <b>square</b> corner to corner and you get 45-45-90; cut an <b>equilateral triangle</b> straight down the middle and you get 30-60-90.</div>`,
+  L(`<div style="font-size:14.5px;line-height:1.6">Where they come from: cut a <b>square</b> corner to corner and you get 45-45-90; cut an <b>equilateral triangle</b> straight down the middle and you get 30-60-90.</div>`, `<div style="font-size:14.5px;line-height:1.6">Waar hulle vandaan kom: sny 'n <b>vierkant</b> van hoek tot hoek en jy kry 45-45-90; sny 'n <b>gelyksydige driehoek</b> reguit deur die middel en jy kry 30-60-90.</div>`),
 ];
 const OAH_FRAMES = [0, 1, 2, 3, 4, 5].map(s => oahTable(s));
 

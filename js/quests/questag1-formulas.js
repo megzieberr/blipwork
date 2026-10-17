@@ -35,9 +35,9 @@ const SKILLS = {
   whichFormula: () => {
     const { A, B } = randSegment();
     const jobs = [
-      { q: L("the <b>length</b> of line AB", "die <b>lengte</b> van lyn AB"), key: L("distance", "distance") },
-      { q: L("the <b>midpoint</b> of AB", "die <b>middelpunt</b> van AB"), key: L("midpoint", "midpoint") },
-      { q: L("the <b>gradient</b> (slope) of AB", "die <b>gradiënt</b> (helling) van AB"), key: L("gradient", "gradient") },
+      { q: L("the <b>length</b> of line AB", "die <b>lengte</b> van lyn AB"), key: "distance", ans: L("Use the distance formula.", "Gebruik die afstandsformule.") },
+      { q: L("the <b>midpoint</b> of AB", "die <b>middelpunt</b> van AB"), key: "midpoint", ans: L("Use the midpoint formula.", "Gebruik die middelpuntformule.") },
+      { q: L("the <b>gradient</b> (slope) of AB", "die <b>gradiënt</b> (helling) van AB"), key: "gradient", ans: L("Use the gradient formula.", "Gebruik die gradiëntformule.") },
     ];
     const j = pick(jobs);
     const wrongs = Object.keys(F).filter((k) => k !== j.key).map((k) => F[k]);
@@ -45,7 +45,7 @@ const SKILLS = {
       F[j.key], wrongs,
       { graph: segDiagram(A, B),
         hint: L("Length → distance. Halfway point → midpoint. Steepness → gradient.", "Lengte → afstand. Halfpad-punt → middelpunt. Steilte → gradiënt."),
-        answerLabel: L(`Use the ${j.key} formula.`, `Gebruik die ${j.key}-formule.`) });
+        answerLabel: j.ans });
   },
 
   /* what the answer looks like */

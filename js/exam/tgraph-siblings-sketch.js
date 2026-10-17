@@ -29,6 +29,8 @@
    Two-parameter wall respected on every curve (GR11-IEB-PAPER-BANK.md).
    ============================================================ */
 
+import { L } from "../lang.js";
+
 const PAPER = "siblings";
 const CH = "tgraph";
 const TOPIC = "sketch";
@@ -123,7 +125,7 @@ const q2 = {
   diagram: {
     spec: blank(Q2_WIN, 45, 1),
     parts: {
-      a: { question: {}, reveal: { hmeasure: { x0: 0, x1: 180, y: 1, label: "period = 180°" } } },
+      a: { question: {}, reveal: { hmeasure: { x0: 0, x1: 180, y: 1, label: L("period = 180°", "periode = 180°") } } },
       b: {
         question: {},
         reveal: {
@@ -320,7 +322,7 @@ const q5 = {
       b: {
         spec: { ...drawn(Q5_WIN, 90, 1, [Q5_F]), midline: { y: 2 } },
         question: {},
-        reveal: { hlines: [{ y: 1, label: "lowest value y = 1" }] },
+        reveal: { hlines: [{ y: 1, label: L("lowest value y = 1", "laagste waarde y = 1") }] },
       },
     },
   },

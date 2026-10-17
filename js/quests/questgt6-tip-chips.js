@@ -25,11 +25,11 @@ function threeBoxes() {
   const box = (colour, name, fill) =>
     `<div><b style="color:var(--${colour})">${name}</b> → ${fill}</div>`;
   const boxes = fill => `<div style="font-size:14px;line-height:2">`
-    + box("good", "positive angles", fill(L("anti-clockwise", "antikloksgewys")))
-    + box("bad", "negative angles", fill(L("clockwise", "kloksgewys")))
-    + box("accent", "co-functions", fill("convert between sin and cos"))
+    + box("good", L("positive angles", "positiewe hoeke"), fill(L("anti-clockwise", "antikloksgewys")))
+    + box("bad", L("negative angles", "negatiewe hoeke"), fill(L("clockwise", "kloksgewys")))
+    + box("accent", L("co-functions", "ko-funksies"), fill(L("convert between sin and cos", "skakel om tussen sin en cos")))
     + `</div>`;
-  const ask = `<div class="muted small" style="margin-bottom:6px">Three boxes decide every reduction:</div>`
+  const ask = L(`<div class="muted small" style="margin-bottom:6px">Three boxes decide every reduction:</div>`, `<div class="muted small" style="margin-bottom:6px">Drie blokkies besluit elke reduksie:</div>`)
     + boxes(() => `<span class="muted">?</span>`);
   return revealAfter(
     reveal(
@@ -155,20 +155,32 @@ const chip5Pool = () => pick([chip5Sin, chip5Cos])();
    pivot the question asks about; the finished derivation comes back as
    the confirmation (q.revealAfter). */
 function butWhy() {
-  const askFrame = `<div style="font-size:13.5px;line-height:1.7">
+  const askFrame = L(`<div style="font-size:13.5px;line-height:1.7">
       <b>but why?</b><br>
       sin(θ − 90°) = sin[−(90° − θ)]<br>
       let K = 90° − θ<br>
       = sin(−K) — and −K sits in quadrant IV…<br>
       = ?
-    </div>`;
-  const frame = `<div style="font-size:13.5px;line-height:1.7">
+    </div>`, `<div style="font-size:13.5px;line-height:1.7">
+      <b>maar hoekom?</b><br>
+      sin(θ − 90°) = sin[−(90° − θ)]<br>
+      stel K = 90° − θ<br>
+      = sin(−K), en −K lê in kwadrant IV…<br>
+      = ?
+    </div>`);
+  const frame = L(`<div style="font-size:13.5px;line-height:1.7">
       <b>but why?</b><br>
       sin(θ − 90°) = sin[−(90° − θ)]<br>
       let K = 90° − θ<br>
       = sin(−K) — in quadrant IV<br>
       = −sin K = −sin(90° − θ) = −cos θ
-    </div>`;
+    </div>`, `<div style="font-size:13.5px;line-height:1.7">
+      <b>maar hoekom?</b><br>
+      sin(θ − 90°) = sin[−(90° − θ)]<br>
+      stel K = 90° − θ<br>
+      = sin(−K): in kwadrant IV<br>
+      = −sin K = −sin(90° − θ) = −cos θ
+    </div>`);
   return revealAfter(
     reveal(
       ynQ(CON, L("In quadrant IV, cos survives and sin flips. True or false?", "In kwadrant IV oorleef cos en sin draai om. Waar of onwaar?"), true,

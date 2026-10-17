@@ -15,8 +15,8 @@ const TREE = "treeRead";
 const ALO = "atLeastOne";
 
 const COLOURS = [
-  { k: "B", name: "blue" }, { k: "G", name: "green" },
-  { k: "R", name: "red" }, { k: "Y", name: "yellow" },
+  { k: "B", name: L("blue", "blou") }, { k: "G", name: L("green", "groen") },
+  { k: "R", name: L("red", "rooi") }, { k: "Y", name: L("yellow", "geel") },
 ];
 
 /* a two-colour bag (keeps trees to 4 leaves) */

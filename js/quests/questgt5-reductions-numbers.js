@@ -69,10 +69,10 @@ function buildChain(fn, angle) {
   steps.push(mcStep(L("What's the sign?", "Wat is die teken?"), r.sign > 0 ? "+" : "−", [r.sign > 0 ? "−" : "+"], SH3));
   const ro = ratioOptions(fn, r.fn2);
   steps.push(mcStep(L("Does the ratio stay, or does it change?", "Bly die verhouding, of verander dit?"), ro.correct, ro.wrongs, SH4));
-  solution.push({ s: `Quadrant: ${CIRC[r.quadrant - 1]}`, r: "read it off the wheel." });
-  solution.push({ s: `Formula: ${r.form}`, r: "the wheel arm this angle lands on." });
-  solution.push({ s: `Sign: ${r.sign < 0 ? "−" : "+"}`, r: "All Strippers Take Cash." });
-  solution.push({ s: `Ratio: stays ${fn}`, r: "reductions never swap the ratio — that's a co-function's job." });
+  solution.push({ s: L(`Quadrant: ${CIRC[r.quadrant - 1]}`, `Kwadrant: ${CIRC[r.quadrant - 1]}`), r: L("read it off the wheel.", "lees dit van die wiel af.") });
+  solution.push({ s: L(`Formula: ${r.form}`, `Formule: ${r.form}`), r: L("the wheel arm this angle lands on.", "die wielarm waarop hierdie hoek land.") });
+  solution.push({ s: L(`Sign: ${r.sign < 0 ? "−" : "+"}`, `Teken: ${r.sign < 0 ? "−" : "+"}`), r: L("All Strippers Take Cash.", "All Strippers Take Cash.") });
+  solution.push({ s: L(`Ratio: stays ${fn}`, `Verhouding: bly ${fn}`), r: L("reductions never swap the ratio — that's a co-function's job.", "reduksies ruil nooit die verhouding om nie: dis 'n ko-funksie se werk.") });
   return {
     type: "steps", concept: CON,
     _dbg: { fn, angle },   // harness-only: lets verify-gtrig.html recompute fn(angle) independently

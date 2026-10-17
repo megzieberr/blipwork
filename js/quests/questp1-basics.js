@@ -15,12 +15,12 @@ const REL = "relFreq";
 /* an event on a fair N-sided die: returns {desc, set} */
 function evt(N) {
   const opts = [
-    () => ({ desc: "an odd number", set: odds(N) }),
-    () => ({ desc: "an even number", set: evens(N) }),
-    () => { const m = pick([2, 3, 4]); return { desc: `a multiple of ${m}`, set: multiplesOf(m, N) }; },
-    () => ({ desc: `a factor of ${N}`, set: factorsOf(N) }),
-    () => { const k = randInt(2, N - 2); return { desc: `greater than ${k}`, set: range1(N).filter(x => x > k) }; },
-    () => { const k = randInt(3, N - 1); return { desc: `at most ${k}`, set: range1(N).filter(x => x <= k) }; },
+    () => ({ desc: L("an odd number", "'n onewe getal"), set: odds(N) }),
+    () => ({ desc: L("an even number", "'n ewe getal"), set: evens(N) }),
+    () => { const m = pick([2, 3, 4]); return { desc: L(`a multiple of ${m}`, `'n veelvoud van ${m}`), set: multiplesOf(m, N) }; },
+    () => ({ desc: L(`a factor of ${N}`, `'n faktor van ${N}`), set: factorsOf(N) }),
+    () => { const k = randInt(2, N - 2); return { desc: L(`greater than ${k}`, `groter as ${k}`), set: range1(N).filter(x => x > k) }; },
+    () => { const k = randInt(3, N - 1); return { desc: L(`at most ${k}`, `hoogstens ${k}`), set: range1(N).filter(x => x <= k) }; },
   ];
   let e; do { e = pick(opts)(); } while (e.set.length === 0 || e.set.length === N);
   return e;

@@ -15,7 +15,7 @@ const ACC = AG[1];
 /* two integer points whose line has the requested character */
 function pointsFor(kind) {
   const a = randInt(-5, 5), b = randInt(-5, 5);
-  if (kind === L("zero", "zero")) { const y = randInt(-4, 4); return { A: { x: -4, y }, B: { x: 4, y } }; }
+  if (kind === "flat") { const y = randInt(-4, 4); return { A: { x: -4, y }, B: { x: 4, y } }; }
   if (kind === "undef") { const x = randInt(-4, 4); return { A: { x, y: -4 }, B: { x, y: 4 } }; }
   const run = pick([1, 2, 3]); const rise = pick([1, 2, 3, 4]);
   const s = kind === "pos" ? 1 : -1;
@@ -29,12 +29,12 @@ function lineDiagram(A, B, accent = ACC) {
   };
 }
 
-const KINDLAB = { pos: L("positive", "positief"), neg: L("negative", "negatief"), zero: L("zero", "zero"), undef: L("undefined", "onbepaald") };
+const KINDLAB = { pos: L("positive", "positief"), neg: L("negative", "negatief"), flat: L("zero", "nul"), undef: L("undefined", "onbepaald") };
 
 const SKILLS = {
   /* read the sign off a drawn line */
   signFromGraph: () => {
-    const kind = pick(["pos", "neg", L("zero", "zero"), "undef"]);
+    const kind = pick(["pos", "neg", "flat", "undef"]);
     const { A, B } = pointsFor(kind);
     const correct = KINDLAB[kind];
     const wrongs = Object.values(KINDLAB).filter((v) => v !== correct);
@@ -65,7 +65,7 @@ const SKILLS = {
 
   /* horizontal line */
   horizontal: () => {
-    const { A, B } = pointsFor(L("zero", "zero"));
+    const { A, B } = pointsFor("flat");
     return mc("specialLines", L("A <b>horizontal</b> line has a gradient of…", "'n <b>Horisontale</b> lyn het 'n gradiënt van…"), L("0 (zero)", "0 (nul)"),
       [L("undefined", "onbepaald"), "1", L("a very big number", "'n baie groot getal")],
       { graph: lineDiagram(A, B),

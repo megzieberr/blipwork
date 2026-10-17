@@ -30,7 +30,7 @@ const SOHCAHTOA_FRAMES = [
 
 const CIRCLE_DEGS = [20, 50, 75, 110];
 const CIRCLE_FRAMES = CIRCLE_DEGS.map(d =>
-  `${circleFrame(d)}<div class="muted small" style="margin-top:6px">As the point moves along the circle (now at θ = ${d}°) the radius stays the same — but θ, the x-coordinate and the y-coordinate all change.</div>`);
+  `${circleFrame(d)}${L(`<div class="muted small" style="margin-top:6px">As the point moves along the circle (now at θ = ${d}°) the radius stays the same — but θ, the x-coordinate and the y-coordinate all change.</div>`, `<div class="muted small" style="margin-top:6px">Soos die punt langs die sirkel beweeg (nou by θ = ${d}°), bly die radius dieselfde, maar θ, die x-koördinaat en die y-koördinaat verander almal.</div>`)}`);
 
 const SKILLS = {
   /* A1 — the word */

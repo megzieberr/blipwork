@@ -232,25 +232,26 @@ function genOutBound() {
     ({ iqr: range, lower, upper } = outlierBounds(q1, q3));
     if (q1 !== range && q3 !== range && q1 !== q3) break;   // three DISTINCT chips (q1≠q3 always true; kept as a floor)
   }
-  const which = pick([L("lower", "lower"), L("upper", "upper")]);
-  const ans = which === L("lower", "lower") ? lower : upper;
+  const isLower = pick([true, false]);   // the data (same draw as the old pick of two words)
+  const which = isLower ? L("lower", "onder") : L("upper", "bo");   // what the learner reads (T93B split)
+  const ans = isLower ? lower : upper;
   const dp = Number.isInteger(ans) ? 0 : 1;
-  const boundaryVal = which === L("lower", "lower") ? q1 : q3;
+  const boundaryVal = isLower ? q1 : q3;
   return {
     type: "steps", concept: "outliers",
-    prompt: L(`A data set has <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the <b>${which} boundary</b> for outliers.`, `'n Datastel het <b>Q1 = ${q1}</b> en <b>Q3 = ${q3}</b>. Bereken die <b>${which}-grens</b> vir uitskieters.`),
+    prompt: L(`A data set has <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the <b>${which} boundary</b> for outliers.`, `'n Datastel het <b>Q1 = ${q1}</b> en <b>Q3 = ${q3}</b>. Bereken die <b>${which}grens</b> vir uitskieters.`),
     steps: [
       calcStep(L("First the IQR.", "Eers die interkwartielomvang."), range, L("IQR = Q3 − Q1", "Interkwartielomvang = Q3 − Q1"), { dp: 0 }),
       {
         kind: "tokenpad",
         prompt: L("Build the boundary. Tap a piece to drop it into the next box.", "Bou die grens. Klik op 'n stuk om dit in die volgende blokkie te plaas."),
-        frame: ["boundary", "=", SLOT, which === L("lower", "lower") ? "−" : "+", "1,5", "×", SLOT],
+        frame: [L("boundary", "grens"), "=", SLOT, isLower ? "−" : "+", "1,5", "×", SLOT],
         keys: shuffleChips([String(q1), String(q3), String(range)]),
         expected: joinThin([String(boundaryVal), String(range)]),
         hint: L("Below Q1 for the lower boundary, above Q3 for the upper — always 1,5 × IQR.", "Onder Q1 vir die ondergrens, bo Q3 vir die bogrens: altyd 1,5 × interkwartielomvang."),
       },
       calcStep(dp === 1 ? L("Now calculate the boundary itself (1 decimal).", "Bereken nou die grens self (1 desimale plek).") : L("Now calculate the boundary itself.", "Bereken nou die grens self."), ans,
-        which === L("lower", "lower")
+        isLower
           ? L(`lower = Q1 − 1,5 × IQR = ${q1} − 1,5 × ${range}.`, `ondergrens = Q1 − 1,5 × interkwartielomvang = ${q1} − 1,5 × ${range}.`)
           : L(`upper = Q3 + 1,5 × IQR = ${q3} + 1,5 × ${range}.`, `bogrens = Q3 + 1,5 × interkwartielomvang = ${q3} + 1,5 × ${range}.`),
         { dp, allowNeg: true, tol: 0.001 }),
@@ -260,7 +261,7 @@ function genOutBound() {
     hint: L("Find the IQR first, then go 1,5 × IQR beyond the quartile (below Q1, or above Q3).", "Vind eers die interkwartielomvang en gaan dan 1,5 × interkwartielomvang verby die kwartiel (onder Q1, of bo Q3)."),
     solution: [
       { s: L(`IQR = Q3 − Q1 = ${q3} − ${q1} = ${range}`, `interkwartielomvang = Q3 − Q1 = ${q3} − ${q1} = ${range}`), r: L("interquartile range", "interkwartielomvang") },
-      which === L("lower", "lower")
+      isLower
         ? { s: L(`lower = Q1 − 1,5 × IQR = ${q1} − 1,5 × ${range} = ${C(lower)}`, `ondergrens = Q1 − 1,5 × interkwartielomvang = ${q1} − 1,5 × ${range} = ${C(lower)}`), r: L("lower boundary", "ondergrens") }
         : { s: L(`upper = Q3 + 1,5 × IQR = ${q3} + 1,5 × ${range} = ${C(upper)}`, `bogrens = Q3 + 1,5 × interkwartielomvang = ${q3} + 1,5 × ${range} = ${C(upper)}`), r: L("upper boundary", "bogrens") },
     ],

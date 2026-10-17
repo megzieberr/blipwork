@@ -23,7 +23,7 @@ const SKILLS = {
   /* the hidden joining face */
   hiddenFace: () => {
     const g = pick([silo, dome])();
-    const topName = g.top === L("cone", "cone") ? L("cone", "cone") : L("hemisphere", "halfsfeer");
+    const topName = L(`${g.top === "cone" ? "cone" : "hemisphere"}`, `${g.top === "cone" ? "keël" : "halfsfeer"}`);   // g.top is data ("cone"); the learner reads topName
     return {
       type: "yesno", concept: "compositeSolids",
       prompt: L(`For the <b>total surface area</b>, do you include the dashed circle where the ${topName} sits on the cylinder?`, `Tel jy vir die <b>totale buite-oppervlakte</b> die gestippelde sirkel by waar die ${topName} op die silinder sit?`),

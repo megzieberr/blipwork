@@ -62,12 +62,13 @@ function genCompareMedian() {
   let a, b;
   do { a = randBox(); b = randBox(); } while (a.med === b.med);
   const axis = boxAxis(Math.max(a.max, b.max));
-  const correct = a.med > b.med ? L("Set A", "Set A") : L("Set B", "Set B");
+  const aWins = a.med > b.med;
+  const correct = aWins ? L("Set A", "Stel A") : L("Set B", "Stel B");
   return mc("compareBox", L("Which set has the <b>higher median</b>?", "Watter stel het die <b>hoër mediaan</b>?"),
-    correct, [correct === L("Set A", "Set A") ? L("Set B", "Set B") : L("Set A", "Set A"), L("They are equal", "Hulle is gelyk")],
+    correct, [aWins ? L("Set B", "Stel B") : L("Set A", "Stel A"), L("They are equal", "Hulle is gelyk")],
     { graphs: [
-        { label: L("Set A", "Set A"), spec: { type: "box", five: a, axis, showValues: true } },
-        { label: L("Set B", "Set B"), spec: { type: "box", five: b, axis, showValues: true } },
+        { label: L("Set A", "Stel A"), spec: { type: "box", five: a, axis, showValues: true } },
+        { label: L("Set B", "Stel B"), spec: { type: "box", five: b, axis, showValues: true } },
       ],
       hint: L("The median is the line inside each box — which sits further right?", "Die mediaan is die lyn binne elke mond: watter een lê verder regs?"),
       solution: [{ s: L(`${correct} has its median line further along the scale.`, `${correct} se mediaanlyn lê verder langs die skaal.`) }] });
@@ -78,12 +79,13 @@ function genCompareSpread() {
   let a, b;
   do { a = randBox(); b = randBox(); } while (rangeOf(a) === rangeOf(b));
   const axis = boxAxis(Math.max(a.max, b.max));
-  const correct = rangeOf(a) > rangeOf(b) ? L("Set A", "Set A") : L("Set B", "Set B");
+  const aWins = rangeOf(a) > rangeOf(b);
+  const correct = aWins ? L("Set A", "Stel A") : L("Set B", "Stel B");
   return mc("compareBox", L("Which set is <b>more spread out</b> (larger range)?", "Watter stel is <b>meer uitgesprei</b> (groter omvang)?"),
-    correct, [correct === L("Set A", "Set A") ? L("Set B", "Set B") : L("Set A", "Set A"), L("They are equally spread", "Hulle is ewe uitgesprei")],
+    correct, [aWins ? L("Set B", "Stel B") : L("Set A", "Stel A"), L("They are equally spread", "Hulle is ewe uitgesprei")],
     { graphs: [
-        { label: L("Set A", "Set A"), spec: { type: "box", five: a, axis, showValues: true } },
-        { label: L("Set B", "Set B"), spec: { type: "box", five: b, axis, showValues: true } },
+        { label: L("Set A", "Stel A"), spec: { type: "box", five: a, axis, showValues: true } },
+        { label: L("Set B", "Stel B"), spec: { type: "box", five: b, axis, showValues: true } },
       ],
       hint: L("Range = distance from the left whisker end to the right whisker end.", "Omvang = afstand van die punt van die linkersnor tot die punt van die regtersnor."),
       solution: [{ s: L(`${correct} stretches further from minimum to maximum → larger range.`, `${correct} strek verder van minimum tot maksimum → groter omvang.`) }] });

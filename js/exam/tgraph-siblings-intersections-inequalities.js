@@ -28,6 +28,8 @@
    dashed cut lines. Two-parameter wall respected on every curve.
    ============================================================ */
 
+import { L } from "../lang.js";
+
 const PAPER = "siblings";
 const CH = "tgraph";
 const TOPIC = "intersections-inequalities";
@@ -57,7 +59,7 @@ const q1 = {
   diagram: {
     spec: Q1_SPEC,
     parts: {
-      a: { question: {}, reveal: { hmeasure: { x0: -180, x1: 180, y: 2, label: "period of f = 360°" } } },
+      a: { question: {}, reveal: { hmeasure: { x0: -180, x1: 180, y: 2, label: L("period of f = 360°", "periode van f = 360°") } } },
       b: { question: {}, reveal: { hlines: [{ y: 2, label: "y = 2" }, { y: -2, label: "y = −2" }] } },
       c: { question: {}, reveal: { points: [{ x: -135, y: -1.41, on: [0, 1], label: "(−135° ; −1,41)" }] } },
     },
@@ -272,7 +274,7 @@ const q4 = {
   diagram: {
     spec: Q4_SPEC,
     parts: {
-      a: { question: {}, reveal: { hmeasure: { x0: 0, x1: 180, y: 1.5, label: "period of g = 180°" } } },
+      a: { question: {}, reveal: { hmeasure: { x0: 0, x1: 180, y: 1.5, label: L("period of g = 180°", "periode van g = 180°") } } },
       b: {
         question: {},
         reveal: {
@@ -426,7 +428,7 @@ const q6 = {
         question: {},
         reveal: {
           points: [{ x: 225, y: -0.71, on: [0, 1], label: "B(225° ; −0,71)" }],
-          hmeasure: { x0: 0, x1: 360, y: 1.5, label: "one turn: 2 crossings" },
+          hmeasure: { x0: 0, x1: 360, y: 1.5, label: L("one turn: 2 crossings", "een volle draai: 2 snypunte") },
         },
       },
     },

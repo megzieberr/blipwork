@@ -1591,8 +1591,9 @@ const m20 = mark();
     const q = three.gen();
     const ask = (q.reveal || []).join(" ");
     const conf = (q.revealAfter || []).join(" ");
-    tick(!/clockwise/i.test(ask), `gt6.threeBoxes #${i}: the ask side never says which way anything turns`);
-    tick(/positive angles/.test(ask) && /negative angles/.test(ask) && /co-functions/.test(ask),
+    tick(!/clockwise|kloksgewys/i.test(ask), `gt6.threeBoxes #${i}: the ask side never says which way anything turns`);
+    // both languages (T93B wrapped the headings: positiewe hoeke / negatiewe hoeke / ko-funksies)
+    tick(/positive angles|positiewe hoeke/.test(ask) && /negative angles|negatiewe hoeke/.test(ask) && /co-functions|ko-funksies/.test(ask),
       `gt6.threeBoxes #${i}: the three headings still open the card`);
     // both languages' fills (briefs/af/T54.af.json): a bare "clockwise" / "kloksgewys"
     // that is NOT the tail of "anti-clockwise" / "antikloksgewys", the anti- one itself,
@@ -1600,7 +1601,7 @@ const m20 = mark();
     tick((/(^|[^-])clockwise/.test(conf) || /(^|[^-a-z])kloksgewys/.test(conf))
       && /anti-clockwise|antikloksgewys/.test(conf) && /sin (and|en) cos/.test(conf),
       `gt6.threeBoxes #${i}: the confirm side fills all three boxes in`);
-    tick(!/clockwise/i.test(q.hint), `gt6.threeBoxes #${i}: the hint nudges towards the numbering, it does not hand the direction over`);
+    tick(!/clockwise|kloksgewys/i.test(q.hint), `gt6.threeBoxes #${i}: the hint nudges towards the numbering, it does not hand the direction over`);
   }
 
   /* gt10 — the same flip the generator does, written again here */

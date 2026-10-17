@@ -41,12 +41,12 @@ const LETTERS = ["θ", "x", "α", "A"];
    "seperately" → separately), which is the standing ruling for
    anything a learner reads. */
 const TYPES = [
-  { n: 1, mark: "①", name: "function alone", cue: afL("isolate the function, then ref ∠ and quadrants — and don't type − into the calculator.", "isoleer die funksie, dan verwysingshoek en kwadrante, en moenie − in die sakrekenaar intik nie."), alt: null },
-  { n: 2, mark: "②", name: "same angles", cue: afL("same angle on both sides — divide away with cos θ and it turns into a tan.", "dieselfde hoek aan albei kante: deel deur cos θ en dit word 'n tan."), alt: "divide by cos (tan θ)" },
-  { n: 3, mark: "③", name: "common factor", cue: afL("take the common factor out, then each bracket separately = 0 — and take 0 as +.", "haal die gemene faktor uit, dan elke hakie apart = 0, en neem 0 as +."), alt: null },
-  { n: 4, mark: "④", name: "grouping", cue: afL("four terms — group them in pairs, and the brackets left over must come out the same.", "vier terme: groepeer hulle in pare, en die hakies wat oorbly moet dieselfde uitkom."), alt: null },
-  { n: 5, mark: "⑤", name: "trinomial", cue: afL("three terms, one function squared and one not — K-method, and a masked identity if the middle term differs.", "drie terme, een funksie in die kwadraat en een nie: K-metode, en 'n gemaskerde identiteit as die middelterm verskil."), alt: "trinomial (K-method) · trinomial with a masked identity" },
-  { n: 6, mark: "⑥", name: "co-functions", cue: afL("sin and cos with different ∠s — make both the same function. No ref. ∠ here.", "sin en cos met verskillende ∠e: maak albei dieselfde funksie. Geen verwysingshoek hier nie."), alt: "make both cos" },
+  { n: 1, mark: "①", name: afL("function alone", "funksie alleen"), cue: afL("isolate the function, then ref ∠ and quadrants — and don't type − into the calculator.", "isoleer die funksie, dan verwysingshoek en kwadrante, en moenie − in die sakrekenaar intik nie."), alt: null },
+  { n: 2, mark: "②", name: afL("same angles", "dieselfde hoeke"), cue: afL("same angle on both sides — divide away with cos θ and it turns into a tan.", "dieselfde hoek aan albei kante: deel deur cos θ en dit word 'n tan."), alt: afL("divide by cos (tan θ)", "deel deur cos (tan θ)") },
+  { n: 3, mark: "③", name: afL("common factor", "gemene faktor"), cue: afL("take the common factor out, then each bracket separately = 0 — and take 0 as +.", "haal die gemene faktor uit, dan elke hakie apart = 0, en neem 0 as +."), alt: null },
+  { n: 4, mark: "④", name: afL("grouping", "groepering"), cue: afL("four terms — group them in pairs, and the brackets left over must come out the same.", "vier terme: groepeer hulle in pare, en die hakies wat oorbly moet dieselfde uitkom."), alt: null },
+  { n: 5, mark: "⑤", name: afL("trinomial", "drieterm"), cue: afL("three terms, one function squared and one not — K-method, and a masked identity if the middle term differs.", "drie terme, een funksie in die kwadraat en een nie: K-metode, en 'n gemaskerde identiteit as die middelterm verskil."), alt: afL("trinomial (K-method) · trinomial with a masked identity", "drieterm (K-metode) · drieterm met 'n gemaskerde identiteit") },
+  { n: 6, mark: "⑥", name: afL("co-functions", "ko-funksies"), cue: afL("sin and cos with different ∠s — make both the same function. No ref. ∠ here.", "sin en cos met verskillende ∠e: maak albei dieselfde funksie. Geen verwysingshoek hier nie."), alt: afL("make both cos", "maak albei cos") },
 ];
 const OPTION_LABELS = TYPES.map(t => `${t.mark} ${t.name}`);
 
@@ -180,7 +180,7 @@ function typeQuestion(n) {
     prompt: afL(`${eqHtml(eq, L)}<br><span class="muted small">Which of the six types is this?</span>`, `${eqHtml(eq, L)}<br><span class="muted small">Watter een van die ses tipes is dit?</span>`),
     options: sixOptions(n),
     hint: ty.cue,
-    answerLabel: `${ty.mark} ${ty.name} — ${ty.cue}${ty.alt ? afL(` <span class="muted">(also written as: ${ty.alt})</span>`, ` <span class="muted">(ook geskryf as: ${ty.alt})</span>`) : ""}`,
+    answerLabel: `${afL(`${ty.mark} ${ty.name} — ${ty.cue}`, `${ty.mark} ${ty.name}: ${ty.cue}`)}${ty.alt ? afL(` <span class="muted">(also written as: ${ty.alt})</span>`, ` <span class="muted">(ook geskryf as: ${ty.alt})</span>`) : ""}`,
     solution: [
       { s: afL(`${eqHtml(eq, L)} → type ${ty.mark}`, `${eqHtml(eq, L)} → tipe ${ty.mark}`), r: ty.name },
       { s: ty.cue, r: afL("the cue for this type.", "die leidraad vir hierdie tipe.") },
