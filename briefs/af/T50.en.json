@@ -1,0 +1,945 @@
+{
+  "unit": "T50",
+  "generated": "2026-10-17T19:00:57.103Z",
+  "files": [
+    "js/exam/tgraph-siblings-read-parameters.js"
+  ],
+  "items": {
+    "tgraph-siblings-read-parameters#1": {
+      "en": "The sketch shows the graph of &nbsp;f&nbsp; for &nbsp;x ∈ [−180° ; 180°]. &nbsp;The graph cuts the x-axis at (45° ; 0) and has a minimum turning point at (90° ; −3).<br><br>Write down the amplitude of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:72:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#2": {
+      "en": "Amplitude is how far the graph swings away from its middle line. This graph is centred on the x-axis, so measure from there to the turning point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:73:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#3": {
+      "en": "The graph rocks about the x-axis (y = 0) and its lowest point is 3 units below it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:75:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#4": {
+      "en": "amplitude = <b>3</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:76:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#5": {
+      "en": "Reading an amplitude off a picture is a two-step habit. First find the middle line, which is the line the wave rocks about — here the peaks are at 3 and the troughs at −3, so the middle is the x-axis itself. Then measure straight up or straight down from that middle line to a turning point. That distance is the amplitude. Notice you do not need both turning points: one is enough, because a sine or cosine always swings the same distance up as it does down. The other way to do it, which is safer when the middle line is not obvious, is to take the highest y minus the lowest y and halve it. Here that is 3 minus −3, which is 6, and half of 6 is 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:78:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#6": {
+      "en": "Write down the period of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:82:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#7": {
+      "en": "The period is the width of ONE complete wave. Start at a peak and read across to the very next peak — or use the fact that a turning point sits a quarter of a period away from a neighbouring x-intercept.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:83:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#8": {
+      "en": "The graph has a maximum at x = 0° and its next maximum at x = 180°, so one whole wave is 180° wide.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:85:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#9": {
+      "en": "period = <b>180°</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:86:39",
+        "tgraph-siblings-read-parameters.js:272:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#10": {
+      "en": "A period is a width, so you read it along the x-axis, never up the y-axis. The safest landmarks are two peaks in a row, or two troughs in a row: the gap between them is exactly one period. On this sketch the graph is at its highest on the y-axis and at its highest again at 180°, so the period is 180°. If only one turning point is marked, use the quarter rule instead: the distance from a turning point to the x-intercept next to it is a quarter of a period. Here the x-intercept is at 45° and the minimum is at 90°, a gap of 45°, and four lots of 45° is 180° — the same answer, arrived at from different information.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:88:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#11": {
+      "en": "Write down the range of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:92:21",
+        "tgraph-siblings-read-parameters.js:439:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#12": {
+      "en": "The range is the list of heights the graph actually reaches. Read the top of the picture and the bottom of the picture off the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:93:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#13": {
+      "en": "The graph reaches a highest point of 3 and a lowest point of −3, and it fills in everything in between.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:95:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#14": {
+      "en": "y ∈ [−3 ; 3]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:96:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#15": {
+      "en": "Range answers the question: if you stood on the y-axis, which heights would the graph ever reach? Read the highest point and the lowest point off the y-axis, then say that the graph covers everything between them. Two habits keep the marks. Write the smaller number first, exactly the way you would write any interval. And use square brackets, not round ones, because this graph genuinely touches 3 and genuinely touches −3 — it does not just get close to them. Round brackets are for a value the graph approaches but never reaches, which is what happens at an asymptote on a tangent graph.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:98:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#16": {
+      "en": "The sketch shows the graph of &nbsp;f(x) = a sin x + q&nbsp; for &nbsp;x ∈ [0° ; 360°], &nbsp;with a maximum turning point at (90° ; 3) and a minimum turning point at (270° ; −1).<br><br>Write down the period of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:137:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#17": {
+      "en": "Nothing is multiplying the x in &nbsp;a sin x + q, &nbsp;so ask yourself what a plain sine graph's period is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:138:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#18": {
+      "en": "Nothing multiplies the x, so b = 1 and the graph completes exactly one wave across the sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:140:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#19": {
+      "en": "period = <b>360°</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:141:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#20": {
+      "en": "The period only ever depends on b, the number multiplying the x inside the function. In this equation the x is on its own, so b is 1 and the period is a plain 360°. The picture agrees with the algebra, which is a good check to get into the habit of doing: the graph starts on the y-axis, rises to a maximum, falls through the middle to a minimum and comes back up, and it takes the whole 360° of the sketch to do it once. Neither the a nor the q has anything to do with the period — a stretches the wave taller, q lifts it, and neither of those changes how wide one wave is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:143:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#21": {
+      "en": "Determine the value of a and the value of q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:147:21",
+        "tgraph-siblings-read-parameters.js:288:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#22": {
+      "en": "Two turning points give you two facts. The midline sits exactly halfway between them, and the amplitude is exactly half the gap between them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:148:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#23": {
+      "en": "The midline is halfway between the maximum and the minimum: &nbsp;q = (3 + (−1)) ÷ 2 = <b>1</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:150:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#24": {
+      "en": "The amplitude is half the distance between them: &nbsp;a = (3 − (−1)) ÷ 2 = 4 ÷ 2 = <b>2</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:151:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#25": {
+      "en": "a = 2 &nbsp;and&nbsp; q = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:152:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#26": {
+      "en": "WATCH OUT for the sign of a. Here the graph rises first, like a plain sine, so a is positive. If the graph had dipped first — gone DOWN from the y-axis before coming up — a would have been −2 with everything else exactly the same.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:153:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#27": {
+      "en": "Two turning points hand you both unknowns, and the two formulas are worth learning as a pair. The midline is the average of the top and the bottom, because it sits exactly halfway between them: add the two y-values and halve. The amplitude is half the distance between the top and the bottom: subtract the smaller from the larger and halve. Here that gives a middle line at y = 1 and a swing of 2 each way, which you can check straight off the picture — from 1 up to 3 is 2, and from 1 down to −1 is also 2. Then the sign of a is decided by shape, not by arithmetic. Ask which way the graph goes as it leaves the y-axis: up means a plain sine and a positive a, down means a flipped one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:155:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#28": {
+      "en": "Hence write down the equation of f and the range of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:159:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#29": {
+      "en": "Put your two values straight into the form you were given. The range then comes from the midline and the amplitude, not from the picture.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:160:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#30": {
+      "en": "Substitute a = 2 and q = 1 into &nbsp;f(x) = a sin x + q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:162:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#31": {
+      "en": "f(x) = 2 sin x + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:163:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#32": {
+      "en": "Range: &nbsp;midline 1, amplitude 2 &nbsp;⟹&nbsp; y ∈ [−1 ; 3]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:164:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#33": {
+      "en": "Once a and q are known the equation is just a substitution, so the marks here are for being careful rather than for being clever. Write the given form down first and drop your numbers into it, so nothing gets lost. The range then comes from the same two numbers: start at the midline and step one amplitude up and one amplitude down. Here that is 1 + 2 = 3 and 1 − 2 = −1, so the range runs from −1 to 3. It is worth noticing that both answers are marked with a follow-through tick. If your a or your q from part (b) had been slightly wrong, you would still earn these marks for using them correctly here — which is exactly why you should always carry on rather than stopping.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:166:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#34": {
+      "en": "The sketch shows the graph of &nbsp;g(x) = a cos(x + p)&nbsp; for &nbsp;x ∈ [−180° ; 180°], &nbsp;where &nbsp;0° &lt; p &lt; 180°. &nbsp;The maximum turning point of g is at (−60° ; 2).<br><br>Determine the value of a and the value of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:209:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#35": {
+      "en": "The height of the maximum gives you one of them. For the other, ask where a PLAIN cosine has its maximum, and how far this one has moved from there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:210:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#36": {
+      "en": "Nothing is added on the end, so the midline is the x-axis. The maximum is 2 above it: &nbsp;a = <b>2</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:212:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#37": {
+      "en": "A plain cosine has its maximum at x = 0°. This one peaks at x = −60°, so the graph has slid 60° to the LEFT — and a shift to the left is &nbsp;+ p&nbsp; inside the bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:213:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#38": {
+      "en": "p = <b>60</b> &nbsp;&nbsp;∴&nbsp; g(x) = 2 cos(x + 60°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:214:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#39": {
+      "en": "WATCH OUT: the sign inside the bracket feels backwards. &nbsp;x + 60°&nbsp; moves the graph 60° to the LEFT, and &nbsp;x − 60°&nbsp; moves it to the RIGHT. Do not trust the feeling — check it on the peak: a plain cosine peaks at 0°, this one peaks at −60°, so it went left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:215:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#40": {
+      "en": "Take the two unknowns one at a time and neither is hard. The a is about height: the graph is centred on the x-axis because nothing was added on the end, and its highest point is 2 above that, so a is 2. The p is about position, and the way to find it is to compare with the graph you already know. A plain cosine always has its maximum on the y-axis, at x = 0. This one has its maximum at x = −60°, which is 60° further left. Then the sign is the part everybody argues with, so settle it with the peak rather than with a rule. If you put x = −60° into cos(x + 60°) the bracket becomes cos(0°), which is the maximum — so x + 60° is right. A shift left is a plus inside the bracket, every time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:218:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#41": {
+      "en": "Determine the coordinates of the point where g cuts the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:222:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#42": {
+      "en": "A graph cuts the y-axis where x = 0. Substitute that into your equation from (a) — and this is a special angle, so no calculator is needed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:223:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#43": {
+      "en": "At the y-axis, x = 0: &nbsp;g(0) = 2 cos(0° + 60°) = 2 cos 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:225:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#44": {
+      "en": "= 2 × ½ = 1 &nbsp;&nbsp;∴&nbsp; the graph cuts the y-axis at (0 ; 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:226:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#45": {
+      "en": "Every graph cuts the y-axis at the point where x is zero, and that is true for trig graphs exactly as it is for straight lines and parabolas. So the whole job is substituting x = 0 into the equation you built in part (a). The bracket then becomes 0° + 60°, which is 60°, and cos 60° is one of the special angles you know without a calculator — it is a half. Two of a half is 1, so the graph passes through (0 ; 1). Two things are worth checking. First, look at the sketch: at x = 0 the curve really is a little way below its peak of 2, which agrees with 1. Second, notice how the shift shows up here — a plain cosine would have cut the y-axis at its maximum, and this one cuts it on the way down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:228:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#46": {
+      "en": "The sketch shows the graph of &nbsp;h(x) = a tan x + q&nbsp; for &nbsp;x ∈ [−180° ; 180°]. &nbsp;The graph passes through (0 ; −1) and (45° ; 1). &nbsp;The dashed lines are its asymptotes.<br><br>Write down the period of h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:268:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#47": {
+      "en": "A tangent graph repeats itself sooner than a sine or a cosine does. Read the gap between two asymptotes in a row off the sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:269:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#48": {
+      "en": "The asymptotes are 180° apart, and a tangent repeats itself exactly once between one asymptote and the next.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:271:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#49": {
+      "en": "The tangent graph is the one that repeats twice as often as the other two. A sine or a cosine needs a full 360° to get back to where it started, but a tangent has already done a complete copy of itself after 180°. On a picture the easiest place to see this is between the asymptotes: one whole branch, running from far below to far above, fills exactly one period. So measuring from one dashed line to the next gives you the period directly. Here they sit at −90° and 90°, which is 180° apart. That also tells you b is 1, because 180° divided by b has to come out as 180°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:274:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#50": {
+      "en": "Write down the equations of the asymptotes of h for &nbsp;x ∈ [−180° ; 180°].",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:278:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#51": {
+      "en": "An asymptote here is a vertical line, so its equation looks like &nbsp;x = something. &nbsp;Read the two dashed lines off the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:279:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#52": {
+      "en": "The dashed lines are vertical, so each one has an equation of the form &nbsp;x = …",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:281:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#53": {
+      "en": "x = −90° &nbsp;and&nbsp; x = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:282:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#54": {
+      "en": "An asymptote is a line the graph gets closer and closer to but never actually touches. On a tangent graph they are vertical, and they sit at the x-values where the tangent is undefined. The thing to be careful about is how you write the answer. A vertical line's equation is x equals a number, not y equals a number, and not just the number on its own. Writing 90° by itself does not describe a line, so it does not earn the mark. Also read the interval you were given before you answer: over a wider interval there would be more asymptotes, spaced one period apart, but between −180° and 180° there are exactly two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:284:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#55": {
+      "en": "Two given points, two unknowns — so substitute each one in turn. Start with the point on the y-axis, because tan 0° makes one of the unknowns disappear.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:289:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#56": {
+      "en": "Substitute (0 ; −1): &nbsp;a tan 0° + q = −1 &nbsp;⟹&nbsp; a(0) + q = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:291:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#57": {
+      "en": "∴&nbsp; q = <b>−1</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:292:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#58": {
+      "en": "Substitute (45° ; 1): &nbsp;a tan 45° + (−1) = 1 &nbsp;⟹&nbsp; a(1) − 1 = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:293:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#59": {
+      "en": "a = <b>2</b> &nbsp;&nbsp;∴&nbsp; h(x) = 2 tan x − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:294:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#60": {
+      "en": "REMEMBER: choose the EASY point first. Substituting (0 ; −1) kills the a straight away because tan 0° = 0, which leaves you one unknown instead of two. Starting with (45° ; 1) instead gives you a + q = 1 and no way forward on its own.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:295:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#61": {
+      "en": "Two unknowns need two pieces of information, and you have been handed exactly two points. The order you use them in is what makes this quick or slow. Look for a point that makes one unknown vanish, and here the point on the y-axis does it: tan 0° is zero, so the term with a in it disappears completely and the equation collapses to q = −1. Now that q is known, the second point has only one unknown left. Put x = 45° in, remember that tan 45° = 1 from your special angles, and you get a − 1 = 1, so a = 2. Both values check against the picture: the graph really does cross the y-axis at −1, and it really is steeper than a plain tangent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:297:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#62": {
+      "en": "The sketch shows &nbsp;f(x) = a sin bx&nbsp; and &nbsp;g(x) = cos(x + p)&nbsp; for &nbsp;x ∈ [−180° ; 180°], &nbsp;where &nbsp;0° &lt; p &lt; 180°. &nbsp;A(45° ; −2) is a turning point of f and B(−90° ; 1) is a turning point of g.<br><br>Determine the value of a and the value of b.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:346:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#63": {
+      "en": "A is a turning point, so its height gives you the size of a — and whether it is a MINIMUM tells you the sign. For b, remember that the first turning point of a sine sits a quarter of a period from the origin.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:347:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#64": {
+      "en": "The graph is centred on the x-axis and A is 2 units below it, so the amplitude is 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:349:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#65": {
+      "en": "A plain sine graph RISES first, so its first turning point is a maximum. Here the first turning point is a MINIMUM, so the graph has been flipped: &nbsp;a = <b>−2</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:350:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#66": {
+      "en": "That first turning point sits a quarter of a period from the origin: &nbsp;45° = period ÷ 4 &nbsp;⟹&nbsp; period = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:351:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#67": {
+      "en": "b = 360° ÷ 180° = <b>2</b> &nbsp;&nbsp;∴&nbsp; f(x) = −2 sin 2x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:352:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#68": {
+      "en": "Two unknowns, and each one has its own landmark. The a comes from height and direction together. The distance from the middle line to the turning point is 2, so the size of a is 2 — and because that first turning point is a low one instead of a high one, the graph has been turned upside down, which makes a negative. The b comes from width. A sine graph always reaches its first turning point a quarter of the way through a period, so if that happens at 45°, a whole period must be four times as long, which is 180°. Then b is 360° divided by the period, giving 2. A good check is to count waves on the sketch: from −180° to 180° is 360°, and you should be able to see exactly two complete waves of f in that space.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:354:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#69": {
+      "en": "Determine the value of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:358:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#70": {
+      "en": "Compare g with a plain cosine. Where does a plain cosine have its maximum, and where does this one have its maximum instead?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:359:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#71": {
+      "en": "A plain cosine peaks at x = 0°; g peaks at x = −90°, so g has slid 90° to the left, which is &nbsp;+ p&nbsp; inside the bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:361:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#72": {
+      "en": "p = <b>90</b> &nbsp;&nbsp;∴&nbsp; g(x) = cos(x + 90°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:362:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#73": {
+      "en": "Finding a horizontal shift is always the same move: pick a landmark you can recognise on the plain graph, find the same landmark on the shifted one, and see how far it has travelled. The easiest landmark on a cosine is its maximum, because a plain cosine peaks right on the y-axis. Here the peak has moved to −90°, which is 90° to the left. A leftward move is a plus inside the bracket, so p is 90. Check it by substituting: cos(−90° + 90°) is cos 0°, which is 1, and that is exactly the height the sketch shows at B. The question also told you that p lies between 0° and 180°, which is the examiner ruling out the other shifts that would give the same picture.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:364:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#74": {
+      "en": "Write down the range of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:368:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#75": {
+      "en": "Sliding a graph sideways does not change which heights it reaches. So what is the range of a plain cosine?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:369:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#76": {
+      "en": "g is a plain cosine slid sideways — its amplitude is still 1 and its midline is still y = 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:371:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#77": {
+      "en": "y ∈ [−1 ; 1]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:372:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#78": {
+      "en": "This is a one-line answer as long as you remember what a sideways shift does and does not do. Moving a graph left or right changes when it reaches its high and low points, but not what those high and low points are. Nothing multiplies the cosine, so the amplitude is 1, and nothing is added on the end, so the middle line is still the x-axis. That puts the top at 1 and the bottom at −1. Read it off the sketch as well, as a check: g really does touch 1 at B and touches −1 half a period later. When a question gives you two graphs, be careful to answer about the right one — f reaches from −2 to 2 and g only from −1 to 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:374:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#79": {
+      "en": "The sketch shows the graph of &nbsp;f(x) = a sin x + q&nbsp; for &nbsp;x ∈ [0° ; 360°]. &nbsp;The graph cuts the y-axis at (0 ; −1) and has a minimum turning point at (270° ; −5). &nbsp;P is the maximum turning point of f.<br><br>Determine the value of a and the value of q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:418:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#80": {
+      "en": "Start with the point on the y-axis, because &nbsp;sin 0° = 0&nbsp; makes the a disappear. Then use the minimum to finish off.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:419:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#81": {
+      "en": "Substitute (0 ; −1): &nbsp;a sin 0° + q = −1 &nbsp;⟹&nbsp; a(0) + q = −1 &nbsp;⟹&nbsp; q = <b>−1</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:421:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#82": {
+      "en": "At a minimum &nbsp;sin x = −1, &nbsp;so the lowest value of f is &nbsp;−a + q. &nbsp;Substitute (270° ; −5): &nbsp;−a + (−1) = −5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:422:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#83": {
+      "en": "−a = −4 &nbsp;⟹&nbsp; a = <b>4</b> &nbsp;&nbsp;∴&nbsp; f(x) = 4 sin x − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:423:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#84": {
+      "en": "Pick the point that does the most work for you first. On the y-axis x is zero, and sin 0° is zero, so the whole a-term vanishes and q drops out on its own: q = −1. With q known, the minimum finishes the job. A sine reaches its lowest value when sin x is −1, so the bottom of the graph is at −a + q. Setting that equal to −5 and putting q = −1 in gives −a − 1 = −5, so a = 4. There is a quicker route worth knowing too: the midline is −1 and the minimum is −5, and the distance between them IS the amplitude, which is 4. Both routes are worth full marks; the substitution one is safer when the picture is hard to read.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:425:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#85": {
+      "en": "Write down the coordinates of the turning point P.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:429:21"
+      ]
+    },
+    "tgraph-siblings-read-parameters#86": {
+      "en": "P is the maximum. A plain sine is highest a quarter of the way through its period, and the height of a maximum is the midline plus one amplitude.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:430:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#87": {
+      "en": "A sine graph reaches its maximum a quarter of a period along: &nbsp;360° ÷ 4 = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:432:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#88": {
+      "en": "At a maximum &nbsp;sin x = 1, &nbsp;so &nbsp;y = 4(1) − 1 = 3 &nbsp;&nbsp;∴&nbsp; P(90° ; 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:433:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#89": {
+      "en": "A turning point has two coordinates and they come from two different ideas, so find them separately. The x-coordinate is about position: a plain sine graph is at its highest a quarter of the way through a period, and this graph's period is 360°, so that happens at 90°. The y-coordinate is about height: at a maximum the sine part is at its biggest, which is 1, so the value of the function is a times 1 plus q, or 4 − 1 = 3. There is also a symmetry check, which is quicker in an exam. The maximum and the minimum are always the same distance from the midline. The minimum is 4 below the midline of −1, so the maximum must be 4 above it, at 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:435:22"
+      ]
+    },
+    "tgraph-siblings-read-parameters#90": {
+      "en": "You already know the highest point and the lowest point of this graph. Write down everything in between.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:440:19"
+      ]
+    },
+    "tgraph-siblings-read-parameters#91": {
+      "en": "The lowest value is −5 and the highest value is 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:442:37"
+      ]
+    },
+    "tgraph-siblings-read-parameters#92": {
+      "en": "y ∈ [−5 ; 3]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:443:39"
+      ]
+    },
+    "tgraph-siblings-read-parameters#93": {
+      "en": "By this stage the range costs nothing, because both ends are already in front of you: the minimum from the question and the maximum from part (b). Write the smaller number first and use square brackets, since the graph really does reach both ends. There is one good check to do every time. The width of the range should always be twice the amplitude, and here 3 minus −5 is 8, which is twice 4. If that check fails, one of your earlier answers is out. Notice too that the tick on this line is a follow-through tick: even if part (a) had gone wrong, a range built correctly out of your own numbers still earns the mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-read-parameters.js:445:22"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3099
+}
