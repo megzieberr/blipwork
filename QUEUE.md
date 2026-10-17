@@ -45,8 +45,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ⏳ 2026-10-17 20:07 T21 | exam: eqn-siblings-solution-count, eqn-siblings-surd-equations (2 files) | ~3 877 words | verify-exam.html
 
 ### Number Patterns
-- ⏳ 2026-10-17 20:07 T22 | concepts: the `pat` block (js/concepts/pat.js after S4) | ~511 words | counted by af_extract 2026-10-17
-- ☐ T23 | hub rounds: questnp1-spot … questnp7-geometric (7 files) | ~1 767 words | verify page: verify-patterns.html
+- ☑ 2026-10-17 T22 | concepts: the `pat` block (js/concepts/pat.js after S4) | ~511 words | counted by af_extract 2026-10-17
+- ⏳ 2026-10-17 20:10 T23 | hub rounds: questnp1-spot … questnp7-geometric (7 files) | ~1 767 words | verify page: verify-patterns.html
 
 ### Analytical Geometry
 - ☐ T24 | concepts: the `analytical` block (js/concepts/analytical.js after S4) | ~455 words | counted by af_extract 2026-10-17
