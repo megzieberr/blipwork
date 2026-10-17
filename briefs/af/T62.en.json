@@ -1,0 +1,892 @@
+{
+  "unit": "T62",
+  "generated": "2026-10-17T19:28:28.309Z",
+  "files": [
+    "js/exam/gtrig-siblings-special-angles.js"
+  ],
+  "items": {
+    "gtrig-siblings-special-angles#1": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine the value of &nbsp;sin 30° · cos 60° + tan 45°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:95:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#2": {
+      "en": "Draw the two triangles in the margin before you write anything else — the 45–45 one and the 30–60 one. Then Oats Are Healthy gives you the rows, and SOHCAHTOA tells you which two letters to pick for each ratio.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:98:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#3": {
+      "en": "Draw the two triangles, then read each value off <b>Oats Are Healthy</b>: &nbsp;sin 30° = O/H = 1/2, &nbsp;cos 60° = A/H = 1/2, &nbsp;tan 45° = O/A = 1/1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:101:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#4": {
+      "en": "= (1/2)(1/2) + 1 &nbsp;=&nbsp; 1/4 + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:102:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#5": {
+      "en": "= 5/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:103:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#6": {
+      "en": "There is no grid to memorise here, and she does not want you making one. Two triangles do the whole job. Draw the 45–45 one — bottom 1, upright 1, hypotenuse √2 — and the 30–60 one, with 60° at the bottom left, bottom 1, upright √3, hypotenuse 2. Then Oats Are Healthy gives you the rows: O on top, A in the middle, H at the bottom. SOHCAHTOA tells you which two letters to pick, and you read the value straight off. sin 30° is O over H, which is 1 over 2. cos 60° is A over H, also 1 over 2. tan 45° is O over A, which is 1 over 1. Multiply the first two, add the third, and you have five quarters, with no calculator anywhere near it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:106:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#7": {
+      "en": "Determine the value of &nbsp;tan 30° · sin 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:114:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#8": {
+      "en": "Both of these come off the SAME triangle, the 30–60 one. Write each as a fraction from the table and look for something that cancels before you multiply anything out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:117:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#9": {
+      "en": "Both values come off the 30–60 triangle: &nbsp;tan 30° = O/A = 1/√3 &nbsp;and&nbsp; sin 60° = O/H = √3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:120:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#10": {
+      "en": "= (1/√3)(√3/2) = √3/(2√3) &nbsp;— the √3 on the top cancels the √3 underneath",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:121:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#11": {
+      "en": "= 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:122:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#12": {
+      "en": "tan 30° is O over A on the 30–60 triangle, which is 1 over √3, and she leaves it exactly like that — not tidied into √3 over 3. sin 60° is O over H on the same triangle, which is √3 over 2. Multiply them and the √3 on the top cancels the √3 underneath, leaving one half. That cancelling is the reason these questions are calculator-free: the surds are put there to disappear. If your answer still has a √ in it and the numbers looked friendly, go back and hunt for a cancel you missed. And notice both values came off the SAME triangle — once you have drawn it, it answers every 30° and 60° question on the page.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:125:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#13": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine the value of &nbsp;sin²60° − cos²30°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:151:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#14": {
+      "en": "Read the two values off the 30–60 triangle first, and check them against each other before you square anything. Do 60° and 30° add to 90°?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:154:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#15": {
+      "en": "Read both off the 30–60 triangle, and put each into <b>block brackets</b> before squaring: &nbsp;sin 60° = O/H = √3/2 &nbsp;and&nbsp; cos 30° = A/H = √3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:157:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#16": {
+      "en": "= [√3/2]² − [√3/2]² = 3/4 − 3/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:158:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#17": {
+      "en": "= 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:159:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#18": {
+      "en": "REMEMBER: 60° and 30° add to 90°, so sin 60° and cos 30° are the same number — a co-function hiding in plain sight. Spotting that first saves you the whole calculation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:161:15"
+      ]
+    },
+    "gtrig-siblings-special-angles#19": {
+      "en": "Two values, and they turn out to be the same value. sin 60° is O over H on the 30–60 triangle, √3 over 2. cos 30° is A over H on that same triangle — and the side next to 30° is the side opposite 60°, so it is also √3 over 2. That is a co-function hiding in plain sight: 30° and 60° add to 90°, so the sine of one is the cosine of the other. Square two equal things and subtract, and you get zero. Before you reach for the values, always check whether the two angles in front of you add to 90°. If they do, the answer often collapses long before you have done any arithmetic at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:165:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#20": {
+      "en": "Determine the value of &nbsp;2tan²45° − cos²60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:173:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#21": {
+      "en": "Block brackets first: put the whole value inside [ ] before you square it, so the bottom of the fraction gets squared too. And the 2 in front multiplies the squared value, not the value before squaring.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:176:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#22": {
+      "en": "tan 45° = O/A = 1/1 = 1 &nbsp;and&nbsp; cos 60° = A/H = 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:179:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#23": {
+      "en": "= 2[1]² − [1/2]² = 2 − 1/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:180:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#24": {
+      "en": "= 7/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:181:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#25": {
+      "en": "Anything you are about to square goes into block brackets first — her habit, and it saves marks all year. tan 45° is O over A on the 45–45 triangle, which is 1 over 1, so the bracket squared is 1, and twice that is 2. cos 60° is A over H on the 30–60 triangle, which is 1 over 2, so that bracket squared is 1 over 4. Take the second from the first and you have seven quarters. Two things usually go wrong here. One is squaring only the top of a fraction — the bottom gets squared as well. The other is the 2 out in front: it multiplies the value AFTER it has been squared, not before.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:184:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#26": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine the value of &nbsp;tan 60°/sin 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:210:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#27": {
+      "en": "Write both values as fractions from the table — she writes tan 60° as √3 over 1, not as a bare √3. Then dividing by a fraction means flipping it and multiplying.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:213:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#28": {
+      "en": "Write both as fractions from the table: &nbsp;tan 60° = O/A = √3/1 &nbsp;and&nbsp; sin 60° = O/H = √3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:216:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#29": {
+      "en": "Dividing by a fraction means flipping it and multiplying: &nbsp;√3/1 × 2/√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:217:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#30": {
+      "en": "= (√3 × 2)/(1 × √3) = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:218:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#31": {
+      "en": "Dividing by a fraction is where these questions catch people, so write both values as fractions before you do anything else. She writes tan 60° as √3 over 1, not as a bare √3, and that is not fussiness — it is what makes the next step obvious. Now you have √3 over 1 divided by √3 over 2. Flip the second one and multiply: √3 over 1 times 2 over √3. The √3 on the top cancels the √3 underneath and 2 is left. Again the surds were put there to cancel. If you keep both values as O-A-H fractions and never turn them into decimals, the whole thing stays exact and your calculator stays in your bag.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:221:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#32": {
+      "en": "Determine the value of &nbsp;cos 30°/tan 30°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:229:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#33": {
+      "en": "Flip and multiply, then remember what √3 × √3 comes to. It is not √9 written out and it is not 3√3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:232:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#34": {
+      "en": "cos 30° = A/H = √3/2 &nbsp;and&nbsp; tan 30° = O/A = 1/√3 &nbsp;(left unrationalised, the way she writes it)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:235:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#35": {
+      "en": "Flip and multiply: &nbsp;√3/2 × √3/1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:236:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#36": {
+      "en": "= (√3 × √3)/2 = 3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:237:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#37": {
+      "en": "WATCH OUT: √3 × √3 = 3. Not √9 left as it stands, and definitely not 3√3. A square root undoes a square, so multiplying a root by itself gives you the number back.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:239:15"
+      ]
+    },
+    "gtrig-siblings-special-angles#38": {
+      "en": "Same move as (a), with one more surd. cos 30° is A over H on the 30–60 triangle, √3 over 2, and tan 30° is O over A on that same triangle, 1 over √3 — left unrationalised, the way she writes it. Dividing means flipping the second fraction, so it becomes √3 over 2 times √3 over 1. Now √3 times √3 is 3, because a square root undoes a square, and the answer is 3 over 2. That step is worth saying out loud every time: √3 × √3 = 3. It is the single most common slip in a no-calculator trig question, and it costs the final mark rather than a method mark, which makes it an expensive one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:243:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#39": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine the value of &nbsp;cos 150° + sin 240°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:269:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#40": {
+      "en": "Neither angle is on your triangles, so nothing can be read off yet. Write the split above each angle first, reduce to an acute angle, and only then go to Oats Are Healthy.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:272:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#41": {
+      "en": "Neither angle is on the triangles, so reduce first. Write the split above each one: &nbsp;150° = 180° − 30° &nbsp;(<b>S</b>) &nbsp;and&nbsp; 240° = 180° + 60° &nbsp;(<b>T</b>).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:275:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#42": {
+      "en": "In S only sine is positive, so cosine turns negative; in T only tan is positive, so sine turns negative: &nbsp;cos 150° = −cos 30° &nbsp;and&nbsp; sin 240° = −sin 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:276:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#43": {
+      "en": "Now the 30–60 triangle can speak: &nbsp;cos 30° = A/H = √3/2 &nbsp;and&nbsp; sin 60° = O/H = √3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:277:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#44": {
+      "en": "= −√3/2 − √3/2 = −√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:278:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#45": {
+      "en": "Two jobs, in this order: reduce, then read. 150° is not on the special-angle triangles, so it has to come down to an acute angle first. Write the split above it — 180° − 30° — which lands in S, where only sine is positive, so cosine turns negative and you have −cos 30°. Do the same to 240°: the split is 180° + 60°, which lands in T, where only tan is positive, so sine turns negative and you have −sin 60°. NOW the triangle can speak. cos 30° is A over H, √3 over 2; sin 60° is O over H, also √3 over 2. Two negative halves of √3 add up to −√3. Reduce first, read second, never the other way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:281:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#46": {
+      "en": "Determine the value of &nbsp;tan 225° · cos(−60°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:289:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#47": {
+      "en": "One angle is past 180° and one is negative. Both are ordinary wheel angles — check which quadrant each one lands in, and whether that ratio survives there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:292:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#48": {
+      "en": "225° = 180° + 45°, which lands in <b>T</b> where tan is positive: &nbsp;tan 225° = tan 45°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:295:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#49": {
+      "en": "−60° is a <b>C</b> angle on the wheel, where cosine is positive: &nbsp;cos(−60°) = cos 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:296:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#50": {
+      "en": "Read both off the triangles: &nbsp;tan 45° = O/A = 1/1 &nbsp;and&nbsp; cos 60° = A/H = 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:297:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#51": {
+      "en": "= 1 × 1/2 = 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:298:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#52": {
+      "en": "A negative angle is not a problem, it is just a turn the other way. On her wheel, −θ is a C-quadrant form, and in C only cosine is positive — so cos(−60°) is simply cos 60°, with no sign change at all. 225° is 180° + 45°, which lands in T where tan is positive, so tan 225° is plain tan 45°. Now read both off the triangles: tan 45° is O over A, 1 over 1, and cos 60° is A over H, 1 over 2. Multiply and you get a half. The rule worth hanging on to is the one about turning: an angle below −90° gets 360° added to it first, but −60° is already inside the wheel, so it needs nothing done to it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:301:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#53": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>In △PQR, &nbsp;Q̂ = 90°, &nbsp;PQ = 12 sin 60° units&nbsp; and&nbsp; QR = 12 cos 60° units.<br><br>Show that the area of △PQR = 18√3 square units.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:331:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#54": {
+      "en": "Turn the two side lengths into ordinary numbers first — they are only special-angle values in disguise. Once you know PQ and QR, the area of a right-angled triangle is half the product of the two sides that make the right angle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:334:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#55": {
+      "en": "Turn the sides into numbers first: &nbsp;sin 60° = O/H = √3/2, &nbsp;so&nbsp; PQ = 12 × √3/2 = 6√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:337:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#56": {
+      "en": "cos 60° = A/H = 1/2, &nbsp;so&nbsp; QR = 12 × 1/2 = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:338:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#57": {
+      "en": "Q̂ = 90°, so PQ and QR are the two sides that make the right angle: &nbsp;area = ½ · QR · PQ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:339:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#58": {
+      "en": "= ½ · 6 · 6√3 = 18√3 square units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:340:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#59": {
+      "en": "REMEMBER: on a “show that” the answer is printed for you, so every mark sits in the working. Write down each special-angle value you used and never skip the substitution line — a bare 18√3 with nothing above it earns nothing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:342:15"
+      ]
+    },
+    "gtrig-siblings-special-angles#60": {
+      "en": "The sides look frightening because they are written as trig expressions, but they are only numbers in disguise. sin 60° is √3 over 2, so PQ is 12 times √3 over 2, which is 6√3. cos 60° is a half, so QR is 12 times a half, which is 6. Now it is an ordinary right-angled triangle with the right angle at Q, and the area of a right-angled triangle is half the product of the two sides that make that right angle — no area rule needed, no perpendicular height to hunt for, because the two legs already are the base and the height. Half of 6 times 6√3 is 18√3. On a show-that question the answer is handed to you, so the marks are entirely in the lines that get you there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:346:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#61": {
+      "en": "Determine the length of PR, leaving your answer in simplest form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:354:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#62": {
+      "en": "PR sits opposite the right angle, so it is the hypotenuse. Watch the squaring — (6√3)² squares the 6 AND the √3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:357:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#63": {
+      "en": "PR is opposite the right angle, so it is the hypotenuse: &nbsp;PR² = PQ² + QR² &nbsp;(pyth)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:360:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#64": {
+      "en": "= (6√3)² + 6² = 36 × 3 + 36 = 108 + 36 = 144",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:361:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#65": {
+      "en": "PR = √144 = 12 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:362:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#66": {
+      "en": "Pythagoras only needs the two sides you already have. PR is the hypotenuse because it sits opposite the right angle at Q, so PR² = PQ² + QR². Squaring 6√3 catches people: square the 6 and square the √3 separately, giving 36 times 3, which is 108. Add 36 and you get 144, and √144 is 12. A length is always positive, so there is no ± line to sort out here. It is worth noticing what has just happened — the three sides came out 6, 6√3 and 12, which is the 30–60–90 triangle from the O-A-H table with every side multiplied by 6. The question was that triangle in a costume all along.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:365:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#67": {
+      "en": "Hence determine the size of &nbsp;R̂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:373:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#68": {
+      "en": "You now know all three sides, so pick whichever ratio is easiest and read the O-A-H table backwards — which angle gives that value?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:376:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#69": {
+      "en": "Opposite R̂ is PQ = 6√3, and next to it is QR = 6: &nbsp;tan R̂ = opposite/adjacent = 6√3/6 = √3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:379:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#70": {
+      "en": "<b>OR</b>&nbsp; cos R̂ = adjacent/hypotenuse = 6/12 = 1/2 — the same answer, worth the same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:380:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#71": {
+      "en": "Reading the 30–60 triangle backwards, O/A = √3/1 at 60° &nbsp;∴&nbsp; R̂ = 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:381:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#72": {
+      "en": "REMEMBER: the three sides came out 6, 6√3 and 12 — the 30–60–90 triangle with every side multiplied by 6. Whenever a right triangle's sides are in the ratio 1 : √3 : 2, the angles are 30°, 60° and 90°, whatever the units.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:383:15"
+      ]
+    },
+    "gtrig-siblings-special-angles#73": {
+      "en": "Once the three sides are known, any of the ratios finds the angle. Opposite R̂ is PQ = 6√3 and next to it is QR = 6, so tan R̂ is 6√3 over 6, which is √3. Now read the table backwards: which angle has O over A equal to √3 over 1? That is 60°, off the 30–60 triangle. You could equally use cos R̂ = 6 over 12 = a half, which is also 60°, and both roads are worth the same marks. This is what she means when she says the special angles are ratios of sides, not numbers to memorise. If the sides of a right triangle are in the ratio 1 : √3 : 2, the angles are 30°, 60° and 90°, no matter what the sides are measured in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:387:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#74": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine which of &nbsp;sin 60°&nbsp; and &nbsp;tan 30°&nbsp; is the larger. Show all your working.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:416:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#75": {
+      "en": "You cannot compare them while one has a surd on top and the other has a surd underneath. Rationalise the one with the surd in the denominator, then see what the two suddenly have in common.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:419:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#76": {
+      "en": "Read both off the 30–60 triangle: &nbsp;sin 60° = O/H = √3/2 &nbsp;and&nbsp; tan 30° = O/A = 1/√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:422:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#77": {
+      "en": "They cannot be compared yet, so rationalise the second one: &nbsp;1/√3 = (1 × √3)/(√3 × √3) = √3/3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:423:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#78": {
+      "en": "Now both have √3 on top. Cutting something into 2 pieces gives bigger pieces than cutting it into 3, so &nbsp;√3/2 is bigger than √3/3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:424:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#79": {
+      "en": "sin 60° is the larger of the two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:425:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#80": {
+      "en": "You cannot compare two things until they look alike, and that is the whole method here. sin 60° comes off the 30–60 triangle as √3 over 2. tan 30° comes off the same triangle as 1 over √3, and she normally leaves special-angle values unrationalised — but here rationalising is the point, because it is what makes the two comparable. Multiply top and bottom by √3 and 1 over √3 becomes √3 over 3. Now both numbers have the same top: √3 over 2 against √3 over 3. Cutting something into 2 pieces gives bigger pieces than cutting it into 3, so √3 over 2 wins. sin 60° is larger, and not a single decimal was needed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:428:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#81": {
+      "en": "Write &nbsp;cos 30°, &nbsp;sin 45°&nbsp; and &nbsp;tan 45°&nbsp; in ascending order. Show all your working.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:436:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#82": {
+      "en": "Write all three over the same bottom number. Then you only have to compare the tops — and remember that 1 can be written as 2 over 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:439:13"
+      ]
+    },
+    "gtrig-siblings-special-angles#83": {
+      "en": "Read all three off the triangles: &nbsp;cos 30° = A/H = √3/2, &nbsp;sin 45° = O/H = 1/√2, &nbsp;tan 45° = O/A = 1/1 = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:442:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#84": {
+      "en": "Write every one of them over 2: &nbsp;cos 30° = √3/2, &nbsp;sin 45° = √2/2, &nbsp;tan 45° = 2/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:443:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#85": {
+      "en": "Now only the tops matter. Since 2 is the same as √4 you are really comparing √2 with √3 with √4 — and a bigger number inside a square root always gives a bigger root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:444:37"
+      ]
+    },
+    "gtrig-siblings-special-angles#86": {
+      "en": "sin 45° &lt; cos 30° &lt; tan 45°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:445:39"
+      ]
+    },
+    "gtrig-siblings-special-angles#87": {
+      "en": "WATCH OUT: ascending order means SMALLEST first. Writing the three correct values in the wrong direction loses the answer mark even though every value was right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:447:15"
+      ]
+    },
+    "gtrig-siblings-special-angles#88": {
+      "en": "Same trick as (a), three numbers instead of two. Write every value with the same bottom and the comparison does itself. cos 30° is √3 over 2 already. sin 45° is 1 over √2, and rationalising turns it into √2 over 2. tan 45° is 1, which is 2 over 2. So you are comparing √2, √3 and 2 sitting on top of three halves. Since 2 is the same as √4, the three tops are √2, √3 and √4, and square roots keep their order — the bigger the number inside, the bigger the root. So sin 45° is the smallest, then cos 30°, then tan 45°. Ascending order means smallest first, so that is the order to write them in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-special-angles.js:451:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2325
+}
