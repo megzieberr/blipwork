@@ -20,8 +20,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 ### Exponents & Surds
 - ☑ 2026-10-17 T01 | concepts: the `exp` block (js/concepts/exp.js after S4) | ~860 words | counted by af_extract 2026-10-17
 - ☑ 2026-10-17 T02 | hub rounds: queses1-laws … queses5-surds (5 files) | ~3 420 words | verify page: verify-exp.html
-- ☐ T03 | hub rounds: queses6-conjugates … queses8-nosolution (3 files) | ~1 692 words | verify page: verify-exp.html
-- ⏳ 2026-10-17 19:30 T04 | exam: cards-exp, exp-conjugates-and-rationalising, exp-first-step-and-method (3 files) | ~1 818 words | verify-exam.html
+- ⏳ 2026-10-17 19:37 T03 | hub rounds: queses6-conjugates … queses8-nosolution (3 files) | ~1 692 words | verify page: verify-exp.html
+- ☑ 2026-10-17 T04 | exam: cards-exp, exp-conjugates-and-rationalising, exp-first-step-and-method (3 files) | ~1 818 words | verify-exam.html
 - ⏳ 2026-10-17 19:30 T05 | exam: exp-level4, exp-no-solution-and-strategy (2 files) | ~3 266 words | verify-exam.html
 - ⏳ 2026-10-17 19:30 T06 | exam: exp-siblings-exponent-expressions, exp-siblings-exponential-equations, exp-siblings-rational-exponents-numeric (3 files) | ~3 163 words | verify-exam.html
 - ☐ T07 | exam: exp-siblings-rationalise, exp-siblings-surd-proofs, exp-siblings-surds (3 files) | ~3 173 words | verify-exam.html
