@@ -1,0 +1,5757 @@
+{
+  "unit": "T02",
+  "generated": "2026-10-17T17:18:24.589Z",
+  "files": [
+    "js/quests/queses1-laws.js",
+    "js/quests/queses2-traps.js",
+    "js/quests/queses3-method.js",
+    "js/quests/queses4-divorce.js",
+    "js/quests/queses5-surds.js"
+  ],
+  "items": {
+    "queses1-laws#1": {
+      "en": "<b>multiply</b> powers with the same base (xᵃ · xᵇ)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:16:13"
+      ]
+    },
+    "queses1-laws#2": {
+      "en": "Add the exponents",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:16:77",
+        "queses1-laws.js:20:110",
+        "queses1-laws.js:24:98"
+      ]
+    },
+    "queses1-laws#3": {
+      "en": "Subtract the exponents",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:16:107",
+        "queses1-laws.js:20:75",
+        "queses1-laws.js:24:119"
+      ]
+    },
+    "queses1-laws#4": {
+      "en": "Multiply the exponents",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:16:133",
+        "queses1-laws.js:24:63"
+      ]
+    },
+    "queses1-laws#5": {
+      "en": "Multiply the bases",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:16:159"
+      ]
+    },
+    "queses1-laws#6": {
+      "en": "Multiplying with the same base → ADD the exponents: xᵃ·xᵇ = xᵃ⁺ᵇ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:16:187"
+      ]
+    },
+    "queses1-laws#7": {
+      "en": "Write a small case out in full: x³ · x² = (x·x·x)(x·x)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:17:20"
+      ]
+    },
+    "queses1-laws#8": {
+      "en": "That is five x's multiplied together, so it is x⁵ — and 3 + 2 = 5",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:18:20"
+      ]
+    },
+    "queses1-laws#9": {
+      "en": "you are just counting x's",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:18:92"
+      ]
+    },
+    "queses1-laws#10": {
+      "en": "∴ xᵃ · xᵇ = xᵃ⁺ᵇ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:19:20"
+      ]
+    },
+    "queses1-laws#11": {
+      "en": "her name for it: the product rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:19:43"
+      ]
+    },
+    "queses1-laws#12": {
+      "en": "<b>divide</b> powers with the same base (xᵃ ÷ xᵇ)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:20:13"
+      ]
+    },
+    "queses1-laws#13": {
+      "en": "Divide the exponents",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:20:131"
+      ]
+    },
+    "queses1-laws#14": {
+      "en": "Divide the bases",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:20:155"
+      ]
+    },
+    "queses1-laws#15": {
+      "en": "Dividing with the same base → SUBTRACT the exponents: xᵃ÷xᵇ = xᵃ⁻ᵇ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:20:181"
+      ]
+    },
+    "queses1-laws#16": {
+      "en": "Write a small case out in full: x⁵ ÷ x² = (x·x·x·x·x)/(x·x)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:21:20"
+      ]
+    },
+    "queses1-laws#17": {
+      "en": "Two x's cancel top and bottom, leaving x³ — and 5 − 2 = 3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:22:20"
+      ]
+    },
+    "queses1-laws#18": {
+      "en": "dividing takes x's away",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:22:84"
+      ]
+    },
+    "queses1-laws#19": {
+      "en": "∴ xᵃ ÷ xᵇ = xᵃ⁻ᵇ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:23:20"
+      ]
+    },
+    "queses1-laws#20": {
+      "en": "the quotient rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:23:43"
+      ]
+    },
+    "queses1-laws#21": {
+      "en": "take a <b>power of a power</b>, (xᵃ)ᵇ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:24:13"
+      ]
+    },
+    "queses1-laws#22": {
+      "en": "Add the bases",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:24:145"
+      ]
+    },
+    "queses1-laws#23": {
+      "en": "Power of a power → MULTIPLY the exponents: (xᵃ)ᵇ = xᵃᵇ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:24:168"
+      ]
+    },
+    "queses1-laws#24": {
+      "en": "The outside power says how many copies: (x³)² = x³ · x³",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:25:20"
+      ]
+    },
+    "queses1-laws#25": {
+      "en": "Now the product rule adds them: 3 + 3 = 6, which is 3 × 2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:26:20"
+      ]
+    },
+    "queses1-laws#26": {
+      "en": "b lots of a",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:26:84"
+      ]
+    },
+    "queses1-laws#27": {
+      "en": "∴ (xᵃ)ᵇ = xᵃᵇ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:27:20"
+      ]
+    },
+    "queses1-laws#28": {
+      "en": "power of a power",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:27:40"
+      ]
+    },
+    "queses1-laws#29": {
+      "en": "When you ${it.op}, what do you do?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses1-laws.js:30:20"
+      ]
+    },
+    "queses1-laws#30": {
+      "en": "Multiply → add · divide → subtract · power of a power → multiply.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:31:15"
+      ]
+    },
+    "queses1-laws#31": {
+      "en": "xᵃ · xᵇ = xᵃ⁺ᵇ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:37:14"
+      ]
+    },
+    "queses1-laws#32": {
+      "en": "Product rule",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:37:41",
+        "queses1-laws.js:38:67",
+        "queses1-laws.js:39:67",
+        "queses1-laws.js:40:90"
+      ]
+    },
+    "queses1-laws#33": {
+      "en": "Quotient rule",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:37:66",
+        "queses1-laws.js:38:41",
+        "queses1-laws.js:39:83"
+      ]
+    },
+    "queses1-laws#34": {
+      "en": "Power of a power",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:37:83",
+        "queses1-laws.js:38:83",
+        "queses1-laws.js:39:38",
+        "queses1-laws.js:40:70"
+      ]
+    },
+    "queses1-laws#35": {
+      "en": "Zero exponent",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:37:103",
+        "queses1-laws.js:39:100"
+      ]
+    },
+    "queses1-laws#36": {
+      "en": "xᵃ ÷ xᵇ = xᵃ⁻ᵇ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:38:14"
+      ]
+    },
+    "queses1-laws#37": {
+      "en": "Power of a product",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:38:103",
+        "queses1-laws.js:40:39"
+      ]
+    },
+    "queses1-laws#38": {
+      "en": "(xᵃ)ᵇ = xᵃᵇ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:39:14"
+      ]
+    },
+    "queses1-laws#39": {
+      "en": "(xy)ᵃ = xᵃyᵃ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:40:14"
+      ]
+    },
+    "queses1-laws#40": {
+      "en": "Power of a quotient",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:40:106"
+      ]
+    },
+    "queses1-laws#41": {
+      "en": "Which law is this?<br><b>${it.law}</b>",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses1-laws.js:43:20"
+      ]
+    },
+    "queses1-laws#42": {
+      "en": "Look at the operation between the bases (× or ÷) versus a bracket raised to a power.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:44:15"
+      ]
+    },
+    "queses1-laws#43": {
+      "en": "${it.law} is the <b>${it.correct.toLowerCase()}</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:45:22"
+      ]
+    },
+    "queses1-laws#44": {
+      "en": "What is <b>x⁰</b> &nbsp;(x ≠ 0)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:51:12"
+      ]
+    },
+    "queses1-laws#45": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:51:76"
+      ]
+    },
+    "queses1-laws#46": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:51:81"
+      ]
+    },
+    "queses1-laws#47": {
+      "en": "Anything non-zero to the zero power is 1.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:51:100"
+      ]
+    },
+    "queses1-laws#48": {
+      "en": "xᵃ ÷ xᵃ = 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:52:20"
+      ]
+    },
+    "queses1-laws#49": {
+      "en": "anything divided by itself",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:52:38"
+      ]
+    },
+    "queses1-laws#50": {
+      "en": "But the quotient rule says the same thing is xᵃ⁻ᵃ = x⁰",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:53:20"
+      ]
+    },
+    "queses1-laws#51": {
+      "en": "Two names for one answer, so x⁰ = 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:54:20"
+      ]
+    },
+    "queses1-laws#52": {
+      "en": "her words: anything to the zero is always one",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:54:62"
+      ]
+    },
+    "queses1-laws#53": {
+      "en": "Simplify <b>7x⁰</b> &nbsp;(x ≠ 0).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:55:12"
+      ]
+    },
+    "queses1-laws#54": {
+      "en": "7x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:55:78"
+      ]
+    },
+    "queses1-laws#55": {
+      "en": "Only x is raised to the 0, so x⁰ = 1 and 7·1 = 7.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:55:95"
+      ]
+    },
+    "queses1-laws#56": {
+      "en": "Check what the 0 is actually sitting on: there is no bracket, so it sits on the x alone",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:56:20"
+      ]
+    },
+    "queses1-laws#57": {
+      "en": "x⁰ = 1, so 7x⁰ = 7(1)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:57:20"
+      ]
+    },
+    "queses1-laws#58": {
+      "en": "the 7 was never touched",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:58:30"
+      ]
+    },
+    "queses1-laws#59": {
+      "en": "What is <b>(5ab)⁰</b> &nbsp;(a, b ≠ 0)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:59:12"
+      ]
+    },
+    "queses1-laws#60": {
+      "en": "5ab",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:59:83"
+      ]
+    },
+    "queses1-laws#61": {
+      "en": "The WHOLE bracket is to the power 0, so the answer is 1.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:59:101"
+      ]
+    },
+    "queses1-laws#62": {
+      "en": "This time there IS a bracket, so the 0 sits on everything inside it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:60:20"
+      ]
+    },
+    "queses1-laws#63": {
+      "en": "5ab is one lump, and any non-zero lump to the power 0 is 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:61:20"
+      ]
+    },
+    "queses1-laws#64": {
+      "en": "∴ (5ab)⁰ = 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:62:20"
+      ]
+    },
+    "queses1-laws#65": {
+      "en": "compare 7x⁰ = 7, where only the x carried the 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:62:39"
+      ]
+    },
+    "queses1-laws#66": {
+      "en": "Zero exponent → 1. Watch what the exponent is actually sitting on.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:65:57"
+      ]
+    },
+    "queses1-laws#67": {
+      "en": "What does a <b>negative exponent</b> mean: x⁻ᵃ = ?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:71:12"
+      ]
+    },
+    "queses1-laws#68": {
+      "en": "1/xᵃ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:71:75",
+        "queses1-laws.js:75:86"
+      ]
+    },
+    "queses1-laws#69": {
+      "en": "−xᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:71:92",
+        "queses1-laws.js:75:94"
+      ]
+    },
+    "queses1-laws#70": {
+      "en": "−1/xᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:71:99"
+      ]
+    },
+    "queses1-laws#71": {
+      "en": "xᵃ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:71:108",
+        "queses1-laws.js:75:71"
+      ]
+    },
+    "queses1-laws#72": {
+      "en": "A negative exponent means reciprocal: x⁻ᵃ = 1/xᵃ. It does NOT make the answer negative.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:71:120"
+      ]
+    },
+    "queses1-laws#73": {
+      "en": "Depressed exponents: flip the fraction and change the sign of the exponent",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:72:20"
+      ]
+    },
+    "queses1-laws#74": {
+      "en": "x⁻ᵃ is really x⁻ᵃ/1, so flipping sends it under the line: 1/xᵃ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:73:20"
+      ]
+    },
+    "queses1-laws#75": {
+      "en": "The minus was used up in the flip",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:74:20"
+      ]
+    },
+    "queses1-laws#76": {
+      "en": "x⁻ᵃ is 1/xᵃ, never −xᵃ",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:74:60"
+      ]
+    },
+    "queses1-laws#77": {
+      "en": "Rewrite with a positive exponent: <b>1/x⁻ᵃ</b>",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:75:12"
+      ]
+    },
+    "queses1-laws#78": {
+      "en": "x⁻ᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:75:101"
+      ]
+    },
+    "queses1-laws#79": {
+      "en": "Flip it across the line and change the sign: 1/x⁻ᵃ = xᵃ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:75:114"
+      ]
+    },
+    "queses1-laws#80": {
+      "en": "The power is already under the line, carrying a minus",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:76:20"
+      ]
+    },
+    "queses1-laws#81": {
+      "en": "Same move, other direction: flip it up over the line and change the sign",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:77:20"
+      ]
+    },
+    "queses1-laws#82": {
+      "en": "∴ 1/x⁻ᵃ = xᵃ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:78:20"
+      ]
+    },
+    "queses1-laws#83": {
+      "en": "depressed exponents work both ways",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:78:39"
+      ]
+    },
+    "queses1-laws#84": {
+      "en": "Is <b>3⁻²</b> positive or negative?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:79:12"
+      ]
+    },
+    "queses1-laws#85": {
+      "en": "Positive (it equals 1/9)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:79:60"
+      ]
+    },
+    "queses1-laws#86": {
+      "en": "Negative (it equals −9)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:79:97"
+      ]
+    },
+    "queses1-laws#87": {
+      "en": "Negative (it equals −1/9)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:79:124"
+      ]
+    },
+    "queses1-laws#88": {
+      "en": "Zero",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:79:153"
+      ]
+    },
+    "queses1-laws#89": {
+      "en": "3⁻² = 1/3² = 1/9 — a negative exponent gives a positive value.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:79:167"
+      ]
+    },
+    "queses1-laws#90": {
+      "en": "flip the fraction, change the sign of the exponent",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:80:37"
+      ]
+    },
+    "queses1-laws#91": {
+      "en": "1/9 is a positive number",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:82:20"
+      ]
+    },
+    "queses1-laws#92": {
+      "en": "a negative EXPONENT never makes the answer negative — that is the whole trap",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:82:51"
+      ]
+    },
+    "queses1-laws#93": {
+      "en": "Negative exponent = “flip the fraction”, not “make it negative”.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:85:57"
+      ]
+    },
+    "queses1-laws#94": {
+      "en": "What does <b>x<sup>½</sup></b> mean?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:91:12"
+      ]
+    },
+    "queses1-laws#95": {
+      "en": "√x",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:91:61"
+      ]
+    },
+    "queses1-laws#96": {
+      "en": "½x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:91:76"
+      ]
+    },
+    "queses1-laws#97": {
+      "en": "x ÷ 2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:91:82"
+      ]
+    },
+    "queses1-laws#98": {
+      "en": "2x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:91:91"
+      ]
+    },
+    "queses1-laws#99": {
+      "en": "A power of ½ is the square root: x^½ = √x.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:91:103"
+      ]
+    },
+    "queses1-laws#100": {
+      "en": "Her conversion box: ⁿ√(xᵃ) = x^(a/n)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:92:20"
+      ]
+    },
+    "queses1-laws#101": {
+      "en": "inside √ = top of the fraction, outside √ = bottom",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:92:63"
+      ]
+    },
+    "queses1-laws#102": {
+      "en": "In x^½ the top is 1 and the bottom is 2, so the root index is 2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:93:20"
+      ]
+    },
+    "queses1-laws#103": {
+      "en": "√ IS ²√, so x^½ = √x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:94:20"
+      ]
+    },
+    "queses1-laws#104": {
+      "en": "the exponent is a root, not “half of x”",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:94:47"
+      ]
+    },
+    "queses1-laws#105": {
+      "en": "Write <b>ⁿ√(xᵃ)</b> with a fractional exponent.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:95:12"
+      ]
+    },
+    "queses1-laws#106": {
+      "en": "x^(a/n)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:95:72"
+      ]
+    },
+    "queses1-laws#107": {
+      "en": "x^(n/a)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:95:92"
+      ]
+    },
+    "queses1-laws#108": {
+      "en": "xᵃⁿ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:95:103"
+      ]
+    },
+    "queses1-laws#109": {
+      "en": "x^(a−n)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:95:110"
+      ]
+    },
+    "queses1-laws#110": {
+      "en": "The inside power a goes on TOP, the root index n on the BOTTOM: ⁿ√(xᵃ) = x^(a/n).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:95:127"
+      ]
+    },
+    "queses1-laws#111": {
+      "en": "Her hook: inside √ = top of the fraction; outside √ = bottom of the fraction",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:96:20",
+        "queses1-laws.js:100:20"
+      ]
+    },
+    "queses1-laws#112": {
+      "en": "The a is INSIDE the root, so it goes on top; the n is written OUTSIDE, so it goes underneath",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:97:20"
+      ]
+    },
+    "queses1-laws#113": {
+      "en": "∴ ⁿ√(xᵃ) = x^(a/n)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:98:20"
+      ]
+    },
+    "queses1-laws#114": {
+      "en": "In x^(a/n), which number is the <b>root</b> (the index of the surd)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:99:12"
+      ]
+    },
+    "queses1-laws#115": {
+      "en": "n (the denominator)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:99:93"
+      ]
+    },
+    "queses1-laws#116": {
+      "en": "a (the numerator)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:99:125"
+      ]
+    },
+    "queses1-laws#117": {
+      "en": "a + n",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:99:146"
+      ]
+    },
+    "queses1-laws#118": {
+      "en": "a × n",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:99:155"
+      ]
+    },
+    "queses1-laws#119": {
+      "en": "Denominator = the root; numerator = the inside power.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:99:170"
+      ]
+    },
+    "queses1-laws#120": {
+      "en": "The root index is the little number written outside the root sign, so it lands on the bottom",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:101:20"
+      ]
+    },
+    "queses1-laws#121": {
+      "en": "∴ n is the root, and a on top is the power inside",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:102:20"
+      ]
+    },
+    "queses1-laws#122": {
+      "en": "check it on x^½ = √x: the 2 underneath is the square root",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:102:76"
+      ]
+    },
+    "queses1-laws#123": {
+      "en": "Bottom of the fraction = the root; top = the power inside.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:105:57"
+      ]
+    },
+    "queses1-laws#124": {
+      "en": "Apply the exponent: <b>(x/y)ᵃ = ?</b>",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:111:12"
+      ]
+    },
+    "queses1-laws#125": {
+      "en": "xᵃ / yᵃ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:111:62"
+      ]
+    },
+    "queses1-laws#126": {
+      "en": "xᵃ / y",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:111:82"
+      ]
+    },
+    "queses1-laws#127": {
+      "en": "x / yᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:111:92"
+      ]
+    },
+    "queses1-laws#128": {
+      "en": "(xy)ᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:111:102"
+      ]
+    },
+    "queses1-laws#129": {
+      "en": "Each part of the fraction gets the exponent: (x/y)ᵃ = xᵃ/yᵃ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:111:117"
+      ]
+    },
+    "queses1-laws#130": {
+      "en": "(x/y)ᵃ means the whole fraction multiplied by itself a times",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:112:20"
+      ]
+    },
+    "queses1-laws#131": {
+      "en": "All the x's collect on top and all the y's underneath",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:113:20"
+      ]
+    },
+    "queses1-laws#132": {
+      "en": "∴ xᵃ/yᵃ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:114:20"
+      ]
+    },
+    "queses1-laws#133": {
+      "en": "power of a quotient — each base gets the exponent",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:114:34"
+      ]
+    },
+    "queses1-laws#134": {
+      "en": "Simplify the negative exponent: <b>(x/y)⁻ᵃ = ?</b>",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:115:12"
+      ]
+    },
+    "queses1-laws#135": {
+      "en": "(y/x)ᵃ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:115:75"
+      ]
+    },
+    "queses1-laws#136": {
+      "en": "(x/y)ᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:115:94"
+      ]
+    },
+    "queses1-laws#137": {
+      "en": "−(x/y)ᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:115:104"
+      ]
+    },
+    "queses1-laws#138": {
+      "en": "(y/x)⁻ᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:115:115"
+      ]
+    },
+    "queses1-laws#139": {
+      "en": "Flip the fraction and drop the sign: (x/y)⁻ᵃ = (y/x)ᵃ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:115:132"
+      ]
+    },
+    "queses1-laws#140": {
+      "en": "Flipped fractions: a negative power turns the fraction upside down",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:116:20"
+      ]
+    },
+    "queses1-laws#141": {
+      "en": "So (x/y)⁻ᵃ = (y/x)ᵃ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:117:20"
+      ]
+    },
+    "queses1-laws#142": {
+      "en": "flip the fraction AND change the sign of the exponent",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:117:46"
+      ]
+    },
+    "queses1-laws#143": {
+      "en": "The minus is used up by the flip — it never stays out in front",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:118:20"
+      ]
+    },
+    "queses1-laws#144": {
+      "en": "Apply the exponent: <b>(xy)ᵃ = ?</b>",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses1-laws.js:119:12"
+      ]
+    },
+    "queses1-laws#145": {
+      "en": "xᵃ yᵃ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queses1-laws.js:119:61"
+      ]
+    },
+    "queses1-laws#146": {
+      "en": "x yᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:119:79"
+      ]
+    },
+    "queses1-laws#147": {
+      "en": "(x + y)ᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:119:87"
+      ]
+    },
+    "queses1-laws#148": {
+      "en": "xᵃ + yᵃ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses1-laws.js:119:99"
+      ]
+    },
+    "queses1-laws#149": {
+      "en": "Each base gets the exponent: (xy)ᵃ = xᵃyᵃ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:119:116"
+      ]
+    },
+    "queses1-laws#150": {
+      "en": "(xy)ᵃ means xy multiplied by itself a times",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:120:20"
+      ]
+    },
+    "queses1-laws#151": {
+      "en": "Multiplying can be reshuffled, so gather all the x's together and all the y's together",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:121:20"
+      ]
+    },
+    "queses1-laws#152": {
+      "en": "∴ xᵃyᵃ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:122:20"
+      ]
+    },
+    "queses1-laws#153": {
+      "en": "power of a product — this only works because it is × inside, never +",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:122:33"
+      ]
+    },
+    "queses1-laws#154": {
+      "en": "Each base in the bracket gets the power. A negative power flips a fraction over.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:125:57"
+      ]
+    },
+    "queses1-laws#155": {
+      "en": "Before you can add or subtract exponents, the <b>bases must be the same</b>. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses1-laws.js:130:5"
+      ]
+    },
+    "queses1-laws#156": {
+      "en": "xᵃ·xᵇ = xᵃ⁺ᵇ only works when the base x is shared.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses1-laws.js:132:13"
+      ]
+    },
+    "queses1-laws#157": {
+      "en": "True — the laws only apply when the bases match. xᵃ·yᵇ (different bases) can’t be combined.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses1-laws.js:133:20"
+      ]
+    },
+    "queses1-laws#158": {
+      "en": "x³ · x² works because you are counting x's: (x·x·x)(x·x) = x⁵",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:135:14"
+      ]
+    },
+    "queses1-laws#159": {
+      "en": "With different bases there is nothing to count together — 2³ · 3² is just 8 × 9 = 72, and no law reaches it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:136:14"
+      ]
+    },
+    "queses1-laws#160": {
+      "en": "∴ true",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses1-laws.js:137:14"
+      ]
+    },
+    "queses1-laws#161": {
+      "en": "the header on her laws page: these rules only apply when the bases are the same",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses1-laws.js:137:27"
+      ]
+    },
+    "queses2-traps#1": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:24:18",
+        "queses2-traps.js:28:17",
+        "queses2-traps.js:29:22"
+      ]
+    },
+    "queses2-traps#2": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:24:23",
+        "queses2-traps.js:28:29"
+      ]
+    },
+    "queses2-traps#3": {
+      "en": "m",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:24:28",
+        "queses2-traps.js:28:53",
+        "queses2-traps.js:29:46"
+      ]
+    },
+    "queses2-traps#4": {
+      "en": "p",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:24:33",
+        "queses2-traps.js:28:41",
+        "queses2-traps.js:29:34"
+      ]
+    },
+    "queses2-traps#5": {
+      "en": "y",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:28:22",
+        "queses2-traps.js:29:27"
+      ]
+    },
+    "queses2-traps#6": {
+      "en": "b",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:28:34"
+      ]
+    },
+    "queses2-traps#7": {
+      "en": "q",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:28:46",
+        "queses2-traps.js:29:39"
+      ]
+    },
+    "queses2-traps#8": {
+      "en": "n",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:28:58",
+        "queses2-traps.js:29:51"
+      ]
+    },
+    "queses2-traps#9": {
+      "en": "Is this correct?<br><b>${upw(b, p)} · ${upw(b, q)} = ${upw(b * b, p + q)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:40:10"
+      ]
+    },
+    "queses2-traps#10": {
+      "en": "No — the base stays ${b}. It is ${upw(b, p)}·${upw(b, q)} = ${upw(b, p + q)} = ${Math.pow(b, p + q)}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:42:12"
+      ]
+    },
+    "queses2-traps#11": {
+      "en": "Same base and a ×, so the product rule fires: add the exponents, ${p} + ${q} = ${p + q}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:44:14"
+      ]
+    },
+    "queses2-traps#12": {
+      "en": "The base takes no part in that arithmetic — it stays ${b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:45:14"
+      ]
+    },
+    "queses2-traps#13": {
+      "en": "only the exponents move",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:45:78"
+      ]
+    },
+    "queses2-traps#14": {
+      "en": "∴ ${upw(b, p + q)} = ${Math.pow(b, p + q)}, so changing ${b} into ${b * b} is the slip",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:46:14"
+      ]
+    },
+    "queses2-traps#15": {
+      "en": "Is this correct?<br><b>${upw(b, p)} ÷ ${upw(b, q)} = ${upw(b, p - q)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:55:10"
+      ]
+    },
+    "queses2-traps#16": {
+      "en": "Yes — same base, so subtract the exponents: ${p} − ${q} = ${p - q}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:57:12"
+      ]
+    },
+    "queses2-traps#17": {
+      "en": "Both sides of the ÷ are powers of ${b}, so the quotient rule applies",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:59:14"
+      ]
+    },
+    "queses2-traps#18": {
+      "en": "Dividing takes ${b}'s away: ${p} − ${q} = ${p - q}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:60:14"
+      ]
+    },
+    "queses2-traps#19": {
+      "en": "∴ ${upw(b, p - q)} — the line is correct as written",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:61:14"
+      ]
+    },
+    "queses2-traps#20": {
+      "en": "and the base is still ${b}, as it should be",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:61:72"
+      ]
+    },
+    "queses2-traps#21": {
+      "en": "Is this correct?<br><b>${upw(v, 0)} = 0</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:69:10"
+      ]
+    },
+    "queses2-traps#22": {
+      "en": "No — anything non-zero to the power 0 is 1, not 0.",
+      "kind": "string",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:71:12"
+      ]
+    },
+    "queses2-traps#23": {
+      "en": "${v}ᵃ ÷ ${v}ᵃ = 1",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:73:14"
+      ]
+    },
+    "queses2-traps#24": {
+      "en": "anything divided by itself",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:73:38"
+      ]
+    },
+    "queses2-traps#25": {
+      "en": "The quotient rule calls that very same thing ${v}ᵃ⁻ᵃ = ${upw(v, 0)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:74:14"
+      ]
+    },
+    "queses2-traps#26": {
+      "en": "So ${upw(v, 0)} = 1, not 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:75:14"
+      ]
+    },
+    "queses2-traps#27": {
+      "en": "anything to the zero is always one",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:75:47"
+      ]
+    },
+    "queses2-traps#28": {
+      "en": "Is this correct?<br><b>${c}${upw(v, 0)} = ${c}</b> &nbsp;(${v} ≠ 0)",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:83:10"
+      ]
+    },
+    "queses2-traps#29": {
+      "en": "Yes — only ${v} is to the power 0 (= 1), so ${c}·1 = ${c}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:85:12"
+      ]
+    },
+    "queses2-traps#30": {
+      "en": "Check what the 0 is sitting on: there is no bracket, so it sits on ${v} alone",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:87:14"
+      ]
+    },
+    "queses2-traps#31": {
+      "en": "${upw(v, 0)} = 1, so ${c}${upw(v, 0)} = ${c}(1)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:88:14"
+      ]
+    },
+    "queses2-traps#32": {
+      "en": "= ${c} — correct as written",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:89:14"
+      ]
+    },
+    "queses2-traps#33": {
+      "en": "(${c}${v})⁰ would have been 1 instead",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:89:48"
+      ]
+    },
+    "queses2-traps#34": {
+      "en": "Is this correct?<br><b>(${c}${upw(v, m)})² = ${c}${upw(v, 2 * m)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:98:10"
+      ]
+    },
+    "queses2-traps#35": {
+      "en": "No — the ${c} is squared too: (${c}${upw(v, m)})² = ${c * c}${upw(v, 2 * m)}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:100:12"
+      ]
+    },
+    "queses2-traps#36": {
+      "en": "The power sits on the WHOLE bracket, so everything inside it gets squared",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:102:14"
+      ]
+    },
+    "queses2-traps#37": {
+      "en": "The ${upw(v, 2 * m)} part is right — it is the ${c} that was left behind",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:104:14"
+      ]
+    },
+    "queses2-traps#38": {
+      "en": "Is this correct?<br><b>${upw(v, `-${n}`)} = −${upw(v, n)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:112:10"
+      ]
+    },
+    "queses2-traps#39": {
+      "en": "No — a negative exponent means a reciprocal: ${upw(v, `-${n}`)} = 1/${upw(v, n)} (a positive value).",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:114:12"
+      ]
+    },
+    "queses2-traps#40": {
+      "en": "Depressed exponents: the minus flips the power under the line — it is not a minus sign out front",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:116:14"
+      ]
+    },
+    "queses2-traps#41": {
+      "en": "Try it with a number: 2⁻³ = 1/8, which is positive, not −8",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:118:14"
+      ]
+    },
+    "queses2-traps#42": {
+      "en": "Is this correct?<br><b>(${u} + ${w})² = ${upw(u, 2)} + ${upw(w, 2)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:127:10"
+      ]
+    },
+    "queses2-traps#43": {
+      "en": "No — you can’t split a power over a sum. (${u}+${w})² = ${upw(u, 2)} + 2${u}${w} + ${upw(w, 2)}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:129:12"
+      ]
+    },
+    "queses2-traps#44": {
+      "en": "A power splits over × and ÷ only — never over + or −",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:131:14"
+      ]
+    },
+    "queses2-traps#45": {
+      "en": "the middle term is what gets lost",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:132:106"
+      ]
+    },
+    "queses2-traps#46": {
+      "en": "Test it with numbers: (2 + 3)² = 25, but 2² + 3² = 13",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:133:14"
+      ]
+    },
+    "queses2-traps#47": {
+      "en": "Is this correct?<br><b>${upw(u, \"a\")} · ${upw(w, \"b\")} = (${u}${w})${usup(\"a+b\")}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:141:10"
+      ],
+      "nested": [
+        "a",
+        "b",
+        "a+b"
+      ]
+    },
+    "queses2-traps#48": {
+      "en": "No — different bases can’t be combined. The laws need the SAME base.",
+      "kind": "string",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:143:12"
+      ]
+    },
+    "queses2-traps#49": {
+      "en": "Check the bases first: ${u} and ${w} are different",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:145:14"
+      ]
+    },
+    "queses2-traps#50": {
+      "en": "The product rule counts copies of ONE base — with two different bases there is nothing to count together",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:146:14"
+      ]
+    },
+    "queses2-traps#51": {
+      "en": "Test it with numbers: 2² · 3² = 4 × 9 = 36, but (2·3)⁴ = 1296",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:147:14"
+      ]
+    },
+    "queses2-traps#52": {
+      "en": "so ${upw(u, \"a\")} · ${upw(w, \"b\")} stays as it is",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:147:82"
+      ],
+      "nested": [
+        "a",
+        "b"
+      ]
+    },
+    "queses2-traps#53": {
+      "en": "Is this correct?<br><b>(${c}${v})${usup(n)} = ${Math.pow(c, n)}${upw(v, n)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:157:10"
+      ]
+    },
+    "queses2-traps#54": {
+      "en": "Yes — every base in the bracket gets the power: ${upw(c, n)} = ${Math.pow(c, n)} and ${upw(v, n)}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:159:12"
+      ]
+    },
+    "queses2-traps#55": {
+      "en": "Inside the bracket it is a MULTIPLY, so the power splits over both parts",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:161:14"
+      ]
+    },
+    "queses2-traps#56": {
+      "en": "${upw(c, n)} = ${Math.pow(c, n)}, and ${v}${usup(n)} stays as ${upw(v, n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:162:14"
+      ]
+    },
+    "queses2-traps#57": {
+      "en": "∴ ${Math.pow(c, n)}${upw(v, n)} — correct as written",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:163:14"
+      ]
+    },
+    "queses2-traps#58": {
+      "en": "the coefficient was not forgotten this time",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:163:73"
+      ]
+    },
+    "queses2-traps#59": {
+      "en": "Is this correct?<br><b>${upw(b, `-${n}`)} = 1/${Math.pow(b, n)}</b>",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:172:10"
+      ]
+    },
+    "queses2-traps#60": {
+      "en": "Yes — ${upw(b, `-${n}`)} = 1/${upw(b, n)} = 1/${Math.pow(b, n)}. The value is positive.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:174:12"
+      ]
+    },
+    "queses2-traps#61": {
+      "en": "Flip the fraction and change the sign: ${upw(b, `-${n}`)} = 1/${upw(b, n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:176:14"
+      ]
+    },
+    "queses2-traps#62": {
+      "en": "${upw(b, n)} = ${Math.pow(b, n)}, so it is 1/${Math.pow(b, n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:177:14"
+      ]
+    },
+    "queses2-traps#63": {
+      "en": "Correct as written — and notice the value came out positive",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:178:14"
+      ]
+    },
+    "queses2-traps#64": {
+      "en": "What is wrong with <b>${upw(b, p)} · ${upw(b, q)} = ${upw(b * b, p + q)}</b>?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:192:10"
+      ]
+    },
+    "queses2-traps#65": {
+      "en": "The base should stay ${b} (answer ${upw(b, p + q)}), not become ${b * b}",
+      "kind": "template",
+      "slots": [
+        "correct"
+      ],
+      "where": [
+        "queses2-traps.js:193:16"
+      ]
+    },
+    "queses2-traps#66": {
+      "en": "The exponents should be multiplied",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:194:16",
+        "queses2-traps.js:244:16"
+      ]
+    },
+    "queses2-traps#67": {
+      "en": "The exponents should be subtracted",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:194:54"
+      ]
+    },
+    "queses2-traps#68": {
+      "en": "Nothing — it is correct",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:194:92",
+        "queses2-traps.js:211:84",
+        "queses2-traps.js:226:77",
+        "queses2-traps.js:244:95"
+      ]
+    },
+    "queses2-traps#69": {
+      "en": "Add the exponents but KEEP the base: ${upw(b, p)}·${upw(b, q)} = ${upw(b, p + q)}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:195:12"
+      ]
+    },
+    "queses2-traps#70": {
+      "en": "Same base and a ×, so add the exponents: ${p} + ${q} = ${p + q}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:197:14"
+      ]
+    },
+    "queses2-traps#71": {
+      "en": "that part of the line is right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:197:84"
+      ]
+    },
+    "queses2-traps#72": {
+      "en": "The base plays no part in that sum — it stays ${b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:198:14"
+      ]
+    },
+    "queses2-traps#73": {
+      "en": "∴ ${upw(b, p + q)}; turning ${b} into ${b * b} is the one broken step",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:199:14"
+      ]
+    },
+    "queses2-traps#74": {
+      "en": "What is wrong with <b>(${c}${upw(v, m)})³ = ${c}${upw(v, 3 * m)}</b>?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:209:10"
+      ]
+    },
+    "queses2-traps#75": {
+      "en": "The ${c} must also be cubed → ${c * c * c}${upw(v, 3 * m)}",
+      "kind": "template",
+      "slots": [
+        "correct"
+      ],
+      "where": [
+        "queses2-traps.js:210:16"
+      ]
+    },
+    "queses2-traps#76": {
+      "en": "The exponents should be added",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:211:16"
+      ]
+    },
+    "queses2-traps#77": {
+      "en": "${v} should be ${upw(v, m + 3)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:211:49"
+      ]
+    },
+    "queses2-traps#78": {
+      "en": "The power hits everything in the bracket: (${c}${upw(v, m)})³ = ${upw(c, 3)}${upw(v, 3 * m)} = ${c * c * c}${upw(v, 3 * m)}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:212:12"
+      ]
+    },
+    "queses2-traps#79": {
+      "en": "The 3 sits on the whole bracket, so both things inside it get cubed",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:214:14"
+      ]
+    },
+    "queses2-traps#80": {
+      "en": "The exponent ${3 * m} is right (${m} × 3 — power of a power), so the only slip is the ${c}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:216:14"
+      ]
+    },
+    "queses2-traps#81": {
+      "en": "What is wrong with <b>${upw(v, `-${n}`)} = −${upw(v, n)}</b>?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:224:10"
+      ]
+    },
+    "queses2-traps#82": {
+      "en": "A negative exponent gives a reciprocal: 1/${upw(v, n)}",
+      "kind": "template",
+      "slots": [
+        "correct"
+      ],
+      "where": [
+        "queses2-traps.js:225:16"
+      ]
+    },
+    "queses2-traps#83": {
+      "en": "It should be −1/${upw(v, n)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:226:16"
+      ]
+    },
+    "queses2-traps#84": {
+      "en": "It should be ${upw(v, n)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:226:48"
+      ]
+    },
+    "queses2-traps#85": {
+      "en": "${upw(v, `-${n}`)} = 1/${upw(v, n)} — positive, not negative.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:227:12"
+      ]
+    },
+    "queses2-traps#86": {
+      "en": "The minus on the exponent flips the power under the line; it does not travel out in front",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:229:14"
+      ]
+    },
+    "queses2-traps#87": {
+      "en": "1/${upw(v, n)} is positive, so writing −${upw(v, n)} is the mistake",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:231:14"
+      ]
+    },
+    "queses2-traps#88": {
+      "en": "check on numbers: 2⁻³ = 1/8, not −8",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:231:88"
+      ]
+    },
+    "queses2-traps#89": {
+      "en": "What is wrong with <b>${upw(u, p)} · ${upw(w, q)} = (${u}${w})${usup(p + q)}</b>?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses2-traps.js:242:10"
+      ]
+    },
+    "queses2-traps#90": {
+      "en": "Different bases — they can’t be combined",
+      "kind": "string",
+      "slots": [
+        "correct"
+      ],
+      "where": [
+        "queses2-traps.js:243:16"
+      ]
+    },
+    "queses2-traps#91": {
+      "en": "It should be (${u}${w})${usup(p * q)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses2-traps.js:244:54"
+      ]
+    },
+    "queses2-traps#92": {
+      "en": "The product rule needs the SAME base; ${u} and ${w} stay separate.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses2-traps.js:245:12"
+      ]
+    },
+    "queses2-traps#93": {
+      "en": "Before touching any exponent, check the bases: ${u} and ${w} are different",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:247:14"
+      ]
+    },
+    "queses2-traps#94": {
+      "en": "The product rule only works on a shared base, so no law applies here at all",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:248:14"
+      ]
+    },
+    "queses2-traps#95": {
+      "en": "Merging them into (${u}${w}) is the mistake",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses2-traps.js:249:14"
+      ]
+    },
+    "queses2-traps#96": {
+      "en": "adding or multiplying the exponents would both be wrong — nothing may be done",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses2-traps.js:249:64"
+      ]
+    },
+    "queses2-traps#97": {
+      "en": "Watch the base, the bracket, and the sign of the exponent.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses2-traps.js:256:79"
+      ]
+    },
+    "queses2-traps#98": {
+      "en": "Does a law actually apply here? Same base? Whole bracket?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses2-traps.js:257:79"
+      ]
+    },
+    "queses2-traps#99": {
+      "en": "x⁰ = 1, a negative exponent flips, and you can’t split (x+y)ⁿ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses2-traps.js:258:79"
+      ]
+    },
+    "queses2-traps#100": {
+      "en": "Find the single broken rule.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses2-traps.js:259:95",
+        "queses2-traps.js:260:95"
+      ]
+    },
+    "queses2-traps#101": {
+      "en": "Check it against the laws one piece at a time.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses2-traps.js:261:79"
+      ]
+    },
+    "queses3-method#1": {
+      "en": "8, 9 and 27",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses3-method.js:15:25"
+      ]
+    },
+    "queses3-method#2": {
+      "en": "16 and 32",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses3-method.js:15:40"
+      ]
+    },
+    "queses3-method#3": {
+      "en": "4ⁿ and 72ⁿ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses3-method.js:15:53"
+      ]
+    },
+    "queses3-method#4": {
+      "en": "25 and 125",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses3-method.js:15:67"
+      ]
+    },
+    "queses3-method#5": {
+      "en": "An expression mixes bases like <b>${bases}</b>. What is the <b>first</b> step to simplify it?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses3-method.js:17:7"
+      ]
+    },
+    "queses3-method#6": {
+      "en": "Rewrite every base as a product of prime factors",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:18:7"
+      ]
+    },
+    "queses3-method#7": {
+      "en": "Add the exponents straight away",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:19:8"
+      ]
+    },
+    "queses3-method#8": {
+      "en": "Multiply all the bases together",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:19:43"
+      ]
+    },
+    "queses3-method#9": {
+      "en": "Cancel the common terms first",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:19:78"
+      ]
+    },
+    "queses3-method#10": {
+      "en": "You can only use the laws once every base is written as the same prime base.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:20:15"
+      ]
+    },
+    "queses3-method#11": {
+      "en": "Rewrite each base as prime factors (8 = 2³, 9 = 3², 27 = 3³ …) so the bases match.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:21:22"
+      ]
+    },
+    "queses3-method#12": {
+      "en": "With bases like ${bases} nothing matches, and every law needs the SAME base",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:23:16"
+      ]
+    },
+    "queses3-method#13": {
+      "en": "So break each base into primes: 8 = 2³, 9 = 3², 27 = 3³, 72 = 2³·3²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:24:16"
+      ]
+    },
+    "queses3-method#14": {
+      "en": "calculator: type the number, =, SHIFT, FACT",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:24:90"
+      ]
+    },
+    "queses3-method#15": {
+      "en": "Now everything is written in 2's and 3's, and the laws can finally start",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:25:16"
+      ]
+    },
+    "queses3-method#16": {
+      "en": "An expression is one big fraction of powers — everything is <b>multiplied or divided</b>, with NO + or − between terms. What do you do?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses3-method.js:31:5"
+      ]
+    },
+    "queses3-method#17": {
+      "en": "Multiply the brackets out, then add/subtract the exponents of the same base",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:32:5"
+      ]
+    },
+    "queses3-method#18": {
+      "en": "Take out a common factor first",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:33:6"
+      ]
+    },
+    "queses3-method#19": {
+      "en": "Use difference of squares",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:33:40"
+      ]
+    },
+    "queses3-method#20": {
+      "en": "Let k = the base and make a quadratic",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:33:69"
+      ]
+    },
+    "queses3-method#21": {
+      "en": "No + or − means it’s a single term — just the laws on the exponents.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:34:13"
+      ]
+    },
+    "queses3-method#22": {
+      "en": "With only × and ÷ you apply the laws directly: multiply out, then add/subtract exponents.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:35:20"
+      ]
+    },
+    "queses3-method#23": {
+      "en": "First check what is between the terms: only × and ÷, so this is her “type 1: one term”",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:37:14"
+      ]
+    },
+    "queses3-method#24": {
+      "en": "Prime-factorise, then multiply the brackets out",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:38:14"
+      ]
+    },
+    "queses3-method#25": {
+      "en": "power of a power",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:38:68"
+      ]
+    },
+    "queses3-method#26": {
+      "en": "Then add the exponents where they multiply and subtract where they divide, and tidy up",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:39:14"
+      ]
+    },
+    "queses3-method#27": {
+      "en": "no + or − anywhere, so nothing has to be factorised first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:40:14"
+      ]
+    },
+    "queses3-method#28": {
+      "en": "There is a <b>+ or − between the terms</b> (e.g. 3ˣ⁺² − 3ˣ). Can you just add the exponents?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses3-method.js:45:5"
+      ]
+    },
+    "queses3-method#29": {
+      "en": "No — you must factorise (take out a common factor) first",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:46:5"
+      ]
+    },
+    "queses3-method#30": {
+      "en": "Yes — add the exponents as usual",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:47:6"
+      ]
+    },
+    "queses3-method#31": {
+      "en": "Yes — subtract the exponents",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:47:42"
+      ]
+    },
+    "queses3-method#32": {
+      "en": "No — you must cancel a term from the top and bottom",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:47:74"
+      ]
+    },
+    "queses3-method#33": {
+      "en": "The laws (add/subtract exponents) only work across × and ÷, never across + and −.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:48:13"
+      ]
+    },
+    "queses3-method#34": {
+      "en": "A + or − blocks the laws. Split the powers and factorise — usually take out a common factor.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:49:20"
+      ]
+    },
+    "queses3-method#35": {
+      "en": "The laws only reach across × and ÷ — a + or − blocks them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:51:14"
+      ]
+    },
+    "queses3-method#36": {
+      "en": "So divorce each power first: 3ˣ⁺² − 3ˣ = 3ˣ·3² − 3ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:52:14"
+      ]
+    },
+    "queses3-method#37": {
+      "en": "divorce = split x^(a+b) into xᵃ · xᵇ",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:52:72"
+      ]
+    },
+    "queses3-method#38": {
+      "en": "Now take out the common factor, always the base with the variable exponent: 3ˣ(3² − 1) = 3ˣ(8)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:53:14"
+      ]
+    },
+    "queses3-method#39": {
+      "en": "Once the + and − are caged in brackets you may cancel",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:54:14"
+      ]
+    },
+    "queses3-method#40": {
+      "en": "never cancel across a bare + or −",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:54:74"
+      ]
+    },
+    "queses3-method#41": {
+      "en": "Simplify <b>2ˣ + 2ˣ</b>.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses3-method.js:60:12"
+      ]
+    },
+    "queses3-method#42": {
+      "en": "2·2ˣ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:60:49"
+      ]
+    },
+    "queses3-method#43": {
+      "en": "2²ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:60:66"
+      ]
+    },
+    "queses3-method#44": {
+      "en": "4ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:60:73"
+      ]
+    },
+    "queses3-method#45": {
+      "en": "2ˣ²",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:60:79"
+      ]
+    },
+    "queses3-method#46": {
+      "en": "Adding two of the same thing: 2ˣ + 2ˣ = 2·2ˣ (just like x + x = 2x).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:60:92"
+      ]
+    },
+    "queses3-method#47": {
+      "en": "Both terms are the SAME thing, 2ˣ, so they are like terms",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:61:20"
+      ]
+    },
+    "queses3-method#48": {
+      "en": "Write the invisible coefficients in: 1·2ˣ + 1·2ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:62:20"
+      ]
+    },
+    "queses3-method#49": {
+      "en": "1 + 1 = 2, so the answer is 2·2ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:63:20"
+      ]
+    },
+    "queses3-method#50": {
+      "en": "exactly like x + x = 2x — the exponent never changes",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:63:59"
+      ]
+    },
+    "queses3-method#51": {
+      "en": "Simplify <b>5·3ˣ − 3ˣ</b>.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses3-method.js:64:12"
+      ]
+    },
+    "queses3-method#52": {
+      "en": "4·3ˣ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:64:51"
+      ]
+    },
+    "queses3-method#53": {
+      "en": "5·3ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:64:68"
+      ]
+    },
+    "queses3-method#54": {
+      "en": "2·3ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:64:76"
+      ]
+    },
+    "queses3-method#55": {
+      "en": "They’re like terms in 3ˣ: 5·3ˣ − 1·3ˣ = 4·3ˣ.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:64:95"
+      ]
+    },
+    "queses3-method#56": {
+      "en": "Both terms carry the same power 3ˣ, so they are like terms",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:65:20"
+      ]
+    },
+    "queses3-method#57": {
+      "en": "Write the hidden 1 in: 5·3ˣ − 1·3ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:66:20"
+      ]
+    },
+    "queses3-method#58": {
+      "en": "keeping the 1 visible is the whole trick",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:66:61"
+      ]
+    },
+    "queses3-method#59": {
+      "en": "5 − 1 = 4, so the answer is 4·3ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:67:20"
+      ]
+    },
+    "queses3-method#60": {
+      "en": "the 3ˣ is left completely alone",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:67:59"
+      ]
+    },
+    "queses3-method#61": {
+      "en": "Treat the matching power as a “like term”, exactly like x + x = 2x.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:70:57"
+      ]
+    },
+    "queses3-method#62": {
+      "en": "You may cancel a power from the top and bottom only when it is a factor of the <b>whole</b> top and <b>whole</b> bottom (caged in brackets). True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses3-method.js:75:5"
+      ]
+    },
+    "queses3-method#63": {
+      "en": "You can never cancel a single term out of a sum like (3ˣ + 1).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:77:13"
+      ]
+    },
+    "queses3-method#64": {
+      "en": "True — cancel only common FACTORS of the whole line, never one term out of a sum.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:78:20"
+      ]
+    },
+    "queses3-method#65": {
+      "en": "Cancelling is really dividing top and bottom by the same thing, and that only works on the WHOLE line",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:80:14"
+      ]
+    },
+    "queses3-method#66": {
+      "en": "In 3ˣ(3² − 1) / 3ˣ(3 − 3⁻²) the 3ˣ multiplies everything, so it cancels",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:81:14"
+      ]
+    },
+    "queses3-method#67": {
+      "en": "the + and − are caged in brackets",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:81:92"
+      ]
+    },
+    "queses3-method#68": {
+      "en": "In (3ˣ + 1)/3ˣ it does not: the 3ˣ on top is only one term of a sum",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:82:14"
+      ]
+    },
+    "queses3-method#69": {
+      "en": "∴ true — cage the + and − in brackets first, then cancel",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:83:14"
+      ]
+    },
+    "queses3-method#70": {
+      "en": "Simplify <b>(5²⁰⁰⁷ + 5²⁰¹⁰) / (5²⁰⁰⁸ + 5²⁰⁰⁹)</b>. The exponents are huge but close together. Which method?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses3-method.js:89:12"
+      ]
+    },
+    "queses3-method#71": {
+      "en": "The k-method: let k = 2008, rewrite each exponent as k−1, k, k+1 …, then factor out 5ᵏ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:90:18"
+      ]
+    },
+    "queses3-method#72": {
+      "en": "Type it straight into the calculator",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:91:18",
+        "queses3-method.js:95:18"
+      ]
+    },
+    "queses3-method#73": {
+      "en": "Cancel 5²⁰⁰⁷ against 5²⁰⁰⁸",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:91:58"
+      ]
+    },
+    "queses3-method#74": {
+      "en": "Equate the exponents",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:91:88",
+        "queses3-method.js:95:86"
+      ]
+    },
+    "queses3-method#75": {
+      "en": "Let k = 2008: the exponents become k−1, k+2, k and k+1. Divorce each power, take out 5ᵏ top and bottom, and it cancels — the calculator can’t hold numbers this big, and you may never cancel single terms across a +.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:92:14"
+      ]
+    },
+    "queses3-method#76": {
+      "en": "Simplify <b>(3¹⁰⁰ + 3¹⁰²) / 3¹⁰¹</b>. The exponents are huge but close together. Which method?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses3-method.js:93:12"
+      ]
+    },
+    "queses3-method#77": {
+      "en": "The k-method: let k = 101, rewrite each exponent as k−1, k, k+1 …, then factor out 3ᵏ",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:94:18"
+      ]
+    },
+    "queses3-method#78": {
+      "en": "Cancel 3¹⁰⁰ against 3¹⁰¹",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses3-method.js:95:58"
+      ]
+    },
+    "queses3-method#79": {
+      "en": "Let k = 101: (3ᵏ⁻¹ + 3ᵏ⁺¹)/3ᵏ = 3ᵏ(3⁻¹ + 3)/3ᵏ = ⅓ + 3 = 10/3. Factor out the k-power; never cancel one term out of a sum.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:96:14"
+      ]
+    },
+    "queses3-method#80": {
+      "en": "The exponents differ by tiny amounts — call the middle one k and write the rest relative to it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:100:15"
+      ]
+    },
+    "queses3-method#81": {
+      "en": "① prime factors  ②  multiply out / add exponents  ③ simplify",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses3-method.js:105:21"
+      ]
+    },
+    "queses3-method#82": {
+      "en": "Put the simplifying steps in the right <b>order</b> (for a one-term expression):",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses3-method.js:107:7"
+      ]
+    },
+    "queses3-method#83": {
+      "en": "① simplify  ②  prime factors  ③ multiply out",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:109:8"
+      ]
+    },
+    "queses3-method#84": {
+      "en": "① multiply out  ②  prime factors  ③ add exponents",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:110:8"
+      ]
+    },
+    "queses3-method#85": {
+      "en": "① add exponents  ②  prime factors  ③ simplify",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses3-method.js:111:8"
+      ]
+    },
+    "queses3-method#86": {
+      "en": "You can’t apply the laws until the bases are prime; simplifying comes last.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses3-method.js:112:15"
+      ]
+    },
+    "queses3-method#87": {
+      "en": "Prime-factorise first, then use the laws on the exponents, then tidy up.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses3-method.js:113:22"
+      ]
+    },
+    "queses3-method#88": {
+      "en": "Prime factors have to come first, because every law needs the bases to match",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:115:16"
+      ]
+    },
+    "queses3-method#89": {
+      "en": "no shared base, no law",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:115:99"
+      ]
+    },
+    "queses3-method#90": {
+      "en": "Only then can you multiply the brackets out and add or subtract the exponents",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:116:16"
+      ]
+    },
+    "queses3-method#91": {
+      "en": "power of a power, then product and quotient rules",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses3-method.js:116:100"
+      ]
+    },
+    "queses3-method#92": {
+      "en": "Simplifying is last — you cannot tidy an answer you have not worked out yet",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses3-method.js:117:16"
+      ]
+    },
+    "queses4-divorce#1": {
+      "en": "Common factor",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList",
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:12:16",
+        "queses4-divorce.js:17:24",
+        "queses4-divorce.js:18:24",
+        "queses4-divorce.js:19:26",
+        "queses4-divorce.js:20:26",
+        "queses4-divorce.js:67:172",
+        "queses4-divorce.js:71:166",
+        "queses4-divorce.js:75:169"
+      ]
+    },
+    "queses4-divorce#2": {
+      "en": "Difference of squares",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "mc.wrongs",
+        "optionList",
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:12:33",
+        "queses4-divorce.js:22:22",
+        "queses4-divorce.js:23:22",
+        "queses4-divorce.js:24:22",
+        "queses4-divorce.js:67:147",
+        "queses4-divorce.js:71:119",
+        "queses4-divorce.js:75:144"
+      ]
+    },
+    "queses4-divorce#3": {
+      "en": "Trinomial",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "mc.wrongs",
+        "optionList",
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:12:58",
+        "queses4-divorce.js:26:27",
+        "queses4-divorce.js:27:29",
+        "queses4-divorce.js:28:27",
+        "queses4-divorce.js:67:125",
+        "queses4-divorce.js:71:153",
+        "queses4-divorce.js:75:131"
+      ]
+    },
+    "queses4-divorce#4": {
+      "en": "Grouping",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "mc.wrongs",
+        "optionList",
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:12:71",
+        "queses4-divorce.js:30:32",
+        "queses4-divorce.js:31:33",
+        "queses4-divorce.js:32:32",
+        "queses4-divorce.js:67:189",
+        "queses4-divorce.js:71:183",
+        "queses4-divorce.js:75:110"
+      ]
+    },
+    "queses4-divorce#5": {
+      "en": "3ˣ⁺² − 3ˣ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:17:8"
+      ]
+    },
+    "queses4-divorce#6": {
+      "en": "Two terms that both contain 3ˣ → take out the common factor 3ˣ.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:17:46"
+      ]
+    },
+    "queses4-divorce#7": {
+      "en": "2ˣ⁺¹ + 2ˣ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:18:8"
+      ]
+    },
+    "queses4-divorce#8": {
+      "en": "Both terms contain 2ˣ → take out 2ˣ: 2ˣ(2 + 1).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:18:46"
+      ]
+    },
+    "queses4-divorce#9": {
+      "en": "5ˣ⁺¹ − 5ˣ⁻¹",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:19:8"
+      ]
+    },
+    "queses4-divorce#10": {
+      "en": "Both contain a power of 5 → take out the smallest, 5ˣ⁻¹.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:19:48"
+      ]
+    },
+    "queses4-divorce#11": {
+      "en": "7·2ˣ + 2ˣ⁺¹",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:20:8"
+      ]
+    },
+    "queses4-divorce#12": {
+      "en": "Both terms contain 2ˣ → factor it out.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:20:48"
+      ]
+    },
+    "queses4-divorce#13": {
+      "en": "2²ˣ − 9",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:22:8"
+      ]
+    },
+    "queses4-divorce#14": {
+      "en": "Two terms, a subtraction, both squares: (2ˣ)² − 3². Let k = 2ˣ → k² − 9.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:22:52"
+      ]
+    },
+    "queses4-divorce#15": {
+      "en": "9ˣ − 16",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:23:8"
+      ]
+    },
+    "queses4-divorce#16": {
+      "en": "9ˣ = (3ˣ)² and 16 = 4², a subtraction of two squares. Let k = 3ˣ → k² − 16.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:23:52"
+      ]
+    },
+    "queses4-divorce#17": {
+      "en": "25 − 4ˣ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:24:8"
+      ]
+    },
+    "queses4-divorce#18": {
+      "en": "5² − (2ˣ)², a difference of two squares. Let k = 2ˣ → 25 − k².",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:24:52"
+      ]
+    },
+    "queses4-divorce#19": {
+      "en": "3²ˣ − 3ˣ − 6",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:26:8",
+        "queses4-divorce.js:45:12"
+      ]
+    },
+    "queses4-divorce#20": {
+      "en": "Three terms with (3ˣ)², 3ˣ and a constant. Let k = 3ˣ → k² − k − 6.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:26:45"
+      ]
+    },
+    "queses4-divorce#21": {
+      "en": "2²ˣ − 5·2ˣ + 4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:27:8",
+        "queses4-divorce.js:43:12"
+      ]
+    },
+    "queses4-divorce#22": {
+      "en": "Three terms in 2ˣ. Let k = 2ˣ → k² − 5k + 4.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:27:47"
+      ]
+    },
+    "queses4-divorce#23": {
+      "en": "9ˣ + 3ˣ − 12",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:28:8",
+        "queses4-divorce.js:44:12"
+      ]
+    },
+    "queses4-divorce#24": {
+      "en": "9ˣ = (3ˣ)², so it’s k² + k − 12 with k = 3ˣ.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:28:45"
+      ]
+    },
+    "queses4-divorce#25": {
+      "en": "a·2ˣ + a + 2ˣ + 1",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:30:8"
+      ]
+    },
+    "queses4-divorce#26": {
+      "en": "Four terms in two pairs: a(2ˣ+1) + (2ˣ+1) = (a+1)(2ˣ+1).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:30:49"
+      ]
+    },
+    "queses4-divorce#27": {
+      "en": "x·3ˣ + 3ˣ + 2x + 2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:31:8"
+      ]
+    },
+    "queses4-divorce#28": {
+      "en": "Four terms: 3ˣ(x+1) + 2(x+1) = (3ˣ+2)(x+1).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:31:50"
+      ]
+    },
+    "queses4-divorce#29": {
+      "en": "p·5ˣ − 5ˣ + p − 1",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:32:8"
+      ]
+    },
+    "queses4-divorce#30": {
+      "en": "Four terms: 5ˣ(p−1) + (p−1) = (5ˣ+1)(p−1).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses4-divorce.js:32:49"
+      ]
+    },
+    "queses4-divorce#31": {
+      "en": "Which factorising method fits?<br><b>${it.e}</b>",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses4-divorce.js:36:60",
+        "queses4-divorce.js:37:60",
+        "queses4-divorce.js:38:60"
+      ]
+    },
+    "queses4-divorce#32": {
+      "en": "Count the terms; look for a common power, two squares, three terms, or two pairs.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses4-divorce.js:36:143"
+      ]
+    },
+    "queses4-divorce#33": {
+      "en": "2 squares & a minus = difference of squares · 3 terms = trinomial · shared power = common factor · 4 terms = grouping.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses4-divorce.js:37:143"
+      ]
+    },
+    "queses4-divorce#34": {
+      "en": "Remember 4ˣ = (2ˣ)² and 9ˣ = (3ˣ)² — that often reveals a square.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses4-divorce.js:38:143"
+      ]
+    },
+    "queses4-divorce#35": {
+      "en": "Let k = 2ˣ",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses4-divorce.js:43:33"
+      ]
+    },
+    "queses4-divorce#36": {
+      "en": "Let k = 2²ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:43:56"
+      ]
+    },
+    "queses4-divorce#37": {
+      "en": "Let k = x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:43:71",
+        "queses4-divorce.js:44:81",
+        "queses4-divorce.js:45:82",
+        "queses4-divorce.js:46:52",
+        "queses4-divorce.js:47:69"
+      ]
+    },
+    "queses4-divorce#38": {
+      "en": "Let k = 4",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:43:84"
+      ]
+    },
+    "queses4-divorce#39": {
+      "en": "Let k = 2ˣ; then 2²ˣ = k², giving k² − 5k + 4.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:43:103"
+      ]
+    },
+    "queses4-divorce#40": {
+      "en": "Let k = 3ˣ",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses4-divorce.js:44:31",
+        "queses4-divorce.js:45:31"
+      ]
+    },
+    "queses4-divorce#41": {
+      "en": "Let k = 9ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:44:54"
+      ]
+    },
+    "queses4-divorce#42": {
+      "en": "Let k = 9",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:44:68"
+      ]
+    },
+    "queses4-divorce#43": {
+      "en": "9ˣ = (3ˣ)², so let k = 3ˣ → k² + k − 12.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:44:100"
+      ]
+    },
+    "queses4-divorce#44": {
+      "en": "Let k = 3²ˣ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:45:54"
+      ]
+    },
+    "queses4-divorce#45": {
+      "en": "Let k = 6",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:45:69",
+        "queses4-divorce.js:46:79"
+      ]
+    },
+    "queses4-divorce#46": {
+      "en": "Let k = 3ˣ; 3²ˣ = k², giving k² − k − 6.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:45:101"
+      ]
+    },
+    "queses4-divorce#47": {
+      "en": "x − √x − 6",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:46:12"
+      ]
+    },
+    "queses4-divorce#48": {
+      "en": "Let k = √x",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:46:29",
+        "queses4-divorce.js:47:55"
+      ]
+    },
+    "queses4-divorce#49": {
+      "en": "Let k = x²",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:46:65"
+      ]
+    },
+    "queses4-divorce#50": {
+      "en": "x = (√x)², so let k = √x → k² − k − 6. (Remember √x = k can never be negative when you solve.)",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:46:98"
+      ]
+    },
+    "queses4-divorce#51": {
+      "en": "√x + ⁴√x − 2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses4-divorce.js:47:12"
+      ]
+    },
+    "queses4-divorce#52": {
+      "en": "Let k = ⁴√x",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses4-divorce.js:47:31"
+      ]
+    },
+    "queses4-divorce#53": {
+      "en": "Let k = 2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses4-divorce.js:47:82"
+      ]
+    },
+    "queses4-divorce#54": {
+      "en": "√x = (⁴√x)², so let k = ⁴√x → k² + k − 2.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:47:101"
+      ]
+    },
+    "queses4-divorce#55": {
+      "en": "Which substitution turns <b>${it.e}</b> into an ordinary quadratic?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses4-divorce.js:50:20"
+      ]
+    },
+    "queses4-divorce#56": {
+      "en": "Let k be the SMALLER power — the other term must be its square, k². (For baseˣ shapes, k = baseˣ.)",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses4-divorce.js:50:116"
+      ]
+    },
+    "queses4-divorce#57": {
+      "en": "After a trinomial gives roots like <b>k = 4</b> or <b>k = −9</b> (with k = 3ˣ), you keep <b>both</b> roots. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses4-divorce.js:55:5"
+      ]
+    },
+    "queses4-divorce#58": {
+      "en": "Can 3ˣ ever be a negative number?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses4-divorce.js:57:13"
+      ]
+    },
+    "queses4-divorce#59": {
+      "en": "False — 3ˣ is always positive, so k = −9 is rejected; only k = 4 (3ˣ = 4) gives a solution.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:57:63"
+      ]
+    },
+    "queses4-divorce#60": {
+      "en": "Always substitute back: k = 3ˣ, so the two branches read 3ˣ = 4 and 3ˣ = −9",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:59:14"
+      ]
+    },
+    "queses4-divorce#61": {
+      "en": "3 is a positive base, and a positive base can never reach a negative value",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:60:14"
+      ]
+    },
+    "queses4-divorce#62": {
+      "en": "3ˣ ≠ −9 ∴ no solution on that branch",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses4-divorce.js:60:95"
+      ]
+    },
+    "queses4-divorce#63": {
+      "en": "∴ false — only k = 4 survives, and stopping at k would lose the mark anyway",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:61:14"
+      ]
+    },
+    "queses4-divorce#64": {
+      "en": "An expression has <b>three terms</b> (a squared power, a single power and a constant). Which method?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses4-divorce.js:67:12"
+      ]
+    },
+    "queses4-divorce#65": {
+      "en": "Three terms in one power → trinomial (let k = baseˣ).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:67:207"
+      ]
+    },
+    "queses4-divorce#66": {
+      "en": "Count the terms first — three of them, and one is the square of another",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:68:20"
+      ]
+    },
+    "queses4-divorce#67": {
+      "en": "That is the K², K, constant shape, so let K = baseˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:69:20"
+      ]
+    },
+    "queses4-divorce#68": {
+      "en": "It becomes an ordinary quadratic in K, which factorises into two brackets",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:70:20"
+      ]
+    },
+    "queses4-divorce#69": {
+      "en": "and always substitute back at the end",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses4-divorce.js:70:100"
+      ]
+    },
+    "queses4-divorce#70": {
+      "en": "An expression has <b>two terms</b>, a subtraction, and both are perfect squares. Which method?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses4-divorce.js:71:12"
+      ]
+    },
+    "queses4-divorce#71": {
+      "en": "Two squares with a minus → difference of squares.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:71:201"
+      ]
+    },
+    "queses4-divorce#72": {
+      "en": "Count the terms — two of them, joined by a minus",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:72:20"
+      ]
+    },
+    "queses4-divorce#73": {
+      "en": "Both are perfect squares, so it fits a² − b² = (a − b)(a + b)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:73:20"
+      ]
+    },
+    "queses4-divorce#74": {
+      "en": "her “diff in □'s”",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses4-divorce.js:73:88"
+      ]
+    },
+    "queses4-divorce#75": {
+      "en": "With a plus between them it would not factorise at all",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:74:20"
+      ]
+    },
+    "queses4-divorce#76": {
+      "en": "the minus is what makes it work",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses4-divorce.js:74:81"
+      ]
+    },
+    "queses4-divorce#77": {
+      "en": "An expression has <b>four terms</b> that split into two matching pairs. Which method?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses4-divorce.js:75:12"
+      ]
+    },
+    "queses4-divorce#78": {
+      "en": "Four terms in two pairs → grouping.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses4-divorce.js:75:192"
+      ]
+    },
+    "queses4-divorce#79": {
+      "en": "Count the terms — four, which is too many for a trinomial",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:76:20"
+      ]
+    },
+    "queses4-divorce#80": {
+      "en": "Take a common factor out of the first pair and out of the second pair",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:77:20"
+      ]
+    },
+    "queses4-divorce#81": {
+      "en": "If the same bracket is left over in both, that bracket comes out as one factor",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses4-divorce.js:78:20"
+      ]
+    },
+    "queses4-divorce#82": {
+      "en": "that leftover bracket matching is the point of grouping",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses4-divorce.js:78:105"
+      ]
+    },
+    "queses4-divorce#83": {
+      "en": "The number of terms and their shape pick the method.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses4-divorce.js:81:57"
+      ]
+    },
+    "queses5-surds#1": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:22:15"
+      ]
+    },
+    "queses5-surds#2": {
+      "en": "y",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:22:20"
+      ]
+    },
+    "queses5-surds#3": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:22:25"
+      ]
+    },
+    "queses5-surds#4": {
+      "en": "m",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:22:30"
+      ]
+    },
+    "queses5-surds#5": {
+      "en": "Simplify <b>√a · √b</b> (same root; a, b ≥ 0).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:28:12"
+      ]
+    },
+    "queses5-surds#6": {
+      "en": "√(ab)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses5-surds.js:28:71"
+      ]
+    },
+    "queses5-surds#7": {
+      "en": "√(a+b)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:28:89"
+      ]
+    },
+    "queses5-surds#8": {
+      "en": "ab",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:28:99"
+      ]
+    },
+    "queses5-surds#9": {
+      "en": "√a + √b",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:28:105"
+      ]
+    },
+    "queses5-surds#10": {
+      "en": "Same root: multiply the insides — √a·√b = √(ab).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:28:122"
+      ]
+    },
+    "queses5-surds#11": {
+      "en": "Surd law ①: × and ÷ may go under the SAME root",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:29:20",
+        "queses5-surds.js:33:20"
+      ]
+    },
+    "queses5-surds#12": {
+      "en": "√a · √b = √(a × b) = √(ab)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:30:20"
+      ]
+    },
+    "queses5-surds#13": {
+      "en": "Check it on numbers: √4 · √9 = 2 × 3 = 6, and √36 = 6",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:31:20"
+      ]
+    },
+    "queses5-surds#14": {
+      "en": "the root sign does not disappear — the answer is still a surd",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:31:80"
+      ]
+    },
+    "queses5-surds#15": {
+      "en": "Simplify <b>√a ÷ √b</b> (same root; a ≥ 0, b &gt; 0).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:32:12"
+      ]
+    },
+    "queses5-surds#16": {
+      "en": "√(a/b)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses5-surds.js:32:78"
+      ]
+    },
+    "queses5-surds#17": {
+      "en": "√(a−b)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:32:97"
+      ]
+    },
+    "queses5-surds#18": {
+      "en": "a/b",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:32:107"
+      ]
+    },
+    "queses5-surds#19": {
+      "en": "√a − √b",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:32:114"
+      ]
+    },
+    "queses5-surds#20": {
+      "en": "Same root: divide the insides — √a ÷ √b = √(a/b).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:32:131"
+      ]
+    },
+    "queses5-surds#21": {
+      "en": "√a ÷ √b = √(a ÷ b) = √(a/b)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:34:20"
+      ]
+    },
+    "queses5-surds#22": {
+      "en": "Check it on numbers: √36 ÷ √4 = 6 ÷ 2 = 3, and √9 = 3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:35:20"
+      ]
+    },
+    "queses5-surds#23": {
+      "en": "the root stays — this is not a/b",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:35:80"
+      ]
+    },
+    "queses5-surds#24": {
+      "en": "Same root → you may combine the insides under one root for × and ÷.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses5-surds.js:38:57"
+      ]
+    },
+    "queses5-surds#25": {
+      "en": "Is this correct?<br><b>√a + √b = √(a + b)</b>",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses5-surds.js:43:5"
+      ]
+    },
+    "queses5-surds#26": {
+      "en": "Try numbers: √9 + √16 = 3 + 4 = 7, but √25 = 5.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses5-surds.js:45:13"
+      ]
+    },
+    "queses5-surds#27": {
+      "en": "No — the BIG NO-NO. You can never add the insides of two surds. √a + √b stays as it is.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:46:20"
+      ]
+    },
+    "queses5-surds#28": {
+      "en": "Test it with numbers you can work out: let a = 9 and b = 16",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:48:14"
+      ]
+    },
+    "queses5-surds#29": {
+      "en": "√9 + √16 = 3 + 4 = 7, but √(9 + 16) = √25 = 5",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:49:14"
+      ]
+    },
+    "queses5-surds#30": {
+      "en": "7 ≠ 5, so the statement is false",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:49:66"
+      ]
+    },
+    "queses5-surds#31": {
+      "en": "Surds combine under one root for × and ÷ only, never for + or −",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:50:14"
+      ]
+    },
+    "queses5-surds#32": {
+      "en": "her BIG NO-NO — √a + √b just stays as it is",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:50:84"
+      ]
+    },
+    "queses5-surds#33": {
+      "en": "Simplify <b>${a}√${v} − ${b}√${v}</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:64:14"
+      ]
+    },
+    "queses5-surds#34": {
+      "en": "Like surds add like terms: ${a}√${v} − ${b}√${v} = ${a - b}√${v}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses5-surds.js:66:16"
+      ]
+    },
+    "queses5-surds#35": {
+      "en": "Both terms carry the same surd, √${v}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:68:18"
+      ]
+    },
+    "queses5-surds#36": {
+      "en": "surd law ②: + and − need the same root AND the same inside",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:68:62"
+      ]
+    },
+    "queses5-surds#37": {
+      "en": "So only the numbers in front change: ${a} − ${b} = ${a - b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:69:18"
+      ]
+    },
+    "queses5-surds#38": {
+      "en": "the √${v} is carried through untouched — it never becomes ${v} or √(2${v})",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:70:40"
+      ]
+    },
+    "queses5-surds#39": {
+      "en": "Simplify <b>√${v} + √${v}</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:79:14"
+      ]
+    },
+    "queses5-surds#40": {
+      "en": "Two of the same surd: √${v} + √${v} = 2√${v} (just like ${v} + ${v} = 2${v}).",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses5-surds.js:81:16"
+      ]
+    },
+    "queses5-surds#41": {
+      "en": "Write the invisible coefficients in: 1√${v} + 1√${v}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:83:18"
+      ]
+    },
+    "queses5-surds#42": {
+      "en": "keeping the 1 visible is the scaffold",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:83:77"
+      ]
+    },
+    "queses5-surds#43": {
+      "en": "Same root and same inside, so only the front numbers add: 1 + 1 = 2",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:84:18"
+      ]
+    },
+    "queses5-surds#44": {
+      "en": "exactly like ${v} + ${v} = 2${v} — the inside never doubles",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:85:33"
+      ]
+    },
+    "queses5-surds#45": {
+      "en": "Simplify <b>${a}·${usup(n)}√${r} + ${b}·${usup(n)}√${r}</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:96:14"
+      ]
+    },
+    "queses5-surds#46": {
+      "en": "Same surd (${usup(n)}√${r}), so add the coefficients: ${a} + ${b} = ${a + b} → ${a + b}·${usup(n)}√${r}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses5-surds.js:98:16"
+      ]
+    },
+    "queses5-surds#47": {
+      "en": "Both terms are the same surd, ${usup(n)}√${r} — same root index ${n}, same inside ${r}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:100:18"
+      ]
+    },
+    "queses5-surds#48": {
+      "en": "so they are like terms",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:100:111"
+      ]
+    },
+    "queses5-surds#49": {
+      "en": "Add only the numbers in front: ${a} + ${b} = ${a + b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:101:18"
+      ]
+    },
+    "queses5-surds#50": {
+      "en": "the inside stays ${r} and the root stays ${n} — neither of them adds",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:102:51"
+      ]
+    },
+    "queses5-surds#51": {
+      "en": "Only surds with the SAME root and SAME inside can be added — combine the numbers in front.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses5-surds.js:108:57"
+      ]
+    },
+    "queses5-surds#52": {
+      "en": "Where does the <b>inside power</b> go when you write ⁿ√(xᵃ) = x^(?/?)?",
+      "kind": "string",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:115:10"
+      ]
+    },
+    "queses5-surds#53": {
+      "en": "On the top (numerator)",
+      "kind": "string",
+      "slots": [
+        "correct"
+      ],
+      "where": [
+        "queses5-surds.js:115:93"
+      ]
+    },
+    "queses5-surds#54": {
+      "en": "On the bottom (denominator)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:116:16"
+      ]
+    },
+    "queses5-surds#55": {
+      "en": "It disappears",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:116:47"
+      ]
+    },
+    "queses5-surds#56": {
+      "en": "It stays inside",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:116:64"
+      ]
+    },
+    "queses5-surds#57": {
+      "en": "Inside power → top; root index → bottom: ⁿ√(xᵃ) = x^(a/n).",
+      "kind": "string",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses5-surds.js:117:12"
+      ]
+    },
+    "queses5-surds#58": {
+      "en": "Her conversion hook: inside √ = top of the fraction; outside √ = bottom of the fraction",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:119:14"
+      ]
+    },
+    "queses5-surds#59": {
+      "en": "The a is written inside the root, so it goes on top",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:120:14"
+      ]
+    },
+    "queses5-surds#60": {
+      "en": "∴ ⁿ√(xᵃ) = x^(a/n)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:121:14"
+      ]
+    },
+    "queses5-surds#61": {
+      "en": "check it on √(x²) = x^(2/2) = x",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:121:39"
+      ]
+    },
+    "queses5-surds#62": {
+      "en": "Simplify <b>${idx}√(${upw(v, a)})</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:133:12"
+      ]
+    },
+    "queses5-surds#63": {
+      "en": "Turn the root into a fractional exponent: inside power on top, root index underneath",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:137:16"
+      ]
+    },
+    "queses5-surds#64": {
+      "en": "the root here is ${n}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:138:63"
+      ]
+    },
+    "queses5-surds#65": {
+      "en": "${a} ÷ ${n} = ${k}, so the answer is ${upw(v, k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:139:16"
+      ]
+    },
+    "queses5-surds#66": {
+      "en": "divide the exponents — never multiply or add them",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:139:72"
+      ]
+    },
+    "queses5-surds#67": {
+      "en": "Inside the root → on top of the fraction; the root index → on the bottom.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses5-surds.js:145:57"
+      ]
+    },
+    "queses5-surds#68": {
+      "en": "A <b>negative</b> number is raised to an <b>even</b> power (e.g. (−5)²). The result is:",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:151:12"
+      ]
+    },
+    "queses5-surds#69": {
+      "en": "Positive",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:151:112",
+        "queses5-surds.js:155:132",
+        "queses5-surds.js:159:110"
+      ]
+    },
+    "queses5-surds#70": {
+      "en": "Negative",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:151:133",
+        "queses5-surds.js:155:111",
+        "queses5-surds.js:159:122"
+      ]
+    },
+    "queses5-surds#71": {
+      "en": "Zero",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:151:145",
+        "queses5-surds.js:155:144",
+        "queses5-surds.js:159:134"
+      ]
+    },
+    "queses5-surds#72": {
+      "en": "Non-real",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:151:153",
+        "queses5-surds.js:155:152",
+        "queses5-surds.js:159:89",
+        "queses5-surds.js:163:110"
+      ]
+    },
+    "queses5-surds#73": {
+      "en": "An even power of a negative is positive: (−5)² = 25.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:151:171"
+      ]
+    },
+    "queses5-surds#74": {
+      "en": "Write it out: (−5)² = (−5)(−5)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:152:20"
+      ]
+    },
+    "queses5-surds#75": {
+      "en": "The two minuses pair up and cancel, giving +25",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:153:20"
+      ]
+    },
+    "queses5-surds#76": {
+      "en": "an even power means every minus finds a partner",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:153:73"
+      ]
+    },
+    "queses5-surds#77": {
+      "en": "∴ positive",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:154:20"
+      ]
+    },
+    "queses5-surds#78": {
+      "en": "A <b>negative</b> number is raised to an <b>odd</b> power (e.g. (−5)³). The result is:",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:155:12"
+      ]
+    },
+    "queses5-surds#79": {
+      "en": "An odd power of a negative is negative: (−5)³ = −125.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:155:170"
+      ]
+    },
+    "queses5-surds#80": {
+      "en": "Write it out: (−5)³ = (−5)(−5)(−5)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:156:20"
+      ]
+    },
+    "queses5-surds#81": {
+      "en": "The first two minuses cancel to +25, and the last one is left over: 25 × (−5) = −125",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:157:20"
+      ]
+    },
+    "queses5-surds#82": {
+      "en": "an odd power always leaves one minus without a partner",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:157:111"
+      ]
+    },
+    "queses5-surds#83": {
+      "en": "∴ negative",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:158:20"
+      ]
+    },
+    "queses5-surds#84": {
+      "en": "What kind of value is <b>√(−4)</b> (an even root of a negative)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:159:12"
+      ]
+    },
+    "queses5-surds#85": {
+      "en": "An even root of a negative number is non-real.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:159:148"
+      ]
+    },
+    "queses5-surds#86": {
+      "en": "√(−4) asks: what number, squared, gives −4?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:160:20"
+      ]
+    },
+    "queses5-surds#87": {
+      "en": "2² = 4 and (−2)² = 4 — squaring kills the minus every time, so nothing real squares to a negative",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:161:20"
+      ]
+    },
+    "queses5-surds#88": {
+      "en": "∴ non-real",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:162:20"
+      ]
+    },
+    "queses5-surds#89": {
+      "en": "her word for this one: non-real, not “no solution”",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:162:37"
+      ]
+    },
+    "queses5-surds#90": {
+      "en": "What is <b>³√(−8)</b> (an odd root of a negative)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queses5-surds.js:163:12"
+      ]
+    },
+    "queses5-surds#91": {
+      "en": "−2 (real and negative)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queses5-surds.js:163:75"
+      ]
+    },
+    "queses5-surds#92": {
+      "en": "An odd root of a negative is real and negative: ³√(−8) = −2.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:163:140"
+      ]
+    },
+    "queses5-surds#93": {
+      "en": "³√(−8) asks: what number, cubed, gives −8?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:164:20"
+      ]
+    },
+    "queses5-surds#94": {
+      "en": "an odd power keeps the minus, so an odd root is allowed to be negative",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:165:52"
+      ]
+    },
+    "queses5-surds#95": {
+      "en": "∴ −2, which is real",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:166:20"
+      ]
+    },
+    "queses5-surds#96": {
+      "en": "this is where an odd root differs from an even one",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:166:46"
+      ]
+    },
+    "queses5-surds#97": {
+      "en": "Even power/root behaves differently from odd; even root of a negative is non-real.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses5-surds.js:169:58"
+      ]
+    },
+    "queses5-surds#98": {
+      "en": "x = ${r} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:178:30"
+      ]
+    },
+    "queses5-surds#99": {
+      "en": "x = −${r} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:178:47"
+      ]
+    },
+    "queses5-surds#100": {
+      "en": "x = ±√${r}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:178:65"
+      ]
+    },
+    "queses5-surds#101": {
+      "en": "no real solution",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses5-surds.js:178:79"
+      ]
+    },
+    "queses5-surds#102": {
+      "en": "Taking the square root of both sides gives x = ±${r} (two answers).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:180:7"
+      ]
+    },
+    "queses5-surds#103": {
+      "en": "x = ±${r} — an even root of a positive gives two answers.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses5-surds.js:181:7"
+      ]
+    },
+    "queses5-surds#104": {
+      "en": "Solve <b>x² = ${k}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses5-surds.js:183:21"
+      ]
+    },
+    "queses5-surds#105": {
+      "en": "x = ±${r}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses5-surds.js:183:48"
+      ]
+    },
+    "queses5-surds#106": {
+      "en": "When you square-root both sides of an equation, remember the ± (both signs work).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses5-surds.js:184:15"
+      ]
+    },
+    "queses5-surds#107": {
+      "en": "x² = ${k}, so take the square root of BOTH sides",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:186:16"
+      ]
+    },
+    "queses5-surds#108": {
+      "en": "x = ±√${k} = ±${r}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:187:16"
+      ]
+    },
+    "queses5-surds#109": {
+      "en": "the ± appears the moment an even root is taken",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:187:41"
+      ]
+    },
+    "queses5-surds#110": {
+      "en": "Both really work: (${r})² = ${k} and (−${r})² = ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses5-surds.js:188:16"
+      ]
+    },
+    "queses5-surds#111": {
+      "en": "this is an equation, so it has two solutions",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses5-surds.js:188:75"
+      ]
+    }
+  },
+  "optionLists": {
+    "queses4-divorce.js:TYPES": [
+      "queses4-divorce#1",
+      "queses4-divorce#2",
+      "queses4-divorce#3",
+      "queses4-divorce#4"
+    ]
+  },
+  "leftovers": [],
+  "words": 3467,
+  "skippedLists": [
+    "queses2-traps.js:LETTERS [x, a, m, p]",
+    "queses5-surds.js:VARS [x, y, a, m]"
+  ]
+}

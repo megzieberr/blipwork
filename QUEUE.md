@@ -19,11 +19,11 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T89 | hub tiles: js/config.js chapter names, round titles, blurbs | 225 items, 1 469 words | verify-wrap (moved up from "Everything else" 2026-10-17 18:35; done 18:50, Fable catchup session, one Opus translator ~60k; af_check clean, verify-wrap EN = baseline and AF green; G2 items it leaned on: mond-en-snor, vlerkies, onbepaald, inklinasiehoek, tweerigtingtabel, DP for TP)
 ### Exponents & Surds
 - ☑ 2026-10-17 T01 | concepts: the `exp` block (js/concepts/exp.js after S4) | ~860 words | counted by af_extract 2026-10-17
-- ⏳ 2026-10-17 19:18 T02 | hub rounds: queses1-laws … queses5-surds (5 files) | ~3 420 words | verify page: verify-exp.html
+- ☑ 2026-10-17 T02 | hub rounds: queses1-laws … queses5-surds (5 files) | ~3 420 words | verify page: verify-exp.html
 - ☐ T03 | hub rounds: queses6-conjugates … queses8-nosolution (3 files) | ~1 692 words | verify page: verify-exp.html
-- ☐ T04 | exam: cards-exp, exp-conjugates-and-rationalising, exp-first-step-and-method (3 files) | ~1 818 words | verify-exam.html
-- ☐ T05 | exam: exp-level4, exp-no-solution-and-strategy (2 files) | ~3 266 words | verify-exam.html
-- ☐ T06 | exam: exp-siblings-exponent-expressions, exp-siblings-exponential-equations, exp-siblings-rational-exponents-numeric (3 files) | ~3 163 words | verify-exam.html
+- ⏳ 2026-10-17 19:30 T04 | exam: cards-exp, exp-conjugates-and-rationalising, exp-first-step-and-method (3 files) | ~1 818 words | verify-exam.html
+- ⏳ 2026-10-17 19:30 T05 | exam: exp-level4, exp-no-solution-and-strategy (2 files) | ~3 266 words | verify-exam.html
+- ⏳ 2026-10-17 19:30 T06 | exam: exp-siblings-exponent-expressions, exp-siblings-exponential-equations, exp-siblings-rational-exponents-numeric (3 files) | ~3 163 words | verify-exam.html
 - ☐ T07 | exam: exp-siblings-rationalise, exp-siblings-surd-proofs, exp-siblings-surds (3 files) | ~3 173 words | verify-exam.html
 
 ### Equations & Inequalities
