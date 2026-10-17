@@ -15,6 +15,7 @@
    ============================================================ */
 import { randInt, pick, shuffled } from "./ui.js";
 import { fmtComma } from "./check.js";
+import { L } from "./lang.js";
 
 export const C = (v) => fmtComma(v);
 export { randInt, pick, shuffled };
@@ -209,4 +210,4 @@ export function eqStr(cv, name = "y") {
 export const ineqLess = (x) => `x &lt; ${C(x)}`;        // x < a
 export const ineqGreater = (x) => `x > ${C(x)}`;       // x > a
 export const ineqBetween = (a, b) => `${C(a)} &lt; x &lt; ${C(b)}`;
-export const ineqOutside = (a, b) => `x &lt; ${C(a)} or x > ${C(b)}`;
+export const ineqOutside = (a, b) => L(`x &lt; ${C(a)} or x > ${C(b)}`, `x &lt; ${C(a)} of x > ${C(b)}`);

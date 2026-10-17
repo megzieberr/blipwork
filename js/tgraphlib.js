@@ -19,6 +19,7 @@
    ============================================================ */
 import { fmtComma } from "./check.js";
 import { randInt, pick, shuffled } from "./ui.js";
+import { L } from "./lang.js";
 export { randInt, pick, shuffled };
 
 const D2R = Math.PI / 180;
@@ -125,7 +126,7 @@ export function eqStr(cv, name = "y") {
 
 export function periodStr(cv) { return `${nstr(periodOf(cv))}°`; }
 export function ampStr(cv) {
-  if (cv.fn === "tan") return "undefined";
+  if (cv.fn === "tan") return L("undefined", "onbepaald");
   const A = amplitudeOf(cv);
   return A === 0.5 ? "½" : nstr(A);
 }
@@ -171,4 +172,6 @@ export function randCurve(opts = {}) {
   ])();
 }
 
-export const FN_NAME = { sin: "sine", cos: "cosine", tan: "tangent" };
+/* the learner's name for each fn id; the ids sin / cos / tan are the data
+   (trig names stay English in Afrikaans: "'n sin-grafiek", row T92) */
+export const FN_NAME = { sin: L("sine", "sin"), cos: L("cosine", "cos"), tan: L("tangent", "tan") };

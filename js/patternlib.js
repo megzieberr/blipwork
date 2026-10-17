@@ -11,6 +11,7 @@
    ============================================================ */
 import { fmtComma } from "./check.js";
 import { randInt, pick, shuffled } from "./ui.js";
+import { L as afL } from "./lang.js";   // afL: randQuadExtreme has its own local L
 
 const MINUS = "−";                                   // U+2212, not a hyphen
 export const C = (v) => fmtComma(v).replace(/^-/, MINUS);   // SA real minus for negatives
@@ -30,13 +31,16 @@ export function classify(t) {
   if (allEqual(sd)) return "quadratic";
   if (t.every((x) => Math.abs(x) > EPS)) {
     const r = t[1] / t[0];
-    if (t.slice(1).every((x, i) => Math.abs(x / t[i] - r) < 1e-6)) return "geometric";
+    if (t.slice(1).every((x, i) => Math.abs(x / t[i] - r) < 1e-6)) return afL("geometric", "geometric");   // an id: twin stays English (T92)
   }
   return "other";
 }
+/* the learner's words for classify()'s ids (row T92). quadratic stays
+   English for now: questnp7 offers L("quadratic", "quadratic") as an
+   option beside this label, so a twin here would show both words */
 export const classifyName = {
-  arithmetic: "arithmetic (linear)", quadratic: "quadratic", geometric: "geometric",
-  constant: "constant", other: "none of these",
+  arithmetic: afL("arithmetic (linear)", "rekenkundig (lineêr)"), quadratic: "quadratic", geometric: afL("geometric", "meetkundig"),
+  constant: "constant", other: afL("none of these", "geen van hierdie"),
 };
 
 /* ---- arithmetic ---- */
@@ -58,7 +62,9 @@ export const quadSeq = (a, b, c, len) => Array.from({ length: len }, (_, i) => {
 
 /* ---- min / max (turning point of the pattern's parabola) ---- */
 export const turningN = (a, b) => -b / (2 * a);
-export const extremeKind = (a) => (a > 0 ? "minimum" : "maximum");
+/* "minimum" is the same word in Afrikaans and is the one value compared
+   (questnp5: kind === "minimum"); only "maximum" gets a twin (T92) */
+export const extremeKind = (a) => (a > 0 ? "minimum" : afL("maximum", "maksimum"));
 /* the EXTREME term is at the natural number n nearest the turning point */
 export const extremeTermN = (a, b) => Math.max(1, Math.round(turningN(a, b)));
 

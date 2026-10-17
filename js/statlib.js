@@ -3,6 +3,8 @@
    hand-typed and can't be wrong). Ungrouped-data conventions
    follow the CAPS rounding rule for quartile positions.
    ============================================================ */
+import { L } from "./lang.js";
+
 export function sortAsc(a) { return a.slice().sort((x, y) => x - y); }
 export function sum(a) { return a.reduce((s, v) => s + v, 0); }
 export function mean(a) { return sum(a) / a.length; }
@@ -57,11 +59,11 @@ export function percentilePos(n, p) { return (n + 1) * p / 100; }
 /* describe how a quartile position rounds, for worked solutions */
 export function roundNote(pos) {
   const fr = pos - Math.floor(pos);
-  if (fr < 1e-6) return `position ${comma(pos)}`;
-  if (Math.abs(fr - 0.5) < 1e-6) return `${comma(pos)} → middle of the two values either side`;
-  if (Math.abs(fr - 0.25) < 1e-6) return `${comma(pos)} → round down to position ${Math.floor(pos)}`;
-  if (Math.abs(fr - 0.75) < 1e-6) return `${comma(pos)} → round up to position ${Math.ceil(pos)}`;
-  return `position ${comma(pos)}`;
+  if (fr < 1e-6) return L(`position ${comma(pos)}`, `posisie ${comma(pos)}`);
+  if (Math.abs(fr - 0.5) < 1e-6) return L(`${comma(pos)} → middle of the two values either side`, `${comma(pos)} → die middel van die twee waardes weerskante`);
+  if (Math.abs(fr - 0.25) < 1e-6) return L(`${comma(pos)} → round down to position ${Math.floor(pos)}`, `${comma(pos)} → rond na onder af tot posisie ${Math.floor(pos)}`);
+  if (Math.abs(fr - 0.75) < 1e-6) return L(`${comma(pos)} → round up to position ${Math.ceil(pos)}`, `${comma(pos)} → rond na bo af tot posisie ${Math.ceil(pos)}`);
+  return L(`position ${comma(pos)}`, `posisie ${comma(pos)}`);
 }
 function comma(n) { return String(Math.round(n * 1000) / 1000).replace(".", ","); }
 

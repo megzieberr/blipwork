@@ -1,0 +1,328 @@
+{
+  "unit": "T92",
+  "generated": "2026-10-17T21:48:33.999Z",
+  "files": [
+    "js/measlib.js",
+    "js/finlib.js",
+    "js/patternlib.js",
+    "js/quests/_patterns.js",
+    "js/tgraphlib.js",
+    "js/analyticslib.js",
+    "js/funclib.js",
+    "js/problib.js",
+    "js/statlib.js",
+    "js/triglib.js"
+  ],
+  "items": {
+    "measlib#1": {
+      "en": "cube",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:25:25",
+        "measlib.js:97:66"
+      ],
+      "af": "kubus"
+    },
+    "measlib#2": {
+      "en": "rectangular prism",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:26:25"
+      ],
+      "af": "reghoekige prisma"
+    },
+    "measlib#3": {
+      "en": "triangular prism",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:27:25"
+      ],
+      "af": "driehoekige prisma"
+    },
+    "measlib#4": {
+      "en": "cylinder",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:28:25",
+        "measlib.js:100:84",
+        "measlib.js:156:33",
+        "measlib.js:157:33"
+      ],
+      "af": "silinder"
+    },
+    "measlib#5": {
+      "en": "cone",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:29:25",
+        "measlib.js:101:76",
+        "measlib.js:105:43",
+        "measlib.js:137:42"
+      ],
+      "af": "keël"
+    },
+    "measlib#6": {
+      "en": "square-based pyramid",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:30:25"
+      ],
+      "af": "vierkantige piramide"
+    },
+    "measlib#7": {
+      "en": "sphere",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:31:25",
+        "measlib.js:103:67"
+      ],
+      "af": "sfeer"
+    },
+    "measlib#8": {
+      "en": "hemisphere",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:32:25",
+        "measlib.js:104:71"
+      ],
+      "af": "halfsfeer"
+    },
+    "measlib#9": {
+      "en": "closed (both ends)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:43:11"
+      ],
+      "af": "geslote (albei ente)"
+    },
+    "measlib#10": {
+      "en": "open at the top",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:44:11"
+      ],
+      "af": "oop bo"
+    },
+    "measlib#11": {
+      "en": "open at the top and bottom",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:45:11"
+      ],
+      "af": "oop bo en onder"
+    },
+    "measlib#12": {
+      "en": "2πr² + πrh",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "measlib.js:64:40",
+        "measlib.js:65:32",
+        "measlib.js:76:19"
+      ],
+      "af": "2πr² + πrh"
+    },
+    "patternlib#1": {
+      "en": "geometric",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "patternlib.js:34:79",
+        "patternlib.js:42:106"
+      ],
+      "af": "geometric"
+    },
+    "patternlib#2": {
+      "en": "arithmetic (linear)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "patternlib.js:42:19"
+      ],
+      "af": "rekenkundig (lineêr)"
+    },
+    "patternlib#3": {
+      "en": "none of these",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "patternlib.js:43:36"
+      ],
+      "af": "geen van hierdie"
+    },
+    "patternlib#4": {
+      "en": "maximum",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "patternlib.js:67:60"
+      ],
+      "af": "maksimum"
+    },
+    "tgraphlib#1": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "tgraphlib.js:129:33"
+      ],
+      "af": "onbepaald"
+    },
+    "tgraphlib#2": {
+      "en": "sine",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "tgraphlib.js:177:33"
+      ],
+      "af": "sin"
+    },
+    "tgraphlib#3": {
+      "en": "cosine",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "tgraphlib.js:177:56"
+      ],
+      "af": "cos"
+    },
+    "tgraphlib#4": {
+      "en": "tangent",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "tgraphlib.js:177:81"
+      ],
+      "af": "tan"
+    },
+    "analyticslib#1": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "analyticslib.js:45:46"
+      ],
+      "af": "onbepaald"
+    },
+    "funclib#1": {
+      "en": "x &lt; ${C(a)} or x > ${C(b)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "funclib.js:213:40"
+      ],
+      "af": "x &lt; ${C(a)} of x > ${C(b)}"
+    },
+    "statlib#1": {
+      "en": "position ${comma(pos)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "statlib.js:62:27",
+        "statlib.js:66:12"
+      ],
+      "af": "posisie ${comma(pos)}"
+    },
+    "statlib#2": {
+      "en": "${comma(pos)} → middle of the two values either side",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "statlib.js:63:43"
+      ],
+      "af": "${comma(pos)} → die middel van die twee waardes weerskante"
+    },
+    "statlib#3": {
+      "en": "${comma(pos)} → round down to position ${Math.floor(pos)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "statlib.js:64:44"
+      ],
+      "af": "${comma(pos)} → rond na onder af tot posisie ${Math.floor(pos)}"
+    },
+    "statlib#4": {
+      "en": "${comma(pos)} → round up to position ${Math.ceil(pos)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "statlib.js:65:44"
+      ],
+      "af": "${comma(pos)} → rond na bo af tot posisie ${Math.ceil(pos)}"
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 55,
+  "afConflicts": [
+    "measlib.js: cube",
+    "measlib.js: cylinder",
+    "measlib.js: cone",
+    "measlib.js: sphere",
+    "measlib.js: hemisphere",
+    "patternlib.js: geometric"
+  ]
+}

@@ -14,6 +14,7 @@
    ============================================================ */
 import { randInt, pick, shuffled } from "./ui.js";
 import { fmtComma } from "./check.js";
+import { L } from "./lang.js";
 
 export const C = (v) => fmtComma(v);
 export const Cdp = (v, dp) => fmtComma(v, dp);
@@ -41,7 +42,7 @@ export function gradient(A, B) {
 /* returns a reduced { n, d, str } for Δy/Δx, real minus, "/" slash.
    Vertical → str "undefined"; horizontal → "0". */
 export function gradFrac(dy, dx) {
-  if (dx === 0) return { n: dy, d: 0, str: "undefined", vertical: true };
+  if (dx === 0) return { n: dy, d: 0, str: L("undefined", "onbepaald"), vertical: true };
   if (dy === 0) return { n: 0, d: 1, str: "0" };
   const sign = dy * dx < 0 ? "−" : "";
   let n = Math.abs(dy), d = Math.abs(dx);

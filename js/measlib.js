@@ -18,17 +18,18 @@
    ============================================================ */
 import { randInt, pick, shuffled } from "./ui.js";
 import { rng } from "./rng.js";
+import { L } from "./lang.js";
 
 /* ---- the correct formulas, in the chapter's own notation ---- */
 export const SOLID = {
-  cube:       { name: "cube",                 vol: "ℓ³",            sa: "6ℓ²" },
-  prism:      { name: "rectangular prism",    vol: "ℓ · b · h",    sa: "2(ℓb + ℓh + bh)" },
-  triPrism:   { name: "triangular prism",     vol: "½ · b · ⊥h · H", sa: "b·⊥h + H(a + b + c)" },
-  cylinder:   { name: "cylinder",             vol: "πr²h",         sa: "2πr² + 2πrh" },     // closed
-  cone:       { name: "cone",                 vol: "⅓πr²H",        sa: "πr² + πrh" },        // h = slant, H = perp
-  pyramid:    { name: "square-based pyramid", vol: "⅓ℓ²H",         sa: "ℓ² + 2ℓh" },         // h = slant, H = perp
-  sphere:     { name: "sphere",               vol: "4/3·πr³",      sa: "4πr²" },
-  hemisphere: { name: "hemisphere",           vol: "⅔πr³",         sa: "3πr²" },             // flat face exposed
+  cube:       { name: L("cube", "kubus"),                         vol: "ℓ³",            sa: "6ℓ²" },
+  prism:      { name: L("rectangular prism", "reghoekige prisma"), vol: "ℓ · b · h",    sa: "2(ℓb + ℓh + bh)" },
+  triPrism:   { name: L("triangular prism", "driehoekige prisma"), vol: "½ · b · ⊥h · H", sa: "b·⊥h + H(a + b + c)" },
+  cylinder:   { name: L("cylinder", "silinder"),                  vol: "πr²h",         sa: "2πr² + 2πrh" },     // closed
+  cone:       { name: L("cone", "keël"),                          vol: "⅓πr²H",        sa: "πr² + πrh" },        // h = slant, H = perp
+  pyramid:    { name: L("square-based pyramid", "vierkantige piramide"), vol: "⅓ℓ²H",         sa: "ℓ² + 2ℓh" },         // h = slant, H = perp
+  sphere:     { name: L("sphere", "sfeer"),                       vol: "4/3·πr³",      sa: "4πr²" },
+  hemisphere: { name: L("hemisphere", "halfsfeer"),               vol: "⅔πr³",         sa: "3πr²" },             // flat face exposed
 };
 
 /* surface-area of a cylinder by which ends are open (the chapter's
@@ -39,9 +40,9 @@ export const CYL_SA = {
   both: "2πrh",          // open top & bottom (pipe) → curved side only
 };
 export const CYL_SA_LABEL = {
-  none: "closed (both ends)",
-  top:  "open at the top",
-  both: "open at the top and bottom",
+  none: L("closed (both ends)", "geslote (albei ente)"),
+  top:  L("open at the top", "oop bo"),
+  both: L("open at the top and bottom", "oop bo en onder"),
 };
 
 /* distractor pools — plausible-but-wrong formulas, kept distinct from
@@ -60,8 +61,8 @@ export const SA_WRONG = {
   cube:       ["ℓ³", "4ℓ²", "6ℓ"],
   prism:      ["ℓ · b · h", "ℓb + ℓh + bh", "2(ℓ + b + h)"],
   triPrism:   ["½ · b · ⊥h · H", "b·⊥h + (a + b + c)", "H(a + b + c)"],
-  cylinder:   ["πr² + 2πrh", "2πrh", "2πr² + πrh", "πr²h"],
-  cone:       ["πr² + 2πrh", "2πr² + πrh", "πr²H", "⅓πr²H"],
+  cylinder:   ["πr² + 2πrh", "2πrh", L("2πr² + πrh", "2πr² + πrh"), "πr²h"],
+  cone:       ["πr² + 2πrh", L("2πr² + πrh", "2πr² + πrh"), "πr²H", "⅓πr²H"],
   pyramid:    ["2ℓ² + 2ℓh", "ℓ² + ℓh", "⅓ℓ²H", "4ℓh"],
   sphere:     ["4/3·πr³", "2πr²", "πr²", "4πr"],
   hemisphere: ["2πr²", "4πr²", "⅔πr³", "πr²"],
@@ -72,7 +73,7 @@ export const SA_WRONG = {
 export function cylSaOptions(open) {
   const correct = CYL_SA[open];
   const others = Object.values(CYL_SA).filter(f => f !== correct);
-  const extra = "2πr² + πrh";
+  const extra = L("2πr² + πrh", "2πr² + πrh");
   const wrongs = shuffled([...others, extra]).slice(0, 3);
   return { correct, wrongs };
 }
@@ -89,16 +90,19 @@ export function wrongs(pool, correct, n = 3) {
    FIGURE BUILDERS → to-scale specs for the solid engine. Random
    (but sensible) proportions; labels are letters, matching the
    formulas above. accent is passed in by the quest.
+   The engine's shape ids ("cube", "cone" ...) are DATA: their L() twins
+   stay byte-equal to the English (row T92), only SOLID[...].name above
+   is the learner's word.
    ============================================================ */
-export function figCube(acc)  { return { type: "solid", shape: "cube", accent: acc, s: randInt(5, 8) }; }
+export function figCube(acc)  { return { type: "solid", shape: L("cube", "cube"), accent: acc, s: randInt(5, 8) }; }
 export function figPrism(acc) { return { type: "solid", shape: "box", accent: acc, l: randInt(7, 10), b: randInt(4, 6), h: randInt(5, 8) }; }
 export function figTriPrism(acc) { return { type: "solid", shape: "triPrism", accent: acc, b: randInt(5, 7), th: randInt(4, 6), L: randInt(8, 11) }; }
-export function figCylinder(acc, open = "none") { return { type: "solid", shape: "cylinder", accent: acc, r: randInt(3, 5), h: randInt(7, 11), open }; }
-export function figCone(acc, opts = {}) { return { type: "solid", shape: "cone", accent: acc, r: randInt(4, 6), h: randInt(7, 10), ...opts }; }
+export function figCylinder(acc, open = "none") { return { type: "solid", shape: L("cylinder", "cylinder"), accent: acc, r: randInt(3, 5), h: randInt(7, 11), open }; }
+export function figCone(acc, opts = {}) { return { type: "solid", shape: L("cone", "cone"), accent: acc, r: randInt(4, 6), h: randInt(7, 10), ...opts }; }
 export function figPyramid(acc, opts = {}) { return { type: "solid", shape: "pyramid", accent: acc, s: randInt(6, 8), h: randInt(7, 10), ...opts }; }
-export function figSphere(acc) { return { type: "solid", shape: "sphere", accent: acc, r: randInt(4, 6) }; }
-export function figHemisphere(acc) { return { type: "solid", shape: "hemisphere", accent: acc, r: randInt(4, 6) }; }
-export function figComposite(acc, top = "cone", opts = {}) {
+export function figSphere(acc) { return { type: "solid", shape: L("sphere", "sphere"), accent: acc, r: randInt(4, 6) }; }
+export function figHemisphere(acc) { return { type: "solid", shape: L("hemisphere", "hemisphere"), accent: acc, r: randInt(4, 6) }; }
+export function figComposite(acc, top = L("cone", "cone"), opts = {}) {
   return { type: "solid", shape: "composite", accent: acc, r: randInt(3, 5), hCyl: randInt(6, 9), top, hTop: randInt(5, 8), ...opts };
 }
 
@@ -130,7 +134,7 @@ export function pyramidTriple() {
 /* cone figure with the internal right triangle. unknown: "H" | "slant" | null
    (null + letters=true → plain letters r/H/h for concept questions). */
 export function figConeHeight(acc, t, unknown, letters = false) {
-  const base = { type: "solid", shape: "cone", accent: acc, r: t.r, h: t.H, heightTri: true };
+  const base = { type: "solid", shape: L("cone", "cone"), accent: acc, r: t.r, h: t.H, heightTri: true };
   if (letters) return { ...base, rLabel: "r", hLabel: "H", slantLabel: "h" };
   return { ...base,
     rLabel: `r = ${t.r}`,
@@ -149,8 +153,8 @@ export function figPyramidHeight(acc, t, unknown, letters = false) {
 /* a tall-thin vs short-wide cylinder, for "to scale" emphasis */
 export function figCylinderShape(acc, kind, open = "none") {
   return kind === "tall"
-    ? { type: "solid", shape: "cylinder", accent: acc, r: randInt(2, 3), h: randInt(11, 13), open }
-    : { type: "solid", shape: "cylinder", accent: acc, r: randInt(5, 6), h: randInt(4, 5), open };
+    ? { type: "solid", shape: L("cylinder", "cylinder"), accent: acc, r: randInt(2, 3), h: randInt(11, 13), open }
+    : { type: "solid", shape: L("cylinder", "cylinder"), accent: acc, r: randInt(5, 6), h: randInt(4, 5), open };
 }
 
 export { randInt, pick, shuffled };

@@ -5,6 +5,7 @@
    Everything a diagram asserts is provable by an engine verify().
    ============================================================ */
 import { C, quadTn } from "../patternlib.js";
+import { L } from "../lang.js";
 
 /* the seven slate shades (matches PAT_SHADES in config) */
 export const PAT = ["#94a3b8", "#8493a8", "#73849b", "#64748b", "#556074", "#475569", "#334155"];
@@ -41,11 +42,14 @@ const SUBS = "₀₁₂₃₄₅₆₇₈₉";
 const toSub = (n) => String(n).split("").map((d) => SUBS[+d] || d).join("");
 export { toSub };
 
-/* ordinal: 1st, 2nd, 3rd, 4th … 11th/12th/13th */
+/* ordinal: 1st, 2nd, 3rd, 4th … 11th/12th/13th. Afrikaans (T92): 1ste,
+   2de, 3de … 8ste … 19de, 20ste, 21ste … 100ste: -ste after 1, 8, 20 and
+   up (and a whole hundred), -de otherwise */
 export const ord = (n) => {
   const t = n % 100;
   const suf = t >= 11 && t <= 13 ? "th" : { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th";
-  return `${C(n)}${suf}`;
+  const afSuf = t === 1 || t === 8 || t >= 20 || (t === 0 && n > 0) ? "ste" : "de";
+  return `${C(n)}${L(suf, afSuf)}`;
 };
 /* a value wrapped in parentheses when negative, so worked strings never
    show a double sign like "5 − −3" */
