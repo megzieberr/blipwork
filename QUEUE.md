@@ -72,8 +72,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ⏳ 2026-10-17 20:44 T42 | exam: func-siblings-topup | ~2 253 words | verify-exam.html
 
 ### 2D Trigonometry
-- ⏳ 2026-10-17 20:44 T43 | concepts: the `trig` block (js/concepts/trig.js after S4) | ~588 words | counted by af_extract 2026-10-17
-- ☐ T44 | hub rounds: questt1-choose … questt7-mixed (7 files) | ~3 381 words | verify page: verify-trig.html ⚠ the Area pad cell in areaSetupStep is frame data, not a slot: hand L() in this row's review
+- ☑ 2026-10-17 T43 | concepts: the `trig` block (js/concepts/trig.js after S4) | ~588 words | counted by af_extract 2026-10-17
+- ⏳ 2026-10-17 20:46 T44 | hub rounds: questt1-choose … questt7-mixed (7 files) | ~3 381 words | verify page: verify-trig.html ⚠ the Area pad cell in areaSetupStep is frame data, not a slot: hand L() in this row's review
 
 ### Trig Graphs
 - ☐ T45 | concepts: the `tgraph` block (js/concepts/tgraph.js after S4) | ~576 words | counted by af_extract 2026-10-17

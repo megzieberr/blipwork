@@ -1,0 +1,252 @@
+{
+  "unit": "T43",
+  "generated": "2026-10-17T18:44:35.912Z",
+  "files": [
+    "js/concepts/trig.js"
+  ],
+  "items": {
+    "trig#1": {
+      "en": "Which rule do I use?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:9:12"
+      ]
+    },
+    "trig#2": {
+      "en": "\n      <p>Match what you are <b>given</b> to the rule:</p>\n      <ul>\n        <li><b>Sine rule</b> — a side together with the angle <b>opposite</b> it (two angles & a side, or two sides & a non-included angle).</li>\n        <li><b>Cosine rule</b> — two sides and the angle <b>between</b> them (find the third side), or <b>all three sides</b> (find an angle).</li>\n        <li><b>Area rule</b> — two sides and the <b>included</b> angle (find the area).</li>\n      </ul>\n      <div class=\"formula\">side+opposite angle → sine · included angle / 3 sides → cosine · 2 sides + included angle → area</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:10:11"
+      ]
+    },
+    "trig#3": {
+      "en": "Labelling — sides and their “friends”",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:20:12"
+      ]
+    },
+    "trig#4": {
+      "en": "\n      <p>Angles get <b>capital</b> letters (Â, B̂, Ĉ); sides get <b>lower-case</b> letters (a, b, c).</p>\n      <p>Each side is named after the angle <b>opposite</b> it — they are “friends” looking across the triangle: side <b>a</b> is opposite <b>Â</b>.</p>\n      <ul>\n        <li>The <b>biggest</b> angle is opposite the <b>longest</b> side.</li>\n        <li>The <b>smallest</b> angle is opposite the <b>shortest</b> side.</li>\n      </ul>\n      <div class=\"eg\">Never judge sizes by eye — a sketch is not to scale.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:21:11"
+      ]
+    },
+    "trig#5": {
+      "en": "Sine rule — finding a side",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:31:12"
+      ]
+    },
+    "trig#6": {
+      "en": "\n      <p>Use it when you have a side paired with its opposite angle. Put the <b>sides on top</b>:</p>\n      <div class=\"formula\">a/sinÂ = b/sinB̂ = c/sinĈ</div>\n      <p>Write only the two ratios you need, then cross-multiply.</p>\n      <div class=\"eg\">e.g. x opposite 50°, with 12 opposite 40°:  x/sin50° = 12/sin40°  →  x = 12·sin50°/sin40°.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:32:11"
+      ]
+    },
+    "trig#7": {
+      "en": "Sine rule — finding an angle",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:39:12"
+      ]
+    },
+    "trig#8": {
+      "en": "\n      <p>Flip the rule so the <b>sines are on top</b>:</p>\n      <div class=\"formula\">sinÂ/a = sinB̂/b = sinĈ/c</div>\n      <p>Solve for the sine, then SHIFT sin that value to get the angle.</p>\n      <div class=\"eg\">e.g. sinθ/9 = sin50°/13  →  sinθ = 9·sin50°/13 = 0,5303  →  <span class=\"nowrap\">SHIFT sin (0,5303)</span> → θ = 32,0°.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:40:11"
+      ]
+    },
+    "trig#9": {
+      "en": "The ambiguous case",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:47:12"
+      ]
+    },
+    "trig#10": {
+      "en": "\n      <p>Only with the <b>sine rule</b>, and only with two sides and a <b>non-included</b> angle (SSA). Sometimes <b>two</b> triangles fit.</p>\n      <p>Compare the side <b>a</b> opposite the known angle Â with <b>h = b·sinÂ</b>:</p>\n      <ul>\n        <li>a &lt; h → <b>no</b> triangle</li>\n        <li>a = h → <b>one</b> triangle (right-angled)</li>\n        <li>h &lt; a &lt; b → <b>two</b> triangles (acute and obtuse)</li>\n        <li>a ≥ b → <b>one</b> triangle</li>\n      </ul>\n      <div class=\"formula\">obtuse angle = 180° − (acute angle)</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:48:11"
+      ]
+    },
+    "trig#11": {
+      "en": "Cosine rule — finding a side",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:60:12"
+      ]
+    },
+    "trig#12": {
+      "en": "\n      <p>Use it with two sides and the <b>included</b> angle (the angle between them).</p>\n      <div class=\"formula\">a² = b² + c² − 2bc·cosÂ</div>\n      <p>(side you want)² = (sum of the other two squared) − 2 × (those two) × cos(angle between them). Work out the right side, then square-root.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:61:11"
+      ]
+    },
+    "trig#13": {
+      "en": "Cosine rule — finding an angle",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:67:12"
+      ]
+    },
+    "trig#14": {
+      "en": "\n      <p>Use it when you know <b>all three sides</b>. Rearranged so the cosine is the subject:</p>\n      <div class=\"formula\">cosÂ = (b² + c² − a²) / (2bc)</div>\n      <p>The side <b>opposite</b> the angle you want is the one subtracted on top. Work out cos of the angle first, then SHIFT cos that value — and if cos came out <b>negative</b>, the calculator hands you the <b>obtuse</b> angle on its own.</p>\n      <div class=\"eg\">This SSS form is <b>not</b> on the formula sheet — memorise it.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:68:11"
+      ]
+    },
+    "trig#15": {
+      "en": "Area rule",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:75:12"
+      ]
+    },
+    "trig#16": {
+      "en": "\n      <p>Use two sides and the angle <b>included</b> between them:</p>\n      <div class=\"formula\">Area = ½·b·c·sinÂ</div>\n      <p>If the angle you have is not between the two sides, find the included angle first (sine or cosine rule).</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:76:11"
+      ]
+    },
+    "trig#17": {
+      "en": "Area of a regular polygon",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:82:12"
+      ]
+    },
+    "trig#18": {
+      "en": "\n      <p>Split a regular n-gon into <b>n equal triangles</b> from the centre. Each centre angle is 360°/n.</p>\n      <div class=\"formula\">Area = n·s² / (4·tan(180°/n))</div>\n      <div class=\"eg\">e.g. a regular octagon (n = 8) with side 10:  Area = 8·10² / (4·tan22,5°).</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:83:11"
+      ]
+    },
+    "trig#19": {
+      "en": "Area of a composite shape",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:89:12"
+      ]
+    },
+    "trig#20": {
+      "en": "\n      <p>Break the figure into triangles (and rectangles) whose areas you can find, then <b>add them up</b>.</p>\n      <p>If you need a missing length first — like the base shared by two parts — get it from the <b>cosine rule</b>, then apply the area rule or length × breadth.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:90:11"
+      ]
+    },
+    "trig#21": {
+      "en": "Shortest distance to a line",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:95:12"
+      ]
+    },
+    "trig#22": {
+      "en": "\n      <p>The shortest distance from a point to a side is the <b>perpendicular</b> height to that side.</p>\n      <p>Find the triangle's area, then turn the area formula around:</p>\n      <div class=\"formula\">Area = ½·base·height<br>→ height = 2·Area / base</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:96:11"
+      ]
+    },
+    "trig#23": {
+      "en": "Working through a problem",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "trig.js:102:12"
+      ]
+    },
+    "trig#24": {
+      "en": "\n      <p>Three questions, in order:</p>\n      <ol>\n        <li><b>What am I given?</b> Label the sides and angles (friends).</li>\n        <li><b>Which rule fits?</b> Side+opposite angle → sine; included angle or 3 sides → cosine; area from 2 sides + included angle → area rule.</li>\n        <li><b>Do I need a stepping stone?</b> Often find one missing angle or side first, then the thing asked.</li>\n      </ol>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "trig.js:103:11"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 588
+}
