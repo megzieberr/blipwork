@@ -1,0 +1,913 @@
+{
+  "unit": "T59",
+  "generated": "2026-10-17T19:22:49.815Z",
+  "files": [
+    "js/exam/gtrig-siblings-identities-undefined.js"
+  ],
+  "items": {
+    "gtrig-siblings-identities-undefined#1": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;tan x&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:92:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#2": {
+      "en": "tan is not really a third ratio — it is one ratio divided by another. Write it that way and the question answers itself: what is underneath, and where is that zero?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:95:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#3": {
+      "en": "tan x = sin x/cos x, so tan x is undefined wherever the denominator is zero: &nbsp;cos x = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:98:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#4": {
+      "en": "x = 90° &nbsp;or&nbsp; x = 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:99:39",
+        "gtrig-siblings-identities-undefined.js:180:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#5": {
+      "en": "REMEMBER: undefined means division by zero, and nothing else. It is not the same as \\\"no solution\\\" (which is what you write when a ratio is asked for a value outside −1 to 1) and it is not the same as \\\"non-real\\\".",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:101:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#6": {
+      "en": "tan x looks like a third ratio standing next to sin and cos, but it is really just sin x divided by cos x. Once you write it that way the question stops being about tan at all — it is about a denominator. A fraction dies the moment its bottom is zero, so tan x is undefined exactly where cos x is zero. On the circle, cos is the x-value of the point, and the x-value is zero at the very top and the very bottom: 90° and 270°. Between 0° and 360° those are the only two. It is also why the tan graph has vertical dashed lines standing there — the graph is not jumping over a gap for fun, it is jumping over a division by zero. Every question on this tile is a version of that one sentence: find the bottom, set it to zero, solve.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:105:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#7": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;1/sin x&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:113:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#8": {
+      "en": "Same one sentence as (a): find the bottom, set it to zero, solve. Do not forget the two ends of the interval — a closed bracket means the endpoint counts.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:116:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#9": {
+      "en": "The denominator may not be zero: &nbsp;sin x = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:119:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#10": {
+      "en": "x = 0°, &nbsp;x = 180° &nbsp;or&nbsp; x = 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:120:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#11": {
+      "en": "WATCH OUT: the interval is written with square brackets, [0°&nbsp;;&nbsp;360°], which means both ends are INCLUDED. Leaving out 0° or 360° costs a mark every single time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:122:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#12": {
+      "en": "Same routine, different ratio. The expression is 1 divided by sin x, so it is undefined wherever sin x is zero. On the circle, sin is the y-value of the point, and the y-value is zero on the horizontal axis — at 0°, at 180°, and again at 360° when you get back to where you started. All three are inside [0°&nbsp;;&nbsp;360°], because square brackets include their ends. That last one is where marks quietly disappear: learners write 0° and 180° and stop, because 360° feels like the same place as 0°. It IS the same place on the circle, but the question asked for values of x in an interval, and 360° is a different value of x from 0°. When the brackets are round instead of square, then you leave the ends out — read them every time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:126:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#13": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;3/(2cos x − 1)&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:152:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#14": {
+      "en": "The bottom is not a bare ratio this time, so you have to solve for it: set the whole denominator equal to zero and get cos x on its own. Then it is an ordinary quadrant-and-reference-angle job.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:155:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#15": {
+      "en": "Set the denominator equal to zero: &nbsp;2cos x − 1 = 0 &nbsp;⟹&nbsp; cos x = 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:158:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#16": {
+      "en": "ref.&nbsp;∠&nbsp;= 60°, and cos is positive in <b>I and IV</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:159:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#17": {
+      "en": "x = 60° &nbsp;or&nbsp; x = 300°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:160:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#18": {
+      "en": "The only new thing here is that the denominator has some algebra in it, so step one is to get the ratio on its own — exactly the same first move as a special sum. 2cos x − 1 = 0 gives cos x = a half. Now it is a small general-solution job inside a fixed interval. The reference angle comes from the size of the number, so cos 60° is a half and ref.&nbsp;∠&nbsp;= 60°. Then the cross: cos is positive down the right-hand side of the bow tie, so tick I and IV. First quadrant gives 60°; fourth quadrant gives 360° − 60°, which is 300°. Both are inside [0°&nbsp;;&nbsp;360°], so both count. Notice you are not solving the fraction — you are solving the thing underneath it, and the answers are the values the expression is NOT allowed to have.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:163:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#19": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is the identity &nbsp;cos x/(1 − sin x) − tan x = 1/cos x&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:171:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#20": {
+      "en": "Make a list of every denominator in the whole line — both sides count. There are three, and one of them is not written down anywhere: it is hiding inside the tan.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:174:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#21": {
+      "en": "List every denominator: the visible 1 − sin x, the cos x hiding inside tan x, and the cos x on the right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:177:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#22": {
+      "en": "1 − sin x = 0 &nbsp;⟹&nbsp; sin x = 1 &nbsp;⟹&nbsp; x = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:178:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#23": {
+      "en": "tan x needs cos x ≠ 0, and so does 1/cos x: &nbsp;cos x = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:179:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#24": {
+      "en": "Both lists together: &nbsp;x = 90° &nbsp;or&nbsp; x = 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:181:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#25": {
+      "en": "WATCH OUT: tan x has no fraction bar printed anywhere, so it is the condition everybody forgets. tan x is sin x over cos x — the moment a tan appears in a question like this, cos x = 0 goes straight onto your list.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:183:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#26": {
+      "en": "The routine never changes: list every denominator, set each one to zero, solve each one, then put the lists together. What makes this question a real question is that one of the denominators is invisible. tan x has no fraction bar on the page, but it is sin x over cos x, so it carries the condition cos x ≠ 0 with it wherever it goes. That gives you 90° and 270°. The visible denominator, 1 − sin x, is zero when sin x = 1, and sine only reaches 1 at the very top of the circle, so that is 90° again. The two lists overlap, which is normal — you write each value once. The answer is 90° and 270°. And it is worth seeing why 90° turned up twice: at 90° the first fraction and the tan both blow up at the same moment. One value, two reasons, still one value.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:187:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#27": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;(sin x · cos x)/(1 + cos x)&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:212:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#28": {
+      "en": "Ignore the top completely for this part. Only the bottom can make an expression undefined.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:215:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#29": {
+      "en": "Set the denominator equal to zero: &nbsp;1 + cos x = 0 &nbsp;⟹&nbsp; cos x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:218:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#30": {
+      "en": "x = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:219:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#31": {
+      "en": "Only the bottom of a fraction can make it undefined, so the top is not your business here at all. Set 1 + cos x equal to zero, which gives cos x = −1. Now, cos is the x-value of the point on the circle, and the furthest left that point ever gets is −1, at exactly 180°. So there is only one answer in the whole interval. Her routine would run it as an ordinary general solution — ref.&nbsp;∠&nbsp;= 0°, second quadrant, x = 180° + k · 360° — and that gives the same single value inside [0°&nbsp;;&nbsp;360°]. Either road is fine; what matters is that you looked underneath and nowhere else. Part (b) is where the top finally matters, and where this answer comes back to bite.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:222:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#32": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;(sin x · cos x)/(1 + cos x)&nbsp; equal to zero?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:230:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#33": {
+      "en": "A fraction is zero when its top is zero — but only if the fraction exists at all. So make the list from the top, then check it against your answer to (a) and throw out anything that appears in both.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:233:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#34": {
+      "en": "A fraction is zero when its TOP is zero and its bottom is not.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:236:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#35": {
+      "en": "sin x = 0 &nbsp;⟹&nbsp; x = 0°, 180° or 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:237:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#36": {
+      "en": "cos x = 0 &nbsp;⟹&nbsp; x = 90° or 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:238:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#37": {
+      "en": "From (a) the expression is undefined at x = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:239:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#38": {
+      "en": "so 180° is thrown out — at 180° the expression has no value at all, never mind a value of zero",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:240:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#39": {
+      "en": "x = 0°, &nbsp;90°, &nbsp;270° &nbsp;or&nbsp; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:241:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#40": {
+      "en": "WATCH OUT: at x = 180° the top IS zero and the bottom is zero too. That does not make the fraction zero — it makes it undefined. Zero over zero is not a number, and a value that kills the bottom can never be part of a \\\"where is it zero\\\" answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:243:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#41": {
+      "en": "A product is zero when any one of its factors is zero, so the top, sin x · cos x, dies wherever sin x is zero or cos x is zero. That gives 0°, 180° and 360° from the sine, and 90° and 270° from the cosine — five candidates. Now comes the part that separates a level 3 answer from a level 1 one. A fraction is only zero if it is a number in the first place, and part (a) told you the whole thing is undefined at 180°. At 180° the top is zero and the bottom is zero as well, and zero over zero is not zero, it is nothing at all. So 180° gets crossed off. Four values survive. The habit to carry away: whenever a question asks where a fraction is zero, solve the top, then check every answer against the bottom before you write the list down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:247:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#42": {
+      "en": "Determine the values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;120°]&nbsp; for which &nbsp;1 − cos 3x = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:272:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#43": {
+      "en": "Get cos 3x on its own, then treat the whole 3x as the unknown and write the general solution for IT first. Only divide by 3 at the very end — and divide every term of the line, including the k · 360°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:275:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#44": {
+      "en": "1 − cos 3x = 0 &nbsp;⟹&nbsp; cos 3x = 1, &nbsp;so ref.&nbsp;∠&nbsp;= 0°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:278:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#45": {
+      "en": "3x = 0° + k · 360° &nbsp;⟹&nbsp; divide every term by 3: &nbsp;x = 0° + k · 120°, &nbsp;k&nbsp;∈&nbsp;ℤ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:279:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#46": {
+      "en": "In [0°&nbsp;;&nbsp;120°]: &nbsp;x = 0° &nbsp;or&nbsp; x = 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:280:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#47": {
+      "en": "WATCH OUT: the k · 360° gets divided by 3 as well. Writing x = 0° + k · 360° instead of x = 0° + k · 120° loses you 120° entirely, and with it half the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:282:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#48": {
+      "en": "Treat the whole 3x as one unknown and do not divide anything until the general solution is written out. cos 3x = 1 means the point on the circle is as far right as it goes, which is 0° — so ref.&nbsp;∠&nbsp;= 0°, and the family is 3x = 0° + k · 360°. Now divide the WHOLE line by 3, every term of it, the way she writes it with the divisor under each piece: 3x over 3 is x, 0° over 3 is 0°, and k · 360° over 3 is k · 120°. So x = 0° + k · 120°. Feed in whole numbers: k = 0 gives 0°, k = 1 gives 120°, k = 2 gives 240° which is past the end of the interval. Two answers. The dividing-through step is the whole reason a 3x question is harder than an x question — the solutions are packed three times closer together, and forgetting to shrink the k term hides two thirds of them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:286:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#49": {
+      "en": "Hence determine the values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;120°]&nbsp; for which the identity &nbsp;(sin 3x)/(1 − cos 3x) = (1 + cos 3x)/(sin 3x)&nbsp; is undefined",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:294:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#50": {
+      "en": "There are two denominators, one on each side, so there are two conditions. Part (a) has already finished the first one — now do the same job on the other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:297:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#51": {
+      "en": "Two denominators, so two conditions. (a) has already dealt with 1 − cos 3x = 0, giving x = 0° and x = 120°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:300:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#52": {
+      "en": "The other one: &nbsp;sin 3x = 0, &nbsp;so ref.&nbsp;∠&nbsp;= 0°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:301:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#53": {
+      "en": "I: 3x = 0° + k · 360° &nbsp;&nbsp;&nbsp;II: 3x = 180° + k · 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:302:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#54": {
+      "en": "Divide through by 3: &nbsp;x = 0° + k · 120° &nbsp;or&nbsp; x = 60° + k · 120°, &nbsp;k&nbsp;∈&nbsp;ℤ &nbsp;⟹&nbsp; x = 0°, 60° or 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:303:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#55": {
+      "en": "Both lists together: &nbsp;x = 0°, &nbsp;60° &nbsp;or&nbsp; 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:304:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#56": {
+      "en": "REMEMBER: an identity with a fraction on BOTH sides has a denominator on both sides, and both count. Solving only the left-hand one is the most common way this question loses two marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:306:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#57": {
+      "en": "An identity is undefined wherever any denominator in the whole line is zero, and this one has a denominator on each side of the equals sign. Part (a) did the left one and found 0° and 120°. The right one is sin 3x = 0, and sine is zero on the horizontal axis, so ref.&nbsp;∠&nbsp;= 0° and the quadrant lines are I and II: 3x = 0° + k · 360° and 3x = 180° + k · 360°. Divide both through by 3 and you get x = 0° + k · 120° and x = 60° + k · 120°. Inside [0°&nbsp;;&nbsp;120°] that produces 0°, 60° and 120°. Now put the two lists together and write each value once: 0°, 60° and 120°. Notice that the sine condition swallowed the cosine one whole — every value from (a) turns up again here. That happens a lot with these pairs, and it is a useful check rather than a mistake.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:310:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#58": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Simplify &nbsp;E = <span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">sin(180° − x) · cos(90° − x)</span><span class=\\\"sf-d\\\">1 − cos(−x)</span></span>&nbsp; to a single expression",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:335:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#59": {
+      "en": "Reduce all three angles first — one of them is a co-function and turns into the other ratio. Then look at the top: a squared ratio next to nothing else is usually a masked identity waiting to be factorised.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:338:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#60": {
+      "en": "sin(180° − x) = sin x &nbsp;&nbsp;·&nbsp;&nbsp; cos(90° − x) = sin x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:341:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#61": {
+      "en": "cos(−x) = cos x, so the bottom is &nbsp;1 − cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:342:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#62": {
+      "en": "Top: &nbsp;sin x · sin x = sin²x = 1 − cos²x = (1 − cos x)(1 + cos x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:343:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#63": {
+      "en": "E = ((1 − cos x)(1 + cos x))/(1 − cos x) = 1 + cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:344:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#64": {
+      "en": "REMEMBER: cos(90° − x) = sin x is a <b>co-function</b> — a 90° split is the only split that converts between sin and cos. cos(180° − x) would stay a cosine and only pick up a minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:346:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#65": {
+      "en": "Three reductions, then one piece of algebra. sin(180° − x) is a second-quadrant angle where sine is positive, so it stays sin x. cos(90° − x) is a co-function — a 90° split is the only kind that converts between sin and cos — and 90° − x sits in A where everything is positive, so it becomes plus sin x. cos(−x) is a fourth-quadrant form, and cosine is the ratio that survives there, so it is simply cos x. Now the top is sin x times sin x, which is sin²x, and that is one of the masked identities: 1 − cos²x. Written like that it is a difference of two squares, so it splits into (1 − cos x)(1 + cos x). And look what is underneath — 1 − cos x, one of the two brackets you just made. Cancel it, and the whole thing is 1 + cos x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:350:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#66": {
+      "en": "Hence determine the values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; for which &nbsp;√E&nbsp; is real",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:358:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#67": {
+      "en": "Two things have to be true, not one. What is under the root may not be negative — and the ORIGINAL expression still has to exist, so its denominator may not be zero. Check both, then put them together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:361:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#68": {
+      "en": "By (a), what sits under the root is simply &nbsp;1 + cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:364:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#69": {
+      "en": "cos x is never smaller than −1, so 1 + cos x is never negative — the root itself is real for every x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:365:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#70": {
+      "en": "But E still has its original denominator: &nbsp;1 − cos x = 0 &nbsp;⟹&nbsp; cos x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:366:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#71": {
+      "en": "x = 0° &nbsp;or&nbsp; x = 360°, and at those two values E does not exist at all",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:367:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#72": {
+      "en": "0° &lt; x &lt; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:368:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#73": {
+      "en": "WATCH OUT: simplifying an expression can hide a restriction. 1 + cos x looks perfectly safe everywhere, but the thing it came FROM had 1 − cos x underneath. The restrictions belong to the original, not to the tidy version.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:370:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#74": {
+      "en": "There are two separate questions hiding in the word \\\"real\\\", and you have to answer both. First: is what sits under the root ever negative? By (a) that is 1 + cos x, and cos x never goes below −1, so 1 + cos x never goes below 0. At x = 180° it is exactly 0, and the square root of 0 is 0, which is perfectly real. So the root is never the problem. Second: does E itself exist? The tidy version, 1 + cos x, looks safe everywhere — but it came from a fraction with 1 − cos x underneath, and that is zero when cos x = 1, which happens at 0° and again at 360°. Those two values were never allowed, and cancelling a bracket does not make them allowed. So the answer is everything strictly between them. The lesson is bigger than this question: restrictions belong to the expression you started with, not the one you tidied it into.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:374:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#75": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;1/tan x&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:399:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#76": {
+      "en": "Two separate things can go wrong here. You are dividing by tan x, so tan x may not be zero — and tan x has to exist in the first place. Solve both, then put the lists together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:402:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#77": {
+      "en": "You are dividing BY tan x, so tan x may not be zero: &nbsp;tan x = 0 &nbsp;⟹&nbsp; sin x = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:405:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#78": {
+      "en": "x = 0°, &nbsp;180° &nbsp;or&nbsp; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:406:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#79": {
+      "en": "And tan x itself has to exist, which needs cos x ≠ 0: &nbsp;cos x = 0 &nbsp;⟹&nbsp; x = 90° or 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:407:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#80": {
+      "en": "x = 0°, &nbsp;90°, &nbsp;180°, &nbsp;270° &nbsp;or&nbsp; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:408:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#81": {
+      "en": "WATCH OUT: this expression fails for TWO different reasons, and most learners find only one of them. tan x = 0 kills the fraction from underneath; cos x = 0 kills the tan itself before the fraction even gets started.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:410:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#82": {
+      "en": "This is the meanest small question on the tile, because it breaks in two different ways and they are easy to confuse. Reason one: the expression is 1 divided by tan x, so tan x is a denominator and may not be zero. tan x is sin x over cos x, and a fraction is zero when its top is zero, so tan x = 0 wherever sin x = 0 — that is 0°, 180° and 360°. Reason two: before you can divide by tan x, tan x has to be a number at all, and tan x does not exist where cos x = 0 — that is 90° and 270°. Both reasons make the expression undefined, so both lists go into the answer: five values in all. If you only ever remember one thing from this card, make it this — when a tan is underneath, check both the tan being zero AND the tan being undefined.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:414:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#83": {
+      "en": "For which values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; is &nbsp;tan 2x&nbsp; undefined?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:422:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#84": {
+      "en": "Same condition as an ordinary tan — but the angle is 2x, so write the general solution for 2x FIRST and only then divide every term by 2. Remember tan repeats every 180°, not every 360°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:425:13"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#85": {
+      "en": "tan 2x = (sin 2x)/(cos 2x), so the condition is &nbsp;cos 2x = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:428:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#86": {
+      "en": "cos is zero at 90°, and the tan family repeats every 180°: &nbsp;2x = 90° + k · 180°, &nbsp;k&nbsp;∈&nbsp;ℤ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:429:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#87": {
+      "en": "Divide every term by 2: &nbsp;x = 45° + k · 90°, &nbsp;k&nbsp;∈&nbsp;ℤ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:430:37"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#88": {
+      "en": "In [0°&nbsp;;&nbsp;360°]: &nbsp;x = 45°, &nbsp;135°, &nbsp;225° &nbsp;or&nbsp; 315°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:431:39"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#89": {
+      "en": "WATCH OUT: a 2x inside the ratio packs the answers twice as close together. Four values fit into [0°&nbsp;;&nbsp;360°], not two — walk k up until you overshoot rather than stopping at the first one that looks right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:433:15"
+      ]
+    },
+    "gtrig-siblings-identities-undefined#90": {
+      "en": "The condition is exactly the same as for an ordinary tan: the bottom, cos 2x, may not be zero. What changes is the bookkeeping. Treat 2x as the unknown and write its general solution first. cos is zero at 90°, and because these values repeat every 180° round the circle, 2x = 90° + k · 180°. Now divide the whole line by 2, every term of it: x = 45° + k · 90°. Then walk k upwards and keep whatever lands inside the interval — k = 0 gives 45°, k = 1 gives 135°, k = 2 gives 225°, k = 3 gives 315°, and k = 4 gives 405°, which has overshot. Four values. The general rule is worth carrying: an angle of 2x doubles how many answers fit into the same interval, and 3x triples them. If you finish with suspiciously few, check whether you divided the k term.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-identities-undefined.js:437:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2624
+}
