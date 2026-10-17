@@ -1,0 +1,1303 @@
+{
+  "unit": "T68",
+  "generated": "2026-10-17T20:44:00.080Z",
+  "files": [
+    "js/exam/euclid-level4.js"
+  ],
+  "items": {
+    "euclid-level4#1": {
+      "en": "In the diagram, A, B and C are points on the circle and AB, AC and BC are drawn. &nbsp;DAE is a straight line through A, with D and E on opposite sides of A. &nbsp;Â₁ = 55°, &nbsp;Â₂ = 60° &nbsp;and&nbsp; ∠ABC = 65°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:138:9"
+      ]
+    },
+    "euclid-level4#2": {
+      "en": "Determine, with a reason, the size of &nbsp;∠ACB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:164:21"
+      ]
+    },
+    "euclid-level4#3": {
+      "en": "Triangle ABC has two of its three angles sitting on the page already.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:165:19"
+      ]
+    },
+    "euclid-level4#4": {
+      "en": "In △ABC: &nbsp;∠ACB + Â₂ + ∠ABC = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:167:37"
+      ]
+    },
+    "euclid-level4#5": {
+      "en": "∴ ∠ACB = 180° − 60° − 65° = 55°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:168:39"
+      ]
+    },
+    "euclid-level4#6": {
+      "en": "Nothing clever, and that is deliberate — this is the mark the question gives you before it asks for anything hard. The three angles of a triangle add to 180°, two of them were given, so the third falls out. What matters is the number that comes out: 55°, which is exactly what Â₁ was given as, at the other end of the picture. Two equal angles like that, one squeezed between a chord and a line and the other sitting across the circle, are the fingerprint of one particular theorem — and the next part is going to make you name it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:171:13"
+      ]
+    },
+    "euclid-level4#7": {
+      "en": "Prove that &nbsp;DAE&nbsp; is a tangent to the circle at A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:178:21"
+      ]
+    },
+    "euclid-level4#8": {
+      "en": "Nothing here says “tangent” yet, so you have to work backwards. If DAE really were a tangent, what would the angle between it and the chord AB have to equal — and does it?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:179:19"
+      ]
+    },
+    "euclid-level4#9": {
+      "en": "Â₁ = 55° &nbsp;and&nbsp; ∠ACB = 55°, &nbsp;so &nbsp;Â₁ = ∠ACB",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:181:37"
+      ]
+    },
+    "euclid-level4#10": {
+      "en": "Â₁ is the angle between the line DAE and the chord AB, and ∠ACB is the angle that chord AB makes in the alternate segment.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:182:37"
+      ]
+    },
+    "euclid-level4#11": {
+      "en": "∴ DAE is a tangent to the circle at A &nbsp;&nbsp;<i>(converse tan chord theorem)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:183:39"
+      ]
+    },
+    "euclid-level4#12": {
+      "en": "WATCH OUT: say which CHORD and which SEGMENT. “The angles are equal, so it is a tangent” is not a proof — the marker needs to see that Â₁ is the angle between the line and chord AB, and that C is in the segment on the other side of AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:185:15"
+      ]
+    },
+    "euclid-level4#13": {
+      "en": "This is the hardest single mark in Grade 11 Euclidean geometry, and it is hard for one reason: nothing in the question cues you. The word tangent does not appear, no right angle is mentioned, and the line is just “a straight line through A”. What you have to do is run a theorem backwards. Forwards, the tangent–chord theorem says: if a line is a tangent, then the angle it makes with a chord equals the angle in the alternate segment. Backwards it says: if that angle equality holds, the line must be a tangent. So the plan is always the same — find the angle in the alternate segment, find the angle between the line and the chord, show they are equal, and name the converse. Once you have seen the shape of it once, every version of this question looks the same.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:189:13"
+      ]
+    },
+    "euclid-level4#14": {
+      "en": "Hence determine, with reasons, the size of &nbsp;Â₃.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:196:21"
+      ]
+    },
+    "euclid-level4#15": {
+      "en": "The word “hence” means you are now allowed to use what you proved. What does the tangent–chord theorem say about the OTHER chord out of A?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:197:19"
+      ]
+    },
+    "euclid-level4#16": {
+      "en": "DAE is a tangent &nbsp;<i>(proved in (b))</i>, and Â₃ is the angle between it and the chord AC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:199:37"
+      ]
+    },
+    "euclid-level4#17": {
+      "en": "∠ABC is the angle in the alternate segment on chord AC. &nbsp;&nbsp;<i>(tan chord theorem)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:200:37"
+      ]
+    },
+    "euclid-level4#18": {
+      "en": "∴ Â₃ = ∠ABC = 65°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:201:39"
+      ]
+    },
+    "euclid-level4#19": {
+      "en": "<b>OR</b> — along the straight line instead: &nbsp;Â₁ + Â₂ + Â₃ = 180° &nbsp;<i>(∠s on a str line)</i>, so Â₃ = 180° − 55° − 60° = 65°. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:202:37"
+      ]
+    },
+    "euclid-level4#20": {
+      "en": "Two roads, and it is worth walking both. The straight-line road needs no theorem at all: D, A and E are collinear, so the three angles at A add to 180°. The tangent road uses what part (b) bought you — now that DAE is known to be a tangent, the theorem works forwards on the second chord AC and hands you ∠ABC. The two agreeing is the figure checking itself. In an exam, when a part says “hence”, the examiner is telling you which road they want; take the other one as your check rather than as your answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:205:13"
+      ]
+    },
+    "euclid-level4#21": {
+      "en": "In the diagram, ADB and AEC are straight lines and DE is drawn. &nbsp;<b>No circle is drawn.</b> &nbsp;∠ADE = ∠ACB = x &nbsp;and&nbsp; ∠BAC = y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:264:9"
+      ]
+    },
+    "euclid-level4#22": {
+      "en": "Determine, with a reason, the size of &nbsp;∠AED&nbsp; in terms of x and y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:290:21"
+      ]
+    },
+    "euclid-level4#23": {
+      "en": "Triangle ADE has two of its angles marked already — one of them is x and the other is y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:291:19"
+      ]
+    },
+    "euclid-level4#24": {
+      "en": "In △ADE: &nbsp;∠AED + ∠ADE + ∠DAE = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:293:37"
+      ]
+    },
+    "euclid-level4#25": {
+      "en": "∴ ∠AED = 180° − x − y",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:294:39"
+      ]
+    },
+    "euclid-level4#26": {
+      "en": "REMEMBER: ∠DAE and ∠BAC are the <b>same angle</b> — D is on AB and E is on AC, so the ray AD points where AB points and AE points where AC points. That is why the given y can be used inside the small triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:296:15"
+      ]
+    },
+    "euclid-level4#27": {
+      "en": "There is not a circle in sight yet, so every circle theorem is switched off and all you have is ordinary triangle work. The one thing to see clearly is that the small triangle ADE and the big triangle ABC share their angle at A, because D and E lie on the two arms. Once you spot that, the small triangle has x at D, y at A, and the rest of 180° left over for E. Working in letters instead of numbers changes nothing about the method — you just carry the letters through instead of adding.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:300:13"
+      ]
+    },
+    "euclid-level4#28": {
+      "en": "Prove that &nbsp;DECB&nbsp; is a cyclic quadrilateral.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:307:21"
+      ]
+    },
+    "euclid-level4#29": {
+      "en": "ADB is a straight line, so ∠ADE is sticking out of the four-sided shape DECB at the corner D. Which of that shape's own angles does the question already say it equals?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:308:19"
+      ]
+    },
+    "euclid-level4#30": {
+      "en": "ADB is a straight line, so ∠ADE is the EXTERIOR angle of quadrilateral DECB at D.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:310:37"
+      ]
+    },
+    "euclid-level4#31": {
+      "en": "The interior opposite angle of DECB is the one at C, which is ∠BCE = ∠ACB = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:311:37"
+      ]
+    },
+    "euclid-level4#32": {
+      "en": "∠ADE = ∠ACB = x, &nbsp;so the exterior angle equals the interior opposite angle<br>∴ DECB is a cyclic quadrilateral &nbsp;&nbsp;<i>(ext ∠ = int opp ∠)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:312:39"
+      ]
+    },
+    "euclid-level4#33": {
+      "en": "WATCH OUT: read <b>DECB</b> in order — D, then E, then C, then B. That is the way the four sides run, and it is what makes C the corner OPPOSITE D. Matching ∠ADE with the angle at E or at B proves nothing at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:314:15"
+      ]
+    },
+    "euclid-level4#34": {
+      "en": "There are two standard ways to prove four points lie on a circle, and this figure is built for the second one. The first is opposite angles adding to 180°. The second is the exterior-angle test: if the angle sticking out at one corner of a quadrilateral equals the interior angle at the corner diagonally across from it, the four corners lie on one circle. That is the converse of the theorem you use forwards on every cyclic quadrilateral, and the SAG short form for it is “ext ∠ = int opp ∠”. What makes this card level 4 is that there are no numbers anywhere — you cannot check anything by arithmetic, so the reasoning has to carry all your confidence. Name the quadrilateral in order, name the exterior angle, name the interior opposite angle, then say they are equal. Four short lines, three marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:318:13"
+      ]
+    },
+    "euclid-level4#35": {
+      "en": "Hence determine, with reasons, the size of &nbsp;∠DBC&nbsp; in terms of x and y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:325:21"
+      ]
+    },
+    "euclid-level4#36": {
+      "en": "AEC is a straight line too, so ∠DEC and ∠AED are neighbours on it. Then use the circle you have just proved into existence.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:326:19"
+      ]
+    },
+    "euclid-level4#37": {
+      "en": "AEC is a straight line, so &nbsp;∠DEC = 180° − ∠AED = 180° − (180° − x − y) = x + y &nbsp;&nbsp;<i>(∠s on a str line)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:328:37"
+      ]
+    },
+    "euclid-level4#38": {
+      "en": "In cyclic quad DECB: &nbsp;∠DBC + ∠DEC = 180° &nbsp;&nbsp;<i>(opp ∠s of cyclic quad)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:329:37"
+      ]
+    },
+    "euclid-level4#39": {
+      "en": "∴ ∠DBC = 180° − (x + y) = 180° − x − y",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:330:39"
+      ]
+    },
+    "euclid-level4#40": {
+      "en": "<b>OR</b> — without the circle at all: &nbsp;in △ABC, &nbsp;∠ABC = 180° − ∠BAC − ∠ACB = 180° − y − x &nbsp;<i>(int. ∠s of △)</i>, and ∠DBC is that same angle. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:331:37"
+      ]
+    },
+    "euclid-level4#41": {
+      "en": "Two roads again, and the fact that they agree is a genuinely useful sanity check on the proof in part (b) — if the circle you proved into existence gave a different answer from ordinary triangle work, something would be wrong. The circle road is the one the word “hence” is asking for: E and B are opposite corners of the cyclic quadrilateral, so their angles add to 180°, and ∠DEC came from the straight line AEC. The triangle road ignores the circle completely. Being able to see both is what makes you quick in an exam, because you can start on whichever one you spot first and use the other to check.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:334:13"
+      ]
+    },
+    "euclid-level4#42": {
+      "en": "In the diagram, O is the centre of the circle and the radius is r. &nbsp;XY is a chord with &nbsp;XY = r, &nbsp;and M is a point on XY such that &nbsp;OM ⊥ XY. &nbsp;Z is a point on the major arc XY, and XZ and YZ are drawn.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:381:9"
+      ]
+    },
+    "euclid-level4#43": {
+      "en": "Write down, with a reason, the length of &nbsp;XM&nbsp; in terms of r.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:407:21"
+      ]
+    },
+    "euclid-level4#44": {
+      "en": "OM comes from the centre and meets the chord at right angles. There is one theorem about what a line like that does to a chord — and remember how long XY is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:408:19"
+      ]
+    },
+    "euclid-level4#45": {
+      "en": "OM ⊥ XY, so &nbsp;XM = MY &nbsp;&nbsp;<i>(line from centre ⊥ to chord)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:410:37"
+      ]
+    },
+    "euclid-level4#46": {
+      "en": "∴ XM = ½ · XY = r/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:411:39"
+      ]
+    },
+    "euclid-level4#47": {
+      "en": "A line dropped from the centre at right angles to a chord always cuts that chord exactly in half — it is the one theorem in the chapter that turns a right angle into a length. Here the chord happens to be as long as the radius, so half of it is half the radius. Working in letters is no harder than working in numbers: r/2 is a complete answer and no number is ever coming. The one thing to be careful of is that “the line from the centre” has to really come from the centre — a perpendicular dropped from anywhere else does not bisect anything.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:414:13"
+      ]
+    },
+    "euclid-level4#48": {
+      "en": "Show that &nbsp;OM = (r√3)/2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:421:21"
+      ]
+    },
+    "euclid-level4#49": {
+      "en": "Look at triangle OXM on its own. You know the right angle, you know the hypotenuse and you have just found one of the short sides.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:422:19"
+      ]
+    },
+    "euclid-level4#50": {
+      "en": "OX is a radius, so &nbsp;OX = r, &nbsp;and&nbsp; ∠OMX = 90° &nbsp;&nbsp;<i>(given: OM ⊥ XY)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:424:37"
+      ]
+    },
+    "euclid-level4#51": {
+      "en": "In △OXM: &nbsp;OM² = OX² − XM² = r² − (r/2)² = r² − r²/4 = (3r²)/4 &nbsp;&nbsp;<i>(Pythagoras)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:425:37"
+      ]
+    },
+    "euclid-level4#52": {
+      "en": "∴ OM = √((3r²)/4) = (r√3)/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:426:39"
+      ]
+    },
+    "euclid-level4#53": {
+      "en": "WATCH OUT: &nbsp;(r/2)² is &nbsp;r²/4, not &nbsp;r²/2. Squaring a fraction squares the bottom as well as the top — that one slip turns √3 into √2 and loses the answer mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:428:15"
+      ]
+    },
+    "euclid-level4#54": {
+      "en": "This is Pythagoras doing exactly what it always does, with letters instead of numbers. The right angle sits at M, so OX is the hypotenuse and the two short sides are OM and XM. Subtract, and the r² factors out neatly. The square-rooting at the end is where the surd appears: the square root of three-quarters of r² is r times the square root of three, over two. A “show that” instruction means the answer has been given to you, so the marks are all in the working — never write down the final line on its own and hope. And notice how much a letter-only answer tells you: OM is about 0,87 of the radius, whatever the circle's actual size.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:432:13"
+      ]
+    },
+    "euclid-level4#55": {
+      "en": "Determine, with reasons, the size of &nbsp;∠XZY.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:439:21"
+      ]
+    },
+    "euclid-level4#56": {
+      "en": "Nothing here mentions an angle, so you have to make one. What kind of triangle is OXY, given that all three of its sides are the same length?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:440:19"
+      ]
+    },
+    "euclid-level4#57": {
+      "en": "OX = OY = r &nbsp;<i>(radii)</i> &nbsp;and&nbsp; XY = r &nbsp;<i>(given)</i>, so △OXY is equilateral.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:442:37"
+      ]
+    },
+    "euclid-level4#58": {
+      "en": "∴ ∠XOY = 60° &nbsp;&nbsp;<i>(∠s opp equal sides; int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:443:37"
+      ]
+    },
+    "euclid-level4#59": {
+      "en": "∠XZY = ½ · ∠XOY &nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> &nbsp;— both stand on chord XY<br>∴ ∠XZY = ½ × 60° = 30°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:444:39"
+      ]
+    },
+    "euclid-level4#60": {
+      "en": "REMEMBER: this is a NUMBER, even though everything else in the question was in terms of r. The angle a chord subtends does not depend on how big the circle is — only on how the chord compares with the radius.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:446:15"
+      ]
+    },
+    "euclid-level4#61": {
+      "en": "The fetch in this part is realising that “XY = r” is secretly an angle fact. Two of the triangle's sides are radii, so they are r; the third side is the chord, and the question told you it is r as well. Three equal sides means an equilateral triangle, which means all three of its angles are 60°. From there the ordinary angle-at-centre theorem finishes it: Z is out on the circumference looking at the same chord XY, so its angle is half. It is worth remembering the result on its own — a chord as long as the radius always subtends 30° at the circumference — because it turns up in Grade 12 as well.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:450:13"
+      ]
+    },
+    "euclid-level4#62": {
+      "en": "In the diagram, &nbsp;SU&nbsp; is a tangent to the circle at A. &nbsp;B and C are points on the circle, and AB, AC and BC are drawn. &nbsp;Â₁ = Â₃ = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:498:9"
+      ]
+    },
+    "euclid-level4#63": {
+      "en": "Write down, with a reason, the size of &nbsp;∠ACB&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:529:21",
+        "euclid-level4.js:673:21"
+      ]
+    },
+    "euclid-level4#64": {
+      "en": "Â₁ is squeezed between the tangent and the chord AB. Which point in the picture sits in the segment on the far side of AB?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:530:19"
+      ]
+    },
+    "euclid-level4#65": {
+      "en": "∠ACB = Â₁ = x &nbsp;&nbsp;<i>(tan chord theorem)</i> — the tangent–chord angle on chord AB, and the angle in the alternate segment",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:532:39"
+      ]
+    },
+    "euclid-level4#66": {
+      "en": "The tangent–chord theorem, used the ordinary way round. Name the chord first — it is AB — then find the point on the other side of it, which is C. The angle the tangent makes with AB at A, and the angle AB makes at C, are always the same size. Working in x rather than in numbers changes nothing at all: the answer is simply x, and that is a complete answer. Both marks here are on the page in one line, but only if the reason is written beside the size.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:535:13"
+      ]
+    },
+    "euclid-level4#67": {
+      "en": "Write down, with a reason, the size of &nbsp;∠ABC&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:542:21"
+      ]
+    },
+    "euclid-level4#68": {
+      "en": "Same theorem, other side. The chord is AC this time — so who is in ITS alternate segment?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:543:19"
+      ]
+    },
+    "euclid-level4#69": {
+      "en": "∠ABC = Â₃ = x &nbsp;&nbsp;<i>(tan chord theorem)</i> — the tangent–chord angle on chord AC, and the angle in the alternate segment",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:545:39"
+      ]
+    },
+    "euclid-level4#70": {
+      "en": "Two chords leave A, so the tangent–chord theorem is available twice — chord AB sending its angle across to C, and chord AC sending its angle across to B. Learners often think the theorem is about “the tangent angle”, singular, and then cannot see where a second one could come from. It is about a CHORD and the tangent, so count your chords. And here both tangent–chord angles are the same x, which is exactly the setup the next part needs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:548:13"
+      ]
+    },
+    "euclid-level4#71": {
+      "en": "Prove that &nbsp;AB = AC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:555:21"
+      ]
+    },
+    "euclid-level4#72": {
+      "en": "Look at triangle ABC on its own now, and forget the tangent. What have you just found out about two of its angles — and which sides face them?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:556:19"
+      ]
+    },
+    "euclid-level4#73": {
+      "en": "In △ABC: &nbsp;∠ABC = x &nbsp;and&nbsp; ∠ACB = x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:558:37"
+      ]
+    },
+    "euclid-level4#74": {
+      "en": "∴ ∠ABC = ∠ACB",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:559:37"
+      ]
+    },
+    "euclid-level4#75": {
+      "en": "∴ AC = AB &nbsp;&nbsp;<i>(sides opp equal ∠s)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:560:39"
+      ]
+    },
+    "euclid-level4#76": {
+      "en": "WATCH OUT: name the sides that are <b>opposite</b> the two equal angles. ∠ABC is at B, and the side facing it across the triangle is AC; ∠ACB is at C, and the side facing it is AB. Naming the wrong pair scores nothing, even though the triangle really is isosceles.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:562:15"
+      ]
+    },
+    "euclid-level4#77": {
+      "en": "This is the isosceles theorem run backwards, and the SAG gives each direction its own short form: “∠s opp equal sides” when you go from equal sides to equal angles, and “sides opp equal ∠s” when you go the other way. Use the one that matches what you actually have, or a marker will read your proof as circular. What makes the card level 4 is that nothing cued you to look at triangle ABC — the given was about two angles on a tangent, and you had to walk them both across the circle before the triangle became interesting. Once they arrived, the proof is two lines.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:566:13"
+      ]
+    },
+    "euclid-level4#78": {
+      "en": "Determine, with reasons, the size of &nbsp;Â₂&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:573:21"
+      ]
+    },
+    "euclid-level4#79": {
+      "en": "Two honest ways in: the three angles along the tangent line, or the three angles of the triangle. Either is worth full marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:574:19"
+      ]
+    },
+    "euclid-level4#80": {
+      "en": "SU is a straight line, so &nbsp;Â₁ + Â₂ + Â₃ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:576:37"
+      ]
+    },
+    "euclid-level4#81": {
+      "en": "∴ x + Â₂ + x = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:577:37"
+      ]
+    },
+    "euclid-level4#82": {
+      "en": "∴ Â₂ = 180° − 2x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:578:39"
+      ]
+    },
+    "euclid-level4#83": {
+      "en": "<b>OR</b> — inside the triangle instead: &nbsp;in △ABC, &nbsp;Â₂ = 180° − ∠ABC − ∠ACB = 180° − x − x = 180° − 2x &nbsp;<i>(int. ∠s of △)</i>. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:579:37"
+      ]
+    },
+    "euclid-level4#84": {
+      "en": "WATCH OUT: 180° − 2x, not 180° − x. There are TWO x's to take off, one on each side of Â₂ — and the same is true inside the triangle, where both base angles came out as x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:581:15"
+      ]
+    },
+    "euclid-level4#85": {
+      "en": "The two roads agreeing is the tangent–chord theorem quietly checking the whole question: the three angles along the tangent at A are x, 180° − 2x and x, and the three angles of triangle ABC are exactly the same three, standing in different places. That is what the theorem does — it shuffles the same angles across the circle. Seeing it once makes the theorem much harder to forget than any amount of chanting it. Whichever road you take, be careful with the algebra at the end: two x's come off, not one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:585:13"
+      ]
+    },
+    "euclid-level4#86": {
+      "en": "In the diagram, O is the centre of the circle and &nbsp;ST&nbsp; is a tangent to the circle at A. &nbsp;B and C are points on the circle, and OA, OB, AB, AC and BC are drawn. &nbsp;Â₂ = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:642:9"
+      ]
+    },
+    "euclid-level4#87": {
+      "en": "Â₂ sits between the tangent and the chord AB. Which point is in the segment on the other side of AB?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:674:19"
+      ]
+    },
+    "euclid-level4#88": {
+      "en": "∠ACB = Â₂ = x &nbsp;&nbsp;<i>(tan chord theorem)</i> — the tangent–chord angle on chord AB, and the angle in the alternate segment",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:676:39"
+      ]
+    },
+    "euclid-level4#89": {
+      "en": "The first link in a chain of three theorems, and it is the one that gets the given x away from the tangent and out into the circle where the other theorems can reach it. Name the chord — AB — then look across it: C is sitting in the alternate segment, so the angle chord AB makes at C equals the angle it makes with the tangent at A. Nothing about working in letters changes the method; x is a perfectly good answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:679:13"
+      ]
+    },
+    "euclid-level4#90": {
+      "en": "Prove that &nbsp;∠AOB = 2x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:686:21"
+      ]
+    },
+    "euclid-level4#91": {
+      "en": "∠AOB is at the centre. You have just found an angle at the circumference. Are they standing on the same chord?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:687:19"
+      ]
+    },
+    "euclid-level4#92": {
+      "en": "∠ACB = x &nbsp;<i>(from (a))</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:689:37"
+      ]
+    },
+    "euclid-level4#93": {
+      "en": "∠AOB and ∠ACB both stand on chord AB, with C on the far arc.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:690:37"
+      ]
+    },
+    "euclid-level4#94": {
+      "en": "∴ ∠AOB = 2 · ∠ACB = 2x &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:691:39"
+      ]
+    },
+    "euclid-level4#95": {
+      "en": "WATCH OUT: the theorem pairs the angle at the centre with an angle at the CIRCUMFERENCE, not with the tangent–chord angle. Doubling Â₂ directly happens to give the same answer here, but only because part (a) moved it to C first — say that step out loud or the reasoning does not hold.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:693:15"
+      ]
+    },
+    "euclid-level4#96": {
+      "en": "The second link. The chord AB is doing all the work in this question: it carries the given angle from the tangent across to C in part (a), and now it carries it from C in to the centre. Both angles stand on AB, one from the circumference and one from the centre, so the centre one is double. Notice that nothing in the question told you to do this — no arc is mentioned, the centre is not pointed at. Spotting that ∠ACB and ∠AOB are a centre-and-circumference pair on the same chord is the fetch, and it is what makes this a starred part rather than an easy one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:697:13"
+      ]
+    },
+    "euclid-level4#97": {
+      "en": "Prove that &nbsp;∠OBA = 90° − x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:704:21"
+      ]
+    },
+    "euclid-level4#98": {
+      "en": "Triangle OAB has two radii for sides, and you have just found the angle between them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:705:19"
+      ]
+    },
+    "euclid-level4#99": {
+      "en": "OA = OB &nbsp;<i>(radii)</i>, so &nbsp;∠OBA = Â₁ &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:707:37"
+      ]
+    },
+    "euclid-level4#100": {
+      "en": "In △OAB: &nbsp;2 · ∠OBA + ∠AOB = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>, &nbsp;so &nbsp;2 · ∠OBA + 2x = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:708:37"
+      ]
+    },
+    "euclid-level4#101": {
+      "en": "∴ ∠OBA = 90° − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:709:39"
+      ]
+    },
+    "euclid-level4#102": {
+      "en": "The third link, and the most familiar one: two radii make an isosceles triangle, its base angles are equal, and the angle sum shares out whatever is left of 180°. The algebra is the only place to slip — both base angles are the same thing, so the equation is TWICE that thing plus 2x equals 180. Say it out loud as you write it. And sanity-check the answer's shape: 90 − x shrinks as x grows, which is right, because a bigger tangent–chord angle means a bigger angle at the centre and a flatter triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:712:13"
+      ]
+    },
+    "euclid-level4#103": {
+      "en": "Hence show that &nbsp;∠OAT = 90°, &nbsp;and name the theorem this confirms.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:719:21"
+      ]
+    },
+    "euclid-level4#104": {
+      "en": "∠OAT is made of the two pieces at A. You were given one of them and you can now write down the other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:720:19"
+      ]
+    },
+    "euclid-level4#105": {
+      "en": "Â₁ = ∠OBA = 90° − x &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:722:37"
+      ]
+    },
+    "euclid-level4#106": {
+      "en": "∠OAT = Â₁ + Â₂ = (90° − x) + x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:723:37"
+      ]
+    },
+    "euclid-level4#107": {
+      "en": "∴ ∠OAT = 90°, which confirms &nbsp;<i>tan ⊥ radius</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:724:39"
+      ]
+    },
+    "euclid-level4#108": {
+      "en": "REMEMBER: in an exam you may quote <i>tan ⊥ radius</i> in one line and be done. This question made you build it from the inside so you can see WHY it is true — it is not a licence to prove it every time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:726:15"
+      ]
+    },
+    "euclid-level4#109": {
+      "en": "The chase ends exactly where it started, and the x cancels — which is the point. Whatever angle the chord makes with the tangent, the angle from the chord round to the radius is exactly what is left of 90°, so the tangent and the radius always meet at a right angle. You have proved a theorem you have been quoting all chapter, using only the tangent–chord theorem, the angle at the centre and an isosceles triangle. That is worth sitting with, because it is a good picture of how the whole chapter fits together: the theorems are not a list of separate facts, they lean on one another, and most of them can be derived from the others if you are patient.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:730:13"
+      ]
+    },
+    "euclid-level4#110": {
+      "en": "In the diagram, O is the centre of the circle and &nbsp;PC&nbsp; is a tangent to the circle at C. &nbsp;A is a point on the circle and OA, OP and AP are drawn. &nbsp;OA = 5 cm, &nbsp;AP = 12 cm &nbsp;and&nbsp; OP = 13 cm.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:780:9"
+      ]
+    },
+    "euclid-level4#111": {
+      "en": "Prove that &nbsp;PA&nbsp; is a tangent to the circle at A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:806:21"
+      ]
+    },
+    "euclid-level4#112": {
+      "en": "Nothing here mentions an angle at all — only three lengths. What can three lengths of a triangle tell you about one of its angles? And once you have that angle, what makes a line a tangent?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:807:19"
+      ]
+    },
+    "euclid-level4#113": {
+      "en": "OA² + AP² = 5² + 12² = 25 + 144 = 169",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:809:37"
+      ]
+    },
+    "euclid-level4#114": {
+      "en": "OP² = 13² = 169, &nbsp;so &nbsp;OA² + AP² = OP²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:810:37"
+      ]
+    },
+    "euclid-level4#115": {
+      "en": "∴ ∠OAP = 90° &nbsp;&nbsp;<i>(converse Pythagoras)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:811:37"
+      ]
+    },
+    "euclid-level4#116": {
+      "en": "PA ⊥ OA at A, and A is a point on the circle<br>∴ PA is a tangent to the circle at A &nbsp;&nbsp;<i>(line ⊥ radius)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:812:39"
+      ]
+    },
+    "euclid-level4#117": {
+      "en": "WATCH OUT: the right angle on its own is NOT the answer. A line perpendicular to a radius somewhere in the middle of the circle is just a chord — it only becomes a tangent because the perpendicular happens at A, which is <b>on the circle</b>. Say that in your last line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:814:15"
+      ]
+    },
+    "euclid-level4#118": {
+      "en": "This is the other way to prove a line is a tangent, and it is the one that turns up when a question gives you lengths instead of angles. Two theorems, both converses, one after the other. First, the converse of Pythagoras: if the two shorter sides squared add up to the longest side squared, the triangle must be right-angled, and the right angle sits opposite the longest side — here at A. Second, the converse of “tangent perpendicular to radius”: a line drawn at right angles to a radius at the point where that radius meets the circle is a tangent. The order matters and so do the words: get the right angle first, then say where it is, then name the tangent. Recognising 5, 12, 13 on sight saves you the arithmetic, and it is worth learning alongside 3, 4, 5 and 8, 15, 17.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:818:13"
+      ]
+    },
+    "euclid-level4#119": {
+      "en": "Write down, with a reason, the length of &nbsp;PC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:825:21"
+      ]
+    },
+    "euclid-level4#120": {
+      "en": "You have just proved that PA is a tangent, and the question told you PC is one. Both start at the same point outside the circle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:826:19"
+      ]
+    },
+    "euclid-level4#121": {
+      "en": "PC = PA = 12 cm &nbsp;&nbsp;<i>(tans from common pt)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:828:39"
+      ]
+    },
+    "euclid-level4#122": {
+      "en": "Two tangents drawn to a circle from the same outside point are always exactly the same length — think of a piece of string pulled taut round a ball from one hand. What makes this a level-three part rather than a one-mark gift is that you are only allowed to use the theorem because part (a) proved PA is a tangent in the first place. If a question ever asks you to “write down” something that leans on a proof you have just done, say so in your reason; a marker likes to see that you know why you are allowed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:831:13"
+      ]
+    },
+    "euclid-level4#123": {
+      "en": "Prove that &nbsp;∠APO = ∠CPO.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:838:21"
+      ]
+    },
+    "euclid-level4#124": {
+      "en": "Compare triangle OAP with triangle OCP. What do they share, and what do you already know about each of them?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:839:19"
+      ]
+    },
+    "euclid-level4#125": {
+      "en": "In △OAP and △OCP: &nbsp;∠OAP = ∠OCP = 90° &nbsp;&nbsp;<i>(tan ⊥ radius)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:841:37"
+      ]
+    },
+    "euclid-level4#126": {
+      "en": "OP = OP &nbsp;<i>(common)</i>; &nbsp;OA = OC &nbsp;<i>(radii)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:842:37"
+      ]
+    },
+    "euclid-level4#127": {
+      "en": "∴ △OAP ≡ △OCP &nbsp;&nbsp;<i>(RHS)</i><br>∴ ∠APO = ∠CPO",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:843:39"
+      ]
+    },
+    "euclid-level4#128": {
+      "en": "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the two triangles really are congruent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:845:15"
+      ]
+    },
+    "euclid-level4#129": {
+      "en": "The two triangles each have a right angle, they share the whole line OP as a hypotenuse, and their remaining sides OA and OC are radii, so they are the same length. Right angle, hypotenuse, side — that is RHS, and congruent triangles have every matching part equal, including the two angles at P. What you have really proved is that OP bisects the angle between the two tangents, which is true of every pair of tangents from an outside point and is worth remembering as a fact in its own right. Bank the earlier marks before you start this one: it leans on part (a) for the right angle at A and on the question's own stem for the one at C.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-level4.js:849:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3808
+}
