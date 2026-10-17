@@ -99,11 +99,11 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T62 | exam: gtrig-siblings-special-angles | ~2 444 words | verify-exam.html
 - ☑ 2026-10-17 T63 | exam: gtrig-siblings-special-sums | ~2 521 words | verify-exam.html
 - ☑ 2026-10-17 T64 | exam: gtrig-siblings-super-special-sums, trig-general-solutions (2 files) | ~3 848 words | verify-exam.html
-- ⏳ 2026-10-17 22:39 T65 | exam: trig-mixed-problems, trig-reduction-and-ratios (2 files) | ~1 577 words | verify-exam.html
+- ☑ 2026-10-17 T65 | exam: trig-mixed-problems, trig-reduction-and-ratios (2 files) | ~1 577 words | verify-exam.html
 
 ### Euclidean Geometry (exam-only)
 - ☑ 2026-10-17 T66 | concepts: the `euclid` block: NONE EXISTS (exam-only chapter, no concept cards), nothing to translate
-- ☐ T67 | exam: cards-euclid, euclid-bookwork-proofs, euclid-circle-theorems (3 files) | ~1 965 words | verify-exam.html
+- ⏳ 2026-10-17 22:41 T67 | exam: cards-euclid, euclid-bookwork-proofs, euclid-circle-theorems (3 files) | ~1 965 words | verify-exam.html
 - ☐ T68 | exam: euclid-level4 | ~3 960 words | verify-exam.html
 - ☐ T69 | exam: euclid-siblings-chords-and-angles | ~4 735 words | verify-exam.html
 - ☐ T70 | exam: euclid-siblings-cyclic-quads | ~5 790 words | verify-exam.html

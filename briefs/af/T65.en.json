@@ -1,0 +1,433 @@
+{
+  "unit": "T65",
+  "generated": "2026-10-17T20:39:22.733Z",
+  "files": [
+    "js/exam/trig-mixed-problems.js",
+    "js/exam/trig-reduction-and-ratios.js"
+  ],
+  "items": {
+    "trig-mixed-problems#1": {
+      "en": "D is a point on AC of △ABC.<br>AD = 12 cm, &nbsp;DC = 8 cm, &nbsp;BD = 15 cm &nbsp;and&nbsp; ∠ADB = 68°.<br><br>Calculate the length of AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:76:13"
+      ]
+    },
+    "trig-mixed-problems#2": {
+      "en": "Work inside the small triangle ABD, not the big one. Check what you actually have in there — two sides and the angle sitting between them points at exactly one rule.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:79:13"
+      ]
+    },
+    "trig-mixed-problems#3": {
+      "en": "In △ABD you have two sides and the angle <i>between</i> them — that is the cosine rule.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:82:37"
+      ]
+    },
+    "trig-mixed-problems#4": {
+      "en": "AB² = AD² + BD² − 2(AD)(BD) cos ∠ADB",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:83:37"
+      ]
+    },
+    "trig-mixed-problems#5": {
+      "en": "AB² = 12² + 15² − 2(12)(15) cos 68° = 144 + 225 − 360 cos 68° = 234,1416…",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:84:37"
+      ]
+    },
+    "trig-mixed-problems#6": {
+      "en": "AB = 15,30 cm",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:85:39"
+      ]
+    },
+    "trig-mixed-problems#7": {
+      "en": "WATCH OUT: the angle in the cosine rule must be the one <i>between</i> the two sides you substituted. ∠ADB sits between AD and BD, so it is the right one — but using 12, 8 and 68° (side DC instead of BD) is a real temptation because both numbers are printed. Mark the two sides on your diagram before you substitute.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:87:15"
+      ]
+    },
+    "trig-mixed-problems#8": {
+      "en": "REMEMBER: no formula sheet in this test. The cosine rule &nbsp;a² = b² + c² − 2bc cos A&nbsp; has to come out of your head.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:90:15"
+      ]
+    },
+    "trig-mixed-problems#9": {
+      "en": "The first decision is which triangle to stand in. AB is a side of the small triangle ABD, and everything you have been given about that triangle — 12, 15 and the 68° between them — belongs to it, so that is where you work. DC is not in it at all, which is exactly why it is printed: the question is checking whether you pick your sides or just grab the numbers on the page. Once you are in the right triangle the choice of rule is automatic. Two sides with the angle wedged between them is the cosine rule's home ground; the sine rule would need a side paired with the angle opposite it, and you do not have that. One habit worth keeping: do not round 234,1416… before you square-root it. Round once, at the very end, to two decimals.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:94:13"
+      ]
+    },
+    "trig-mixed-problems#10": {
+      "en": "Calculate the area of △ABC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:102:13"
+      ]
+    },
+    "trig-mixed-problems#11": {
+      "en": "BD cuts the big triangle into two smaller ones, and you know two sides and the included angle in each. What is the angle on the other side of D, and how does its sine compare with 68°?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:105:13"
+      ]
+    },
+    "trig-mixed-problems#12": {
+      "en": "D lies on AC, so △ABC splits into △ABD and △DBC. &nbsp;∠BDC = 180° − 68° = 112° (∠s on a straight line), and sin 112° = sin 68°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:108:37"
+      ]
+    },
+    "trig-mixed-problems#13": {
+      "en": "Area = ½(12)(15) sin 68° + ½(8)(15) sin 112°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:109:37"
+      ]
+    },
+    "trig-mixed-problems#14": {
+      "en": "= 83,4465… + 55,6310… = 139,08 cm²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:110:39"
+      ]
+    },
+    "trig-mixed-problems#15": {
+      "en": "<b>OR</b> — because the two pieces share the same perpendicular height from B: &nbsp;Area = ½(AD + DC)(BD) sin 68° = ½(20)(15) sin 68° = 139,08 cm². &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:111:37"
+      ]
+    },
+    "trig-mixed-problems#16": {
+      "en": "WATCH OUT: do not write ½(20)(15) sin 68° and call it “the area rule on △ABC”. The area rule needs two <i>sides of that triangle</i> with the angle between them, and BD is not a side of △ABC. The numbers happen to be right here only because the two small triangles share a height — show that step, or show the two areas added.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:113:15"
+      ]
+    },
+    "trig-mixed-problems#17": {
+      "en": "You cannot use the area rule on △ABC directly, because you do not know two of its sides with the angle between them — BD runs into the middle of it, not along an edge. But BD also does something useful: it cuts the big triangle into two smaller ones, and in each of those you DO have two sides and the included angle. So work out both areas and add them. The pretty part is the angle at D. ∠ADB and ∠BDC sit on a straight line, so they add to 180°, which makes ∠BDC = 112° — and any two angles that add to 180° have exactly the same sine. That is why 68° does the work for both halves, and it is also why the shortcut in the OR box comes out right: the two triangles share the same perpendicular height from B, so their areas can be added as one ½(AD + DC)(BD) sin 68°. Both roads earn full marks; what loses marks is jumping to the shortcut without showing why it is allowed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-mixed-problems.js:117:13"
+      ]
+    },
+    "trig-reduction-and-ratios#1": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator. Show all your working.</em><br>If sin 34° = t, write cos 56° in terms of t.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:73:13"
+      ]
+    },
+    "trig-reduction-and-ratios#2": {
+      "en": "Add the two angles first. If they make 90°, the question is handing you a co-function — and a co-function does one job only: it converts between sin and cos. 90° − θ lives in A on the wheel, where everything is positive, so nothing here is going to need a minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:76:13"
+      ]
+    },
+    "trig-reduction-and-ratios#3": {
+      "en": "34° and 56° add up to 90°, so this is a co-function:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:79:37"
+      ]
+    },
+    "trig-reduction-and-ratios#4": {
+      "en": "cos 56° = cos(90° − 34°) = sin 34° = t",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:80:39"
+      ]
+    },
+    "trig-reduction-and-ratios#5": {
+      "en": "REMEMBER: cos(90° − θ) = sin θ &nbsp;and&nbsp; sin(90° − θ) = cos θ. Whenever two angles in a question add to 90°, that is the whole clue.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:82:15"
+      ]
+    },
+    "trig-reduction-and-ratios#6": {
+      "en": "Draw one right-angled triangle and label it twice — once from the angle at the bottom, once from the angle at the top. The side that is <i>across from</i> the bottom angle is the side <i>next to</i> the top one, and the hypotenuse never moves. Because those two acute angles always add to 90°, the sine of one is the cosine of the other, every time. That is all a co-function is: it converts between sin and cos. And it is not a separate rule sitting off to one side — co-functions live inside the All Strippers Take Cash wheel. 90° − θ is an A angle, everything positive, so no minus comes along for the ride and cos 56° is simply sin 34°, which is t. The one to watch is its neighbour: 90° + θ has crossed over into S, where only sine survives. Cosine is not sine, so it picks up the minus, and cos(90° + θ) = −sin θ. One plus sign is the whole difference between them — which is why your opening move on a question shaped like this is always the same: add the two angles and see what they make.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:86:13"
+      ]
+    },
+    "trig-reduction-and-ratios#7": {
+      "en": "<em>No calculator.</em><br>It is given that 5 sin β + 3 = 0 &nbsp;and&nbsp; tan β &gt; 0.<br>With the aid of a sketch, determine the value of 5 cos β + tan β.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:94:13"
+      ]
+    },
+    "trig-reduction-and-ratios#8": {
+      "en": "Step ① never changes: get the function on its own. Then draw your cross and tick it twice — once for the quadrants where sin is negative, once for the quadrants where tan is positive. The quadrant that collects two ticks is the one you sketch in, and (pyth) finds the side that is missing. Let the quadrant hand you the signs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:97:13"
+      ]
+    },
+    "trig-reduction-and-ratios#9": {
+      "en": "First get the ratio on its own: &nbsp;5 sin β = −3 &nbsp;⟹&nbsp; sin β = −3/5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:100:37"
+      ]
+    },
+    "trig-reduction-and-ratios#10": {
+      "en": "sin β is <b>negative</b> and tan β is <b>positive</b> — that can only be the <b>third quadrant</b>. Sketch it there: the point (−4 ; −3), with y = −3 and r = 5.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:101:37"
+      ]
+    },
+    "trig-reduction-and-ratios#11": {
+      "en": "Pythagoras gives the third side, and in the third quadrant x is <b>negative</b>: &nbsp;x² = 5² − 3² = 16 &nbsp;⟹&nbsp; x = −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:102:37"
+      ]
+    },
+    "trig-reduction-and-ratios#12": {
+      "en": "cos β = x/r = −4/5 &nbsp;&nbsp;·&nbsp;&nbsp; tan β = y/x = (−3)/(−4) = 3/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:103:37"
+      ]
+    },
+    "trig-reduction-and-ratios#13": {
+      "en": "5 cos β + tan β = 5(−4/5) + 3/4 = −4 + 3/4 = −13/4 = −3,25",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:104:39"
+      ]
+    },
+    "trig-reduction-and-ratios#14": {
+      "en": "WATCH OUT: the sign of x. In the third quadrant <i>both</i> x and y are negative. A learner who writes x = 4 gets cos β = 4/5 and loses the last two marks in one step — and notice that tan β would then come out negative, which contradicts what the question told you. That contradiction is your own check.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:106:15"
+      ]
+    },
+    "trig-reduction-and-ratios#15": {
+      "en": "This is a special sum, and it runs on the five steps: isolate the function, determine the quadrant, sketch the diagram, calculate the unknown side, substitute. Step ① is quick — 5 sin β = −3, so sin β = −3/5. Step ② is where the whole teaching sits. Draw the little cross and tick it twice, in two colours if that helps you see it: sin is negative in III and IV, tan is positive in I and III. The quadrant that got two ticks wins, and that is III. All Strippers Take Cash says the same thing round the bow tie — A is everything, S is sine only, T is tan only, C is cos only — so “sin negative and tan positive” can land on T and nowhere else. That double tick is the reason the step exists: sin β = −3/5 on its own fits two quadrants, and the two would hand you opposite answers. After that the sketch does the work. You are given y = −3 and r = 5, (pyth) gives you 4 for the side that is left, and the quadrant tells you to write it as −4, because in the third quadrant both x and y are negative. r never takes a minus — it is the radius, and a radius is a length. From there every ratio is two of those three numbers divided, and the calculator stays in your bag.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:110:13"
+      ]
+    },
+    "trig-reduction-and-ratios#16": {
+      "en": "<em>No calculator.</em><br>Simplify: &nbsp;<span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">cos(180° − x) · sin(90° + x)</span><span class=\\\"sf-d\\\">cos²(90° + x)</span></span>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:118:13"
+      ]
+    },
+    "trig-reduction-and-ratios#17": {
+      "en": "Three reductions, three separate lines — and write the split above each angle before you write anything else. For each one, the three steps in order: which quadrant, which reduction formula, then + or −. And anything you are about to square goes into block brackets first.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:121:13"
+      ]
+    },
+    "trig-reduction-and-ratios#18": {
+      "en": "Take the three reductions one at a time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:124:37"
+      ]
+    },
+    "trig-reduction-and-ratios#19": {
+      "en": "cos(180° − x) = −cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:125:37"
+      ]
+    },
+    "trig-reduction-and-ratios#20": {
+      "en": "sin(90° + x) = cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:126:37"
+      ]
+    },
+    "trig-reduction-and-ratios#21": {
+      "en": "cos(90° + x) = −sin x &nbsp;⟹&nbsp; cos²(90° + x) = (−sin x)² = sin²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:127:37"
+      ]
+    },
+    "trig-reduction-and-ratios#22": {
+      "en": "Now put them back:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:128:37"
+      ]
+    },
+    "trig-reduction-and-ratios#23": {
+      "en": "(−cos x)(cos x) / sin²x = −cos²x / sin²x &nbsp;&nbsp;<b>OR</b>&nbsp;&nbsp; −1/tan²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:129:39"
+      ]
+    },
+    "trig-reduction-and-ratios#24": {
+      "en": "WATCH OUT: squaring kills the minus in the denominator — (−sin x)² = +sin²x, never −sin²x. That one sign is the difference between −cos²x/sin²x and +cos²x/sin²x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:131:15"
+      ]
+    },
+    "trig-reduction-and-ratios#25": {
+      "en": "A reduction is nothing more sinister than rewriting an angle as an acute angle, and the three steps handle every single one: quadrant, reduction formula, sign. Only 90° ± x converts between sin and cos — that is exactly what makes it a co-function. 180° ± x and 360° ± x leave the ratio alone and do nothing but decide a sign, which is why cos(180° − x) is still a cosine and has only turned negative. The middle one, sin(90° + x), converts to cos, and 90° + x sits in S where sine is positive, so it comes out clean as cos x. The third one is the trap: cos(90° + x) is in S as well, but cosine is not sine, so it picks up the minus — cos(90° + x) = −sin x. Then comes the piece that quietly saves the mark. The question squares that one, so put it in block brackets first, [−sin x]², and reduce inside the brackets before you square. The minus dies in there and sin²x comes out positive. Skip the brackets and your answer is exactly the right size with the wrong sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-reduction-and-ratios.js:135:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1532
+}

@@ -73,25 +73,25 @@ const t2q6 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "D is a point on AC of △ABC.<br>AD = 12 cm, &nbsp;DC = 8 cm, &nbsp;BD = 15 cm &nbsp;and&nbsp; ∠ADB = 68°.<br><br>Calculate the length of AB.",
+        en: "D is a point on AC of △ABC.<br>AD = 12 cm, &nbsp;DC = 8 cm, &nbsp;BD = 15 cm &nbsp;and&nbsp; ∠ADB = 68°.<br><br>Calculate the length of AB.", af: "D is 'n punt op AC van △ABC.<br>AD = 12 cm, &nbsp;DC = 8 cm, &nbsp;BD = 15 cm &nbsp;en&nbsp; ∠ADB = 68°.<br><br>Bereken die lengte van AB.",
       },
       hint: {
-        en: "Work inside the small triangle ABD, not the big one. Check what you actually have in there — two sides and the angle sitting between them points at exactly one rule.",
+        en: "Work inside the small triangle ABD, not the big one. Check what you actually have in there — two sides and the angle sitting between them points at exactly one rule.", af: "Werk binne die klein driehoek ABD, nie die groot een nie. Kyk wat jy werklik daarin het: twee sye en die hoek tussen hulle wys na presies een reël.",
       },
       memo: [
-        { type: "step", text: { en: "In △ABD you have two sides and the angle <i>between</i> them — that is the cosine rule." } },
-        { type: "step", text: { en: "AB² = AD² + BD² − 2(AD)(BD) cos ∠ADB" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "AB² = 12² + 15² − 2(12)(15) cos 68° = 144 + 225 − 360 cos 68° = 234,1416…" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "AB = 15,30 cm" }, ticks: ["a"] },
+        { type: "step", text: { en: "In △ABD you have two sides and the angle <i>between</i> them — that is the cosine rule.", af: "In △ABD het jy twee sye en die hoek <i>tussen</i> hulle: dit is die cosinusreël." } },
+        { type: "step", text: { en: "AB² = AD² + BD² − 2(AD)(BD) cos ∠ADB", af: "AB² = AD² + BD² − 2(AD)(BD) cos ∠ADB" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "AB² = 12² + 15² − 2(12)(15) cos 68° = 144 + 225 − 360 cos 68° = 234,1416…", af: "AB² = 12² + 15² − 2(12)(15) cos 68° = 144 + 225 − 360 cos 68° = 234,1416…" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "AB = 15,30 cm", af: "AB = 15,30 cm" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the angle in the cosine rule must be the one <i>between</i> the two sides you substituted. ∠ADB sits between AD and BD, so it is the right one — but using 12, 8 and 68° (side DC instead of BD) is a real temptation because both numbers are printed. Mark the two sides on your diagram before you substitute.",
+          en: "WATCH OUT: the angle in the cosine rule must be the one <i>between</i> the two sides you substituted. ∠ADB sits between AD and BD, so it is the right one — but using 12, 8 and 68° (side DC instead of BD) is a real temptation because both numbers are printed. Mark the two sides on your diagram before you substitute.", af: "PASOP: die hoek in die cosinusreël moet die een <i>tussen</i> die twee sye wees wat jy vervang het. ∠ADB lê tussen AD en BD, dus is dit die regte een, maar om 12, 8 en 68° te gebruik (sy DC in plaas van BD) is 'n regte versoeking, want albei getalle staan op die blad. Merk die twee sye op jou diagram voordat jy vervang.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: no formula sheet in this test. The cosine rule &nbsp;a² = b² + c² − 2bc cos A&nbsp; has to come out of your head.",
+          en: "REMEMBER: no formula sheet in this test. The cosine rule &nbsp;a² = b² + c² − 2bc cos A&nbsp; has to come out of your head.", af: "ONTHOU: geen formuleblad in hierdie toets nie. Die cosinusreël &nbsp;a² = b² + c² − 2bc cos A&nbsp; moet uit jou kop kom.",
         } },
       ],
       esplain: {
-        en: "The first decision is which triangle to stand in. AB is a side of the small triangle ABD, and everything you have been given about that triangle — 12, 15 and the 68° between them — belongs to it, so that is where you work. DC is not in it at all, which is exactly why it is printed: the question is checking whether you pick your sides or just grab the numbers on the page. Once you are in the right triangle the choice of rule is automatic. Two sides with the angle wedged between them is the cosine rule's home ground; the sine rule would need a side paired with the angle opposite it, and you do not have that. One habit worth keeping: do not round 234,1416… before you square-root it. Round once, at the very end, to two decimals.",
+        en: "The first decision is which triangle to stand in. AB is a side of the small triangle ABD, and everything you have been given about that triangle — 12, 15 and the 68° between them — belongs to it, so that is where you work. DC is not in it at all, which is exactly why it is printed: the question is checking whether you pick your sides or just grab the numbers on the page. Once you are in the right triangle the choice of rule is automatic. Two sides with the angle wedged between them is the cosine rule's home ground; the sine rule would need a side paired with the angle opposite it, and you do not have that. One habit worth keeping: do not round 234,1416… before you square-root it. Round once, at the very end, to two decimals.", af: "Die eerste besluit is in watter driehoek jy gaan staan. AB is 'n sy van die klein driehoek ABD, en alles wat jy oor daardie driehoek gekry het (12, 15 en die 68° tussen hulle) behoort daaraan, dus werk jy daar. DC is glad nie daarin nie, en dit is presies hoekom dit daar staan: die vraag toets of jy jou sye kies of net die getalle op die blad gryp. Sodra jy in die regte driehoek is, kies die reël homself. Twee sye met die hoek vasgeknyp tussen hulle is die cosinusreël se tuisveld; die sinusreël het 'n sy nodig saam met die hoek teenoor daardie sy, en dit het jy nie. Een gewoonte wat die moeite werd is: moenie 234,1416… afrond voordat jy die vierkantswortel neem nie. Rond een keer af, heel aan die einde, tot twee desimale.",
       },
     },
     {
@@ -99,22 +99,22 @@ const t2q6 = {
       marks: 2,
       level: 3,
       prompt: {
-        en: "Calculate the area of △ABC.",
+        en: "Calculate the area of △ABC.", af: "Bereken die oppervlakte van △ABC.",
       },
       hint: {
-        en: "BD cuts the big triangle into two smaller ones, and you know two sides and the included angle in each. What is the angle on the other side of D, and how does its sine compare with 68°?",
+        en: "BD cuts the big triangle into two smaller ones, and you know two sides and the included angle in each. What is the angle on the other side of D, and how does its sine compare with 68°?", af: "BD sny die groot driehoek in twee kleiner driehoeke, en in elkeen ken jy twee sye en die ingeslote hoek. Wat is die hoek aan die ander kant van D, en hoe vergelyk die sin daarvan met sin 68°?",
       },
       memo: [
-        { type: "step", text: { en: "D lies on AC, so △ABC splits into △ABD and △DBC. &nbsp;∠BDC = 180° − 68° = 112° (∠s on a straight line), and sin 112° = sin 68°." } },
-        { type: "step", text: { en: "Area = ½(12)(15) sin 68° + ½(8)(15) sin 112°" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "= 83,4465… + 55,6310… = 139,08 cm²" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — because the two pieces share the same perpendicular height from B: &nbsp;Area = ½(AD + DC)(BD) sin 68° = ½(20)(15) sin 68° = 139,08 cm². &nbsp;Same marks." } },
+        { type: "step", text: { en: "D lies on AC, so △ABC splits into △ABD and △DBC. &nbsp;∠BDC = 180° − 68° = 112° (∠s on a straight line), and sin 112° = sin 68°.", af: "D lê op AC, dus word △ABC in △ABD en △DBC verdeel. &nbsp;∠BDC = 180° − 68° = 112° (∠e op 'n reguit lyn), en sin 112° = sin 68°." } },
+        { type: "step", text: { en: "Area = ½(12)(15) sin 68° + ½(8)(15) sin 112°", af: "Oppervlakte = ½(12)(15) sin 68° + ½(8)(15) sin 112°" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "= 83,4465… + 55,6310… = 139,08 cm²", af: "= 83,4465… + 55,6310… = 139,08 cm²" }, ticks: ["a"] },
+        { type: "step", text: { en: "<b>OR</b> — because the two pieces share the same perpendicular height from B: &nbsp;Area = ½(AD + DC)(BD) sin 68° = ½(20)(15) sin 68° = 139,08 cm². &nbsp;Same marks.", af: "<b>OF</b>, omdat die twee stukke dieselfde loodregte hoogte vanaf B deel: &nbsp;Oppervlakte = ½(AD + DC)(BD) sin 68° = ½(20)(15) sin 68° = 139,08 cm². &nbsp;Dieselfde punte." } },
         { type: "trap", text: {
-          en: "WATCH OUT: do not write ½(20)(15) sin 68° and call it “the area rule on △ABC”. The area rule needs two <i>sides of that triangle</i> with the angle between them, and BD is not a side of △ABC. The numbers happen to be right here only because the two small triangles share a height — show that step, or show the two areas added.",
+          en: "WATCH OUT: do not write ½(20)(15) sin 68° and call it “the area rule on △ABC”. The area rule needs two <i>sides of that triangle</i> with the angle between them, and BD is not a side of △ABC. The numbers happen to be right here only because the two small triangles share a height — show that step, or show the two areas added.", af: "PASOP: moenie ½(20)(15) sin 68° skryf en dit “die oppervlakreël op △ABC” noem nie. Die oppervlakreël het twee <i>sye van daardie driehoek</i> nodig met die hoek tussen hulle, en BD is nie 'n sy van △ABC nie. Die getalle is hier net reg omdat die twee klein driehoeke 'n hoogte deel: wys daardie stap, of wys die twee oppervlaktes bymekaargetel.",
         } },
       ],
       esplain: {
-        en: "You cannot use the area rule on △ABC directly, because you do not know two of its sides with the angle between them — BD runs into the middle of it, not along an edge. But BD also does something useful: it cuts the big triangle into two smaller ones, and in each of those you DO have two sides and the included angle. So work out both areas and add them. The pretty part is the angle at D. ∠ADB and ∠BDC sit on a straight line, so they add to 180°, which makes ∠BDC = 112° — and any two angles that add to 180° have exactly the same sine. That is why 68° does the work for both halves, and it is also why the shortcut in the OR box comes out right: the two triangles share the same perpendicular height from B, so their areas can be added as one ½(AD + DC)(BD) sin 68°. Both roads earn full marks; what loses marks is jumping to the shortcut without showing why it is allowed.",
+        en: "You cannot use the area rule on △ABC directly, because you do not know two of its sides with the angle between them — BD runs into the middle of it, not along an edge. But BD also does something useful: it cuts the big triangle into two smaller ones, and in each of those you DO have two sides and the included angle. So work out both areas and add them. The pretty part is the angle at D. ∠ADB and ∠BDC sit on a straight line, so they add to 180°, which makes ∠BDC = 112° — and any two angles that add to 180° have exactly the same sine. That is why 68° does the work for both halves, and it is also why the shortcut in the OR box comes out right: the two triangles share the same perpendicular height from B, so their areas can be added as one ½(AD + DC)(BD) sin 68°. Both roads earn full marks; what loses marks is jumping to the shortcut without showing why it is allowed.", af: "Jy kan nie die oppervlakreël direk op △ABC gebruik nie, want jy ken nie twee van sy sye met die hoek tussen hulle nie: BD loop tot binne-in die driehoek, nie langs 'n rand nie. Maar BD doen ook iets nuttigs: dit sny die groot driehoek in twee kleiner driehoeke, en in elkeen van hulle HET jy twee sye en die ingeslote hoek. Bereken dus albei oppervlaktes en tel hulle op. Die mooi deel is die hoek by D. ∠ADB en ∠BDC lê op 'n reguit lyn, dus tel hulle op tot 180°, wat ∠BDC = 112° maak, en enige twee hoeke wat tot 180° optel, het presies dieselfde sin-waarde. Dit is hoekom 68° die werk vir albei helftes doen, en dit is ook hoekom die kortpad in die OF-blokkie reg uitkom: die twee driehoeke deel dieselfde loodregte hoogte vanaf B, dus kan hulle oppervlaktes saam as een ½(AD + DC)(BD) sin 68° geskryf word. Albei paaie kry volpunte; wat punte kos, is om na die kortpad te spring sonder om te wys hoekom dit toegelaat word.",
       },
     },
   ],
