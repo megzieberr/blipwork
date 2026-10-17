@@ -1,0 +1,312 @@
+{
+  "unit": "T26",
+  "generated": "2026-10-17T18:15:15.621Z",
+  "files": [
+    "js/concepts/func.js"
+  ],
+  "items": {
+    "func#1": {
+      "en": "The four function families",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:9:12"
+      ]
+    },
+    "func#2": {
+      "en": "\n      <p>Spot the family from the equation:</p>\n      <ul>\n        <li><b>Straight line</b> — just an x, no powers, no x on the bottom: y = ax + q.</li>\n        <li><b>Parabola</b> — has an <b>x²</b> (or a bracket squared): y = ax² + bx + c. Shape ∪ or ∩, one turning point.</li>\n        <li><b>Hyperbola</b> — x in the <b>denominator</b>: y = a/(x − p) + q. Two branches, two asymptotes.</li>\n        <li><b>Exponential</b> — x in the <b>exponent</b>: y = a·b<sup>x − p</sup> + q. One horizontal asymptote, no turning point.</li>\n      </ul>\n      <p>Names for y: f(x), g(x), h(x). f(3) means “substitute x = 3 and read the y-value”.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:10:11"
+      ]
+    },
+    "func#3": {
+      "en": "Domain & range",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:21:12"
+      ]
+    },
+    "func#4": {
+      "en": "\n      <p><b>Domain</b> = all the x-values the graph uses. <b>Range</b> = all the y-values.</p>\n      <ul>\n        <li><b>Line / parabola / exponential:</b> domain is x ∈ ℝ (every x works).</li>\n        <li><b>Hyperbola:</b> domain x ∈ ℝ, x ≠ p (it skips the vertical asymptote).</li>\n      </ul>\n      <p>Range:</p>\n      <ul>\n        <li><b>Parabola:</b> y ≥ q (happy) or y ≤ q (sad), where q is the turning-point y.</li>\n        <li><b>Hyperbola:</b> y ∈ ℝ, y ≠ q (skips the horizontal asymptote).</li>\n        <li><b>Exponential:</b> y &gt; q (a &gt; 0) or y &lt; q (a &lt; 0).</li>\n      </ul>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:22:11"
+      ]
+    },
+    "func#5": {
+      "en": "The straight line y = ax + q",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:36:12"
+      ]
+    },
+    "func#6": {
+      "en": "\n      <p><b>a</b> is the gradient, <b>q</b> is the y-intercept.</p>\n      <ul>\n        <li>a &gt; 0 → increasing (slopes up); a &lt; 0 → decreasing (slopes down).</li>\n        <li><b>y-intercept:</b> let x = 0 → it is just q, the point (0 ; q).</li>\n        <li><b>x-intercept:</b> let y = 0 and solve for x.</li>\n      </ul>\n      <div class=\"eg\">y = 2x − 6: y-intercept (0 ; −6); x-intercept where 0 = 2x − 6 → x = 3, point (3 ; 0).</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:37:11"
+      ]
+    },
+    "func#7": {
+      "en": "The parabola — shape & turning point",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:47:12"
+      ]
+    },
+    "func#8": {
+      "en": "\n      <p>Standard form y = ax² + bx + c; turning-point form y = a(x − p)² + q with turning point (p ; q).</p>\n      <ul>\n        <li><b>a &gt; 0</b> → “happy” ∪, opens up, has a <b>minimum</b>.</li>\n        <li><b>a &lt; 0</b> → “sad” ∩, opens down, has a <b>maximum</b>.</li>\n        <li><b>Turning point x</b> = −b/(2a); substitute back for the y.</li>\n        <li><b>Axis of symmetry</b> = the vertical line through the turning point, x = p.</li>\n      </ul>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:48:11"
+      ]
+    },
+    "func#9": {
+      "en": "The hyperbola y = a/(x − p) + q",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:58:12"
+      ]
+    },
+    "func#10": {
+      "en": "\n      <p>Two branches sitting around two asymptotes:</p>\n      <ul>\n        <li><b>Vertical asymptote:</b> x = p.</li>\n        <li><b>Horizontal asymptote:</b> y = q.</li>\n        <li><b>a &gt; 0</b> → branches top-right & bottom-left, each <b>decreasing</b>.</li>\n        <li><b>a &lt; 0</b> → branches top-left & bottom-right, each <b>increasing</b>.</li>\n      </ul>\n      <p>The graph never touches its asymptotes — that is why x ≠ p and y ≠ q.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:59:11"
+      ]
+    },
+    "func#11": {
+      "en": "The exponential y = a·b<sup>x − p</sup> + q",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:70:12"
+      ]
+    },
+    "func#12": {
+      "en": "\n      <p>One horizontal asymptote and no turning point.</p>\n      <ul>\n        <li><b>Asymptote:</b> y = q (the graph flattens towards it).</li>\n        <li><b>b &gt; 1</b> → growth (“taking off”, increasing). <b>0 &lt; b &lt; 1</b> → decay (“landing”, decreasing).</li>\n        <li><b>a &gt; 0</b> → graph above the asymptote (range y &gt; q). <b>a &lt; 0</b> → below (y &lt; q).</li>\n        <li><b>p</b> — the exponent is (x − p). Read p as the number after the sign, and the graph moves the <b>opposite</b> way: 2<sup>x − 3</sup> is 3 units to the <b>right</b>, and 2<sup>x + 3</sup> is 3 units to the <b>left</b>.</li>\n      </ul>\n      <p>In Grade 10 the exponential was y = a·bˣ + q. Grade 11 adds the p.</p>\n      <div class=\"eg\">A fraction base is a negative exponent: (½)ˣ = 2⁻ˣ.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:71:11"
+      ]
+    },
+    "func#13": {
+      "en": "Reading features off a graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:83:12"
+      ]
+    },
+    "func#14": {
+      "en": "\n      <ul>\n        <li><b>y-intercept:</b> where the graph crosses the y-axis (x = 0).</li>\n        <li><b>x-intercept(s):</b> where it crosses the x-axis (y = 0).</li>\n        <li><b>Turning point:</b> the lowest/highest point of a parabola — read both coordinates.</li>\n        <li><b>Asymptotes:</b> the dashed lines the graph hugs but never touches.</li>\n      </ul>\n      <p>Follow a point straight down to the x-axis for its x-value, and straight across to the y-axis for its y-value.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:84:11"
+      ]
+    },
+    "func#15": {
+      "en": "Increasing & decreasing",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:94:12"
+      ]
+    },
+    "func#16": {
+      "en": "\n      <p>Read the graph <b>left to right</b>: going up = increasing, going down = decreasing.</p>\n      <p>A parabola changes direction at its turning point x = p:</p>\n      <ul>\n        <li><b>Happy (∪):</b> decreasing for x &lt; p, increasing for x &gt; p.</li>\n        <li><b>Sad (∩):</b> increasing for x &lt; p, decreasing for x &gt; p.</li>\n      </ul>\n      <p>A straight line is increasing everywhere (a &gt; 0) or decreasing everywhere (a &lt; 0).</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:95:11"
+      ]
+    },
+    "func#17": {
+      "en": "Where a graph is positive or negative",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:105:12"
+      ]
+    },
+    "func#18": {
+      "en": "\n      <p>“f(x)” is the <b>y-value</b>, so:</p>\n      <ul>\n        <li><b>f(x) &gt; 0</b> — the graph is <b>above</b> the x-axis.</li>\n        <li><b>f(x) &lt; 0</b> — the graph is <b>below</b> the x-axis.</li>\n      </ul>\n      <p>The x-intercepts are the boundaries. For a parabola with intercepts a &lt; b:</p>\n      <ul>\n        <li><b>Happy:</b> above for x &lt; a or x &gt; b; below for a &lt; x &lt; b.</li>\n        <li><b>Sad:</b> above for a &lt; x &lt; b; below for x &lt; a or x &gt; b.</li>\n      </ul>\n      <p>Always write x first, e.g. <i>−2 &lt; x &lt; 3</i>.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:106:11"
+      ]
+    },
+    "func#19": {
+      "en": "Product & quotient inequalities (signs)",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:120:12"
+      ]
+    },
+    "func#20": {
+      "en": "\n      <p>It is all about <b>signs</b>:</p>\n      <ul>\n        <li><b>f(x)·g(x) &gt; 0</b> — same side of the x-axis (both above, or both below).</li>\n        <li><b>f(x)·g(x) &lt; 0</b> — different sides (one above, one below).</li>\n        <li><b>f(x)/g(x)</b> — same rule, but g(x) ≠ 0.</li>\n        <li><b>x·f(x) &gt; 0</b> — x and the y-value have the <b>same</b> sign → quadrants 1 &amp; 3.</li>\n        <li><b>x·f(x) &lt; 0</b> — different signs → quadrants 2 &amp; 4.</li>\n      </ul>\n      <p>When comparing two graphs (f &gt; g), the boundaries are the x-values of the <b>intersection</b> points.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:121:11"
+      ]
+    },
+    "func#21": {
+      "en": "Transformations",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:133:12"
+      ]
+    },
+    "func#22": {
+      "en": "\n      <p>Starting from f(x):</p>\n      <ul>\n        <li><b>Up/down:</b> f(x) + k (up), f(x) − k (down).</li>\n        <li><b>Left/right (inside with x):</b> f(x + k) shifts <b>left</b>, f(x − k) shifts <b>right</b>.</li>\n        <li><b>Reflection in the x-axis:</b> −f(x) (the y’s change sign).</li>\n        <li><b>Reflection in the y-axis:</b> f(−x) (the x’s change sign).</li>\n        <li><b>Vertical stretch:</b> k·f(x).</li>\n      </ul>\n      <p>A vertical shift moves a parabola’s turning point y and an asymptote y = q; x stays the same.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:134:11"
+      ]
+    },
+    "func#23": {
+      "en": "Where two graphs meet",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:146:12"
+      ]
+    },
+    "func#24": {
+      "en": "\n      <p>An <b>intersection</b> point lies on <b>both</b> graphs at once — read its coordinates off both axes.</p>\n      <p>To compare graphs:</p>\n      <ul>\n        <li><b>f(x) &gt; g(x)</b> — where f is <b>above</b> g.</li>\n        <li>The graphs swap over at their intersection points, so those x-values are the boundaries.</li>\n      </ul>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:147:11"
+      ]
+    },
+    "func#25": {
+      "en": "Nature of the roots",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:156:12"
+      ]
+    },
+    "func#26": {
+      "en": "\n      <p>The roots (x-intercepts) of a parabola depend on the discriminant Δ = b² − 4ac:</p>\n      <ul>\n        <li><b>Δ &gt; 0</b> — two real, unequal roots (cuts the x-axis twice).</li>\n        <li><b>Δ = 0</b> — two equal roots (touches the x-axis once).</li>\n        <li><b>Δ &lt; 0</b> — non-real roots (never reaches the x-axis).</li>\n      </ul>\n      <p><b>The y = k method:</b> for a happy parabola with turning-point value y₀, the line y = k meets it <b>twice</b> when k &gt; y₀, <b>once</b> when k = y₀, and <b>not at all</b> when k &lt; y₀.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:157:11"
+      ]
+    },
+    "func#27": {
+      "en": "Average gradient",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:167:12"
+      ]
+    },
+    "func#28": {
+      "en": "\n      <p>The average gradient between two points is the gradient of the straight line joining them.</p>\n      <div class=\"formula\">average gradient = (y₂ − y₁) / (x₂ − x₁)</div>\n      <p>First substitute each x into the function to get its y-value, then use the formula.</p>\n      <div class=\"eg\">f(x) = x² − 4 between x = −1 and x = 3: points (−1 ; −3) and (3 ; 5) → (5 − (−3))/(3 − (−1)) = 2.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:168:11"
+      ]
+    },
+    "func#29": {
+      "en": "Maximum / minimum length between graphs",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "func.js:175:12"
+      ]
+    },
+    "func#30": {
+      "en": "\n      <p>For a vertical line between two graphs:</p>\n      <div class=\"formula\">length = <span class=\"nowrap\">(graph on top)</span> − <span class=\"nowrap\">(graph below)</span></div>\n      <p>If one is a parabola, that difference is itself a parabola. Find where it turns (x = −b/(2a)) and substitute back to get the biggest (or smallest) length.</p>\n      <div class=\"eg\">Keep the brackets when subtracting: g − f = −x + 9 − (x² − 2x + 3) = −x² + x + 6.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "func.js:176:11"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 734
+}
