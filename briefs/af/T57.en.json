@@ -1,0 +1,732 @@
+{
+  "unit": "T57",
+  "generated": "2026-10-17T19:17:25.815Z",
+  "files": [
+    "js/exam/gtrig-siblings-co-functions.js"
+  ],
+  "items": {
+    "gtrig-siblings-co-functions#1": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Write down &nbsp;cos(90° + θ)&nbsp; in terms of &nbsp;sin θ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:80:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#2": {
+      "en": "Do not touch the ratio yet — ask the quadrant question first. Where on the wheel does 90° + θ land, and which ratio survives there? Only then use the fact that a 90° split is the one split that converts between sin and cos.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:83:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#3": {
+      "en": "90° + θ has crossed the 90° line into the <b>second quadrant</b> — S on All Strippers Take Cash, where <b>only sine</b> is positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:86:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#4": {
+      "en": "A 90° ± θ angle is a co-function, so the ratio converts: cos becomes sin. And cosine is not sine, so it collects the minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:87:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#5": {
+      "en": "cos(90° + θ) = −sin θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:88:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#6": {
+      "en": "REMEMBER: this is THE trap. cos(90° − θ) = +sin θ, but cos(90° + θ) = −sin θ. One plus sign is the whole difference between them — which is why you add the angles and look at the wheel before you write anything down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:90:15"
+      ]
+    },
+    "gtrig-siblings-co-functions#7": {
+      "en": "Two angles, one wheel. All Strippers Take Cash tells you which ratio survives in each quadrant, and 90° + θ has just crossed the 90° line into S — the quadrant where only sine stays positive. Cosine is not sine, so it has to change sign, and that is where the minus comes from. The rest of the answer is the co-function part: a 90° split is the only split that converts between sin and cos, so cos turns into sin. Put the two halves together and you get −sin θ. Its friendly neighbour, 90° − θ, sits in A where everything is positive, so cos(90° − θ) is simply +sin θ. That is why your first move on a question shaped like this is always the same: add the angles, then look at the wheel.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:94:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#8": {
+      "en": "Write down &nbsp;sin(90° + θ)&nbsp; in terms of &nbsp;cos θ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:102:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#9": {
+      "en": "Same angle as (a), so the same quadrant. The only new question is whether the ratio you started with is the one that survives there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:105:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#10": {
+      "en": "90° + θ is still an S angle, and in S <b>sine</b> is the ratio that stays positive — so nothing turns negative here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:108:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#11": {
+      "en": "The 90° split still converts, so sin becomes cos.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:109:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#12": {
+      "en": "sin(90° + θ) = cos θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:110:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#13": {
+      "en": "Same angle, different ratio — and this time nothing goes wrong. 90° + θ is still in S, and sine is exactly the ratio S keeps positive, so no minus comes along for the ride. The 90° split still does its one job and converts sine into cosine, which leaves you with a clean cos θ. Putting (a) and (b) next to each other is the fastest way to hold the trap in your head: with the SAME angle, sin(90° + θ) = cos θ but cos(90° + θ) = −sin θ. The sign is not decided by the split — it is decided by the quadrant, and by whether the ratio you started with is the one that survives there. Ask those two questions in that order and the sign looks after itself.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:113:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#14": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Simplify: &nbsp;sin(90° − x)/cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:140:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#15": {
+      "en": "Deal with the bracket first and leave the bottom of the fraction alone. 90° − x lives in A, where everything is positive, so no minus is coming — the only thing that happens is the conversion.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:143:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#16": {
+      "en": "90° − x is an <b>A</b> angle (everything positive), and the 90° split converts sin to cos:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:146:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#17": {
+      "en": "sin(90° − x) = cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:147:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#18": {
+      "en": "cos x/cos x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:148:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#19": {
+      "en": "90° − x sits in A, the quadrant where all three ratios are positive, so nothing here turns negative — the only thing that happens is the conversion. Sine becomes cosine, the expression turns into cos x over cos x, and that is 1. Picture the reason instead of memorising it. In a right-angled triangle the two acute angles add to 90°, so they share the same three sides and only swap the names opposite and adjacent: the side across from one is the side next to the other. That is all a co-function is — a change of name, not a change of value. Once you see that, sin(90° − x) = cos x stops being a rule to remember and starts being obvious.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:151:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#20": {
+      "en": "Simplify: &nbsp;sin(90° − x) · tan x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:159:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#21": {
+      "en": "Two moves. Convert the co-function, then write tan as sin over cos — that swap is what creates something to cancel with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:162:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#22": {
+      "en": "sin(90° − x) = cos x &nbsp;(an A angle, so no minus)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:165:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#23": {
+      "en": "tan x = sin x/cos x &nbsp;— one of the identities she wants known by heart",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:166:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#24": {
+      "en": "So the expression is &nbsp;cos x · sin x/cos x &nbsp;— and the cos x cancels.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:167:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#25": {
+      "en": "= sin x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:168:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#26": {
+      "en": "Two moves, and doing both matters more than the order. First the co-function: sin(90° − x) is an A angle, everything positive, and the 90° split converts sine to cosine, so it is simply cos x. Second the identity: tan x is not a new animal, it is sin x over cos x. Now the expression reads cos x times sin x over cos x, the cos x on top cancels the cos x underneath, and sin x is left. Notice what did the real work — turning tan into sin over cos is what created something to cancel with. Whenever an expression mixes tan with sin and cos, that swap is almost always the move worth trying first.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:171:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#27": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;cos 18° = p.<br><br>Write &nbsp;sin 72°&nbsp; in terms of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:203:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#28": {
+      "en": "Add the two angles. If they make 90°, the question is handing you a co-function — and a co-function does one job only: it converts between sin and cos. 90° − θ lives in A, so nothing here needs a minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:206:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#29": {
+      "en": "18° and 72° add up to 90°, so this is a co-function: &nbsp;sin 72° = sin(90° − 18°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:209:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#30": {
+      "en": "= cos 18° = p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:210:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#31": {
+      "en": "18° and 72° add up to 90°, and that is the whole clue. Two angles that add to 90° are the two acute angles of the same right-angled triangle, so they share the same three sides — the side opposite one is the side next to the other. That makes the sine of one equal to the cosine of the other, every time. So sin 72° is exactly cos 18°, which you were handed as p. Notice there is no triangle to draw and no Pythagoras to do here: the question never asks for a side you do not already have. When you see in terms of p with two angles adding to 90°, the answer is usually just p or −p, and your only job is deciding which.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:213:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#32": {
+      "en": "Write &nbsp;sin 108°&nbsp; in terms of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:221:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#33": {
+      "en": "Split 108° as 90° + 18° and ask the quadrant question first: which quadrant is that, and is sine the ratio that survives there?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:224:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#34": {
+      "en": "108° = 90° + 18°, which lands in <b>S</b> — where sine is positive, so no minus appears:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:227:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#35": {
+      "en": "sin 108° = sin(90° + 18°) = cos 18° = p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:228:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#36": {
+      "en": "REMEMBER: sin(90° + θ) = +cos θ, but cos(90° + θ) = −sin θ. Same angle, same quadrant, different sign — because in S only sine survives.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:230:15"
+      ]
+    },
+    "gtrig-siblings-co-functions#37": {
+      "en": "108° is 90° + 18°, so it is the same 18° again, only pushed one quadrant further round. On the wheel that lands in S, and in S sine is the one ratio that stays positive — so no minus appears. The 90° split still converts, so sine turns into cosine and you get cos 18°, which is p. Here is a check you can do in your head: sin 72° and sin 108° both came out as p, and that is not a coincidence. 72° and 108° are mirror images about 90°, so the sine graph is at exactly the same height at both. If your two answers had come out different, one of them would be wrong.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:234:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#38": {
+      "en": "Write &nbsp;cos 162°&nbsp; in terms of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:242:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#39": {
+      "en": "This one is a 180° split, not a 90° one. Before you worry about the sign, ask whether the ratio changes at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:245:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#40": {
+      "en": "162° = 180° − 18°, which lands in <b>S</b>. A 180° split is a <b>reduction</b>, not a co-function — the ratio stays cosine:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:248:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#41": {
+      "en": "cos 162° = cos(180° − 18°) = −cos 18° = −p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:249:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#42": {
+      "en": "162° is 180° − 18°, so this one is a reduction, not a co-function — and the two families behave differently on purpose. A 180° split never changes the ratio; all it does is decide a sign. So cosine stays cosine. 180° − 18° lands in S, where only sine is positive, and cosine is not sine, so it takes the minus: cos 162° = −cos 18° = −p. Say the three steps out loud every time and you will not mix the families up — which quadrant, which reduction formula, then plus or minus. Only the 90° splits convert between sin and cos; the 180° and 360° splits leave the ratio exactly as it was.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:252:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#43": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Write &nbsp;sin(x − 90°)&nbsp; in terms of &nbsp;cos x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:281:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#44": {
+      "en": "Pull the minus out to the front first — x − 90° is the same angle as −(90° − x). Then let K stand for 90° − x and reduce sin(−K) the way you reduce any negative angle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:284:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#45": {
+      "en": "Take the minus out to the front: &nbsp;sin(x − 90°) = sin[−(90° − x)]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:287:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#46": {
+      "en": "Let K = 90° − x. Then −K is a <b>fourth-quadrant</b> (C) angle, where only cosine is positive — so sine takes the minus: &nbsp;sin(−K) = −sin K",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:288:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#47": {
+      "en": "Put K back: &nbsp;= −sin(90° − x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:289:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#48": {
+      "en": "and sin(90° − x) = cos x, &nbsp;∴&nbsp; sin(x − 90°) = −cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:290:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#49": {
+      "en": "WATCH OUT: sin(x − 90°) and sin(90° − x) are NOT the same thing. Swapping the two angles round flips the sign of the whole answer — one is −cos x, the other is +cos x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:292:15"
+      ]
+    },
+    "gtrig-siblings-co-functions#50": {
+      "en": "x − 90° looks like a new rule, but it is the old one wearing a coat. Take the minus out to the front: x − 90° is the same angle as −(90° − x). Now let K stand for 90° − x, so you are looking at sin(−K). A negative angle turns you clockwise into the fourth quadrant, C, where only cosine survives — so sine flips sign and sin(−K) = −sin K. Put K back and you have −sin(90° − x), and sin(90° − x) is the plain co-function you already know: cos x. So sin(x − 90°) = −cos x. Write that derivation out once yourself. After that you can just remember the result, but you will always be able to rebuild it if the memory goes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:296:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#51": {
+      "en": "Hence simplify: &nbsp;sin(x − 90°)/cos(x − 90°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:304:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#52": {
+      "en": "Run exactly the same route as (a) on the bottom of the fraction, asking each time which ratio survives in the fourth quadrant. Then divide, and see whether the answer tidies into a tan.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:307:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#53": {
+      "en": "Same route on the denominator, and this time it is cosine that survives in <b>C</b>, so no minus appears: &nbsp;cos(x − 90°) = cos[−(90° − x)] = cos(90° − x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:310:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#54": {
+      "en": "cos(x − 90°) = sin x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:311:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#55": {
+      "en": "sin(x − 90°)/cos(x − 90°) = −cos x/sin x &nbsp;&nbsp;<b>OR</b>&nbsp;&nbsp; −1/tan x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:312:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#56": {
+      "en": "Run the same route on the cosine and the answer comes out with the opposite sign, for one reason: in the fourth quadrant cosine is the ratio that survives. So cos(x − 90°) = cos(90° − x) = sin x, with no minus anywhere. That leaves −cos x on the top and sin x on the bottom. Divide and you have −cos x over sin x, which is the upside-down version of tan, so you may also write it as −1 over tan x. Either form is a correct final answer and a marker takes both. The one place marks go missing is putting the minus on the wrong line — check it by asking which of the two ratios survives in the quadrant you landed in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:315:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#57": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Simplify: &nbsp;cos 130° + sin 40°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:344:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#58": {
+      "en": "Reduce first, then go looking for a co-function. Once cos 130° is written as a cosine of an acute angle, check whether that acute angle and 40° add to 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:347:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#59": {
+      "en": "Write the split above the angle: &nbsp;130° = 180° − 50°, which lands in <b>S</b>, so cosine turns negative:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:350:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#60": {
+      "en": "cos 130° = −cos 50°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:351:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#61": {
+      "en": "50° and 40° add to 90°, so a co-function converts it: &nbsp;cos 50° = sin 40°, &nbsp;∴&nbsp; cos 130° = −sin 40°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:352:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#62": {
+      "en": "cos 130° + sin 40° = −sin 40° + sin 40° = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:353:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#63": {
+      "en": "Two different machines, one answer. cos 130° is a reduction first: 130° is 180° − 50°, which lands in S, and cosine is not sine, so it turns negative and becomes −cos 50°. Now look at 50° and 40° — they add to 90°, so a co-function converts one into the other and cos 50° = sin 40°. Put the two together and cos 130° is exactly −sin 40°, so adding sin 40° gives zero. That is the shape a paper loves: an angle that looks nothing like the other one, until you reduce it and then convert it. Reduce first, co-function second, and always write the split above the angle before you write the next line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:356:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#64": {
+      "en": "Simplify: &nbsp;(cos 130° · sin 220°)/(sin 40° · cos 320°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:364:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#65": {
+      "en": "Four separate reductions, four separate lines, and the split written above each angle before you touch it. Do not cancel anything until every factor is a ratio of an acute angle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:367:13"
+      ]
+    },
+    "gtrig-siblings-co-functions#66": {
+      "en": "From (a): &nbsp;cos 130° = −sin 40°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:370:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#67": {
+      "en": "220° = 180° + 40°, which lands in <b>T</b> (only tan positive): &nbsp;sin 220° = −sin 40°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:371:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#68": {
+      "en": "320° = 360° − 40°, which lands in <b>C</b> (cosine positive): &nbsp;cos 320° = cos 40°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:372:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#69": {
+      "en": "The top is (−sin 40°) × (−sin 40°) = sin²40°; the bottom is sin 40° × cos 40°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:373:37"
+      ]
+    },
+    "gtrig-siblings-co-functions#70": {
+      "en": "sin²40°/(sin 40° · cos 40°) = sin 40°/cos 40° = tan 40°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:374:39"
+      ]
+    },
+    "gtrig-siblings-co-functions#71": {
+      "en": "WATCH OUT: two minus signs on the top multiply to a PLUS. A learner who keeps one of them ends up with −tan 40°, which is exactly the right size with the wrong sign — and the sign is a whole mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:376:15"
+      ]
+    },
+    "gtrig-siblings-co-functions#72": {
+      "en": "Do not try to see the whole thing at once — take one factor at a time and write the split above each angle before anything else. 130° is 180° − 50°, so cos 130° = −cos 50°, and 50° and 40° add to 90°, so that is −sin 40°. 220° is 180° + 40°, which lands in T where only tan is positive, so sin 220° = −sin 40°. 320° is 360° − 40°, which lands in C where cosine is positive, so cos 320° = cos 40°. Now the top is two minuses multiplied together, which makes a plus, giving sin²40° over sin 40° times cos 40°. One sin 40° cancels and you are left with sin over cos — which is tan 40°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-co-functions.js:380:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1997
+}
