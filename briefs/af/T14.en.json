@@ -1,0 +1,1123 @@
+{
+  "unit": "T14",
+  "generated": "2026-10-17T17:54:52.917Z",
+  "files": [
+    "js/exam/eqn-level4.js",
+    "js/exam/eqn-nature-of-roots-2.js"
+  ],
+  "items": {
+    "eqn-level4#1": {
+      "en": "Prove that the roots of &nbsp;x² − (p + 1)x + (p − 2) = 0 &nbsp;are real for every real value of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:97:13"
+      ]
+    },
+    "eqn-level4#2": {
+      "en": "“Real roots” is a statement about Δ. Work Δ out in terms of p, and then ask yourself how you could possibly show that a whole expression in p is never negative — you have met a shape that is never negative before.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:100:13"
+      ]
+    },
+    "eqn-level4#3": {
+      "en": "a = 1, &nbsp;b = −(p + 1), &nbsp;c = p − 2. Substitute into Δ, with brackets around every negative:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:103:37"
+      ]
+    },
+    "eqn-level4#4": {
+      "en": "Δ = b² − 4ac = (−(p + 1))² − 4(1)(p − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:104:37"
+      ]
+    },
+    "eqn-level4#5": {
+      "en": "= p² + 2p + 1 − 4p + 8 = p² − 2p + 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:105:37"
+      ]
+    },
+    "eqn-level4#6": {
+      "en": "complete the square on Δ: &nbsp;&nbsp;b/2 = −2/2 = −1, &nbsp;so&nbsp; Δ = (p² − 2p + 1) − 1 + 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:106:37"
+      ]
+    },
+    "eqn-level4#7": {
+      "en": "Δ = (p − 1)² + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:107:37"
+      ]
+    },
+    "eqn-level4#8": {
+      "en": "(p − 1)² is a square, so it is never negative &nbsp;∴&nbsp; Δ ≥ 8, which is greater than 0, for every real value of p &nbsp;∴&nbsp; the roots are real (and unequal) for every real value of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:108:39"
+      ]
+    },
+    "eqn-level4#9": {
+      "en": "WATCH OUT: &nbsp;b = −(p + 1), so &nbsp;b² = (−(p + 1))² = (p + 1)² = p² + 2p + 1. The minus disappears when you square it, and the bracket must be squared as a whole — &nbsp;p² + 1&nbsp; is not it. Also note &nbsp;−4(1)(p − 2) = −4p + 8: the &nbsp;−4&nbsp; reaches BOTH terms.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:110:15"
+      ]
+    },
+    "eqn-level4#10": {
+      "en": "Nothing in this question tells you what to do, which is what makes it a level 4. The word “real” is the clue: roots are real when the discriminant is not negative, so the whole job is to show that this discriminant can never dip below zero, no matter what p you choose. Working it out gives p squared minus two p plus nine, and you cannot tell at a glance whether that could ever go negative. Completing the square is what settles it. Once it is written as p minus one, squared, plus eight, the answer is obvious: a square is never negative, so the smallest the discriminant can ever be is eight. Eight is comfortably above zero, so the roots are real every single time — in fact real and unequal, since Δ is never actually zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:114:13"
+      ]
+    },
+    "eqn-level4#11": {
+      "en": "Determine the values of k for which the roots of &nbsp;x² + (k − 3)x + 4 = 0 &nbsp;are real and unequal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:139:13"
+      ]
+    },
+    "eqn-level4#12": {
+      "en": "Real and unequal means Δ &gt; 0. Work Δ out in terms of k and you will find you are holding a quadratic INEQUALITY in k — so finish it the way you finish any quadratic inequality: critical points, then the bowl.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:142:13"
+      ]
+    },
+    "eqn-level4#13": {
+      "en": "a = 1, &nbsp;b = k − 3, &nbsp;c = 4:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:145:37"
+      ]
+    },
+    "eqn-level4#14": {
+      "en": "Δ = (k − 3)² − 4(1)(4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:146:37"
+      ]
+    },
+    "eqn-level4#15": {
+      "en": "= k² − 6k + 9 − 16 = k² − 6k − 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:147:37"
+      ]
+    },
+    "eqn-level4#16": {
+      "en": "real and unequal &nbsp;⟹&nbsp; Δ &gt; 0: &nbsp;&nbsp;k² − 6k − 7 &gt; 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:148:37"
+      ]
+    },
+    "eqn-level4#17": {
+      "en": "(k − 7)(k + 1) &gt; 0 &nbsp;&nbsp;&nbsp;CP: &nbsp;k = 7 &nbsp;or&nbsp; k = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:149:37"
+      ]
+    },
+    "eqn-level4#18": {
+      "en": "happy parabola, and the sign is &gt;, so read OUTSIDE the bowl: &nbsp;&nbsp;∴&nbsp; k &lt; −1 &nbsp;&nbsp;or&nbsp;&nbsp; k &gt; 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:150:39"
+      ]
+    },
+    "eqn-level4#19": {
+      "en": "WATCH OUT: the answer to a &gt; 0 inequality with two critical points is TWO pieces joined by “or” — never a single sandwich like &nbsp;−1 &lt; k &lt; 7, which is the “inside the bowl” answer and is exactly wrong here. And never hand in the calculator's semicolon form &nbsp;k &lt; −1 ; 7 &lt; k&nbsp; — rewrite it with “or”, with k on the left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:152:15"
+      ]
+    },
+    "eqn-level4#20": {
+      "en": "There are two layers here and both have to be seen. The first is that “real and unequal” is a statement about the discriminant being strictly greater than zero. The second is what the discriminant turns out to be: not a number, but a quadratic in k. So the moment you write Δ greater than zero you are holding a quadratic inequality, and the method for that is her TIP Chips routine — everything on the left, nothing negative in front of the squared term, factorise, and set each factor equal to zero to get the critical points. Seven and negative one. Then the picture decides: a happy parabola is above the axis on the two outside arms, so the answer is k below negative one or k above seven, joined by the word or.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:156:13"
+      ]
+    },
+    "eqn-level4#21": {
+      "en": "Hence write down the smallest INTEGER value of k, greater than 0, for which the roots are real and unequal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:164:13"
+      ]
+    },
+    "eqn-level4#22": {
+      "en": "You have two branches from (a). Only one of them contains positive numbers at all — so look there, and remember that the critical value itself is not part of the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:167:13"
+      ]
+    },
+    "eqn-level4#23": {
+      "en": "k must be positive, so the branch &nbsp;k &lt; −1&nbsp; is out. That leaves &nbsp;k &gt; 7.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:170:37"
+      ]
+    },
+    "eqn-level4#24": {
+      "en": "the smallest integer bigger than 7 is 8 &nbsp;&nbsp;∴&nbsp; k = 8 &nbsp;&nbsp;(check: Δ = (8 − 3)² − 16 = 25 − 16 = 9, which is &gt; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:171:39"
+      ]
+    },
+    "eqn-level4#25": {
+      "en": "WATCH OUT: &nbsp;k = 7&nbsp; is NOT allowed. At k = 7 the discriminant is exactly 0, which gives roots that are real and EQUAL — the one thing the question rules out. A strict &nbsp;&gt;&nbsp; always means the critical value itself is excluded.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:173:15"
+      ]
+    },
+    "eqn-level4#26": {
+      "en": "This part is quick, but it is quick only if part (a) is right, and it is easy to answer too fast. Two branches came out of (a): everything below negative one and everything above seven. The question asks for a value bigger than zero, so the whole left branch is irrelevant. On the right branch you need the first whole number strictly past seven, and that is eight, not seven itself. Seven is the boundary, where the discriminant lands exactly on zero and the roots become equal instead of unequal. Checking is worth the ten seconds it takes: put eight back in and the discriminant comes out as nine, safely positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:177:13"
+      ]
+    },
+    "eqn-level4#27": {
+      "en": "Solve for x and y simultaneously:<br>&nbsp;&nbsp;y = 2<sup>x</sup> &nbsp;&nbsp;and&nbsp;&nbsp; 4<sup>x</sup> − 3y = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:201:13"
+      ]
+    },
+    "eqn-level4#28": {
+      "en": "The first equation already tells you what y is, so everything in the second one needs to be written in terms of y. That means finding a way to say 4<sup>x</sup> using 2<sup>x</sup> — what is 4, written as a power of 2?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:204:13"
+      ]
+    },
+    "eqn-level4#29": {
+      "en": "Everything in the second equation must be written in terms of y. The key is that 4 = 2²:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:207:37"
+      ]
+    },
+    "eqn-level4#30": {
+      "en": "4<sup>x</sup> = (2²)<sup>x</sup> = (2<sup>x</sup>)² = y²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:208:37"
+      ]
+    },
+    "eqn-level4#31": {
+      "en": "y² − 3y = 4 &nbsp;&nbsp;⟹&nbsp;&nbsp; y² − 3y − 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:209:37"
+      ]
+    },
+    "eqn-level4#32": {
+      "en": "(y − 4)(y + 1) = 0 &nbsp;&nbsp;∴&nbsp; y = 4 &nbsp;or&nbsp; y = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:210:37"
+      ]
+    },
+    "eqn-level4#33": {
+      "en": "y = 4: &nbsp;2<sup>x</sup> = 4 = 2² &nbsp;— same base, so the exponents are equal &nbsp;∴&nbsp; x = 2 &nbsp;&nbsp;∴&nbsp; (2 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:211:39"
+      ]
+    },
+    "eqn-level4#34": {
+      "en": "y = −1: &nbsp;2<sup>x</sup> = −1 has <b>no solution</b> — a positive base can never give a negative value &nbsp;∴&nbsp; (2 ; 4) is the only answer",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:212:39"
+      ]
+    },
+    "eqn-level4#35": {
+      "en": "REMEMBER: &nbsp;2<sup>x</sup> = −1&nbsp; is “<b>no solution</b>”, not “undefined” and not “non-real”. Undefined is only for a denominator of zero; non-real is for an even root of a negative. Here the graph of 2<sup>x</sup> simply lives above the x-axis and never comes down to −1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:214:15"
+      ]
+    },
+    "eqn-level4#36": {
+      "en": "This is a simultaneous system and a k-method question at the same time, and nothing on the page says so. The first equation hands you y equal to two to the x, so the plan is to rewrite the second equation entirely in y. Four to the x is the only obstacle, and it falls the moment you write four as two squared: two squared, to the x, is the same as two to the x, all squared, which is y squared. Now the second equation is an ordinary trinomial in y. Factorise it and you get four and negative one. Four is fine and takes you back to x equal to two. Negative one is impossible, because two to a power is always positive, so that branch simply has no solution.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:218:13"
+      ]
+    },
+    "eqn-level4#37": {
+      "en": "A rectangular flower bed is &nbsp;(x − 4) metres wide. Its length, in metres, is &nbsp;√(4x − 4). &nbsp;The bed is 3 metres longer than it is wide.<br><br>Show that this information gives the equation &nbsp;√(4x − 4) = x − 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:245:13"
+      ]
+    },
+    "eqn-level4#38": {
+      "en": "Turn the sentence into symbols one piece at a time. “3 metres longer than it is wide” is a sentence about the LENGTH — write it as an equation and then tidy the right-hand side.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:248:13"
+      ]
+    },
+    "eqn-level4#39": {
+      "en": "“3 metres longer than it is wide” means &nbsp;length = width + 3:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:251:37"
+      ]
+    },
+    "eqn-level4#40": {
+      "en": "√(4x − 4) = (x − 4) + 3 &nbsp;&nbsp;∴&nbsp; √(4x − 4) = x − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:252:39"
+      ]
+    },
+    "eqn-level4#41": {
+      "en": "WATCH OUT: in a “show that” question the answer is printed for you, so every mark is for the working that reaches it. Start from the sentence, not from the given line, and let the given line be your LAST line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:254:15"
+      ]
+    },
+    "eqn-level4#42": {
+      "en": "Word problems are translation, and translation goes best one phrase at a time. The bed's width is x minus four metres and its length is the root expression, and the sentence tells you how the two compare: the length is three more than the width. Written down, that is the root expression equals x minus four plus three, and the right-hand side tidies to x minus one. Notice that you are not solving anything yet, so resist the urge to square. A show-that question is asking you to build the equation, and the marks sit on the line where you turn the English into symbols and on the line where you simplify it into the exact form printed in the question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:258:13"
+      ]
+    },
+    "eqn-level4#43": {
+      "en": "Solve for x, and hence write down the width and the length of the bed.<br>Give a reason for rejecting any value of x that you do not use.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:266:13"
+      ]
+    },
+    "eqn-level4#44": {
+      "en": "Solve the surd equation as usual, and test both answers. Then do the thing the algebra cannot do for you: put each answer back into the STORY and ask whether a real flower bed could look like that.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:269:13"
+      ]
+    },
+    "eqn-level4#45": {
+      "en": "Square both sides: &nbsp;&nbsp;4x − 4 = (x − 1)² = x² − 2x + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:272:37"
+      ]
+    },
+    "eqn-level4#46": {
+      "en": "0 = x² − 6x + 5 = (x − 1)(x − 5) &nbsp;&nbsp;∴&nbsp; x = 1 &nbsp;or&nbsp; x = 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:273:37"
+      ]
+    },
+    "eqn-level4#47": {
+      "en": "Test both in the original equation: at &nbsp;x = 1&nbsp; both sides are 0, and at &nbsp;x = 5&nbsp; both sides are 4. So the substitution test keeps BOTH — the story is what decides.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:274:37"
+      ]
+    },
+    "eqn-level4#48": {
+      "en": "x = 1 is rejected: the width would be &nbsp;1 − 4 = −3 m, and a flower bed cannot have a negative width.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:275:39"
+      ]
+    },
+    "eqn-level4#49": {
+      "en": "x = 5: &nbsp;width = 5 − 4 = 1 m",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:276:39"
+      ]
+    },
+    "eqn-level4#50": {
+      "en": "length = √(20 − 4) = √16 = 4 m &nbsp;&nbsp;(and 4 = 1 + 3, exactly as the question says)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:277:39"
+      ]
+    },
+    "eqn-level4#51": {
+      "en": "WATCH OUT: this is the surd equation where the substitution test does NOT do the rejecting. Both answers pass it, so a learner who tests and stops hands in an impossible flower bed. In any word problem, the LAST check is always the story: no negative lengths, no negative masses, no fractional people.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:279:15"
+      ]
+    },
+    "eqn-level4#52": {
+      "en": "Solving is the easy half. Square both sides, watch the middle term, collect into a quadratic and factorise, and out come one and five. Both of them genuinely satisfy the equation — put each one in and the two sides really do match — so the usual surd-equation test cannot separate them. That is what makes this a level 4. The separating has to be done by the situation. If x is one, the bed is one minus four, which is negative three metres wide, and no bed is minus three metres wide. So one goes, with that reason written down, because the question asks for the reason. Five leaves a bed one metre wide and four metres long, and four really is three more than one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:283:13"
+      ]
+    },
+    "eqn-level4#53": {
+      "en": "The equation &nbsp;x² + px + q = 0 &nbsp;has roots 4 and −6.<br>Determine the values of p and q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:308:13"
+      ]
+    },
+    "eqn-level4#54": {
+      "en": "Roots and factors are two ways of saying the same thing. If 4 is a root, which bracket must be a factor? Build the equation from its brackets and then multiply out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:311:13"
+      ]
+    },
+    "eqn-level4#55": {
+      "en": "If 4 and −6 are the roots, then (x − 4) and (x + 6) are the factors:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:314:37"
+      ]
+    },
+    "eqn-level4#56": {
+      "en": "(x − 4)(x + 6) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:315:37"
+      ]
+    },
+    "eqn-level4#57": {
+      "en": "x² + 6x − 4x − 24 = 0 &nbsp;&nbsp;⟹&nbsp;&nbsp; x² + 2x − 24 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:316:37"
+      ]
+    },
+    "eqn-level4#58": {
+      "en": "comparing with &nbsp;x² + px + q = 0: &nbsp;&nbsp;p = 2 &nbsp;&nbsp;and&nbsp;&nbsp; q = −24",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:317:39"
+      ]
+    },
+    "eqn-level4#59": {
+      "en": "WATCH OUT: the signs flip going from root to factor. A root of &nbsp;−6&nbsp; gives the factor &nbsp;(x + 6), not &nbsp;(x − 6). Check by putting the root back into your bracket — it must come out as zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:319:15"
+      ]
+    },
+    "eqn-level4#60": {
+      "en": "This is the question she calls an exam favourite, and it runs backwards to the usual one. Normally you factorise to find the roots; here you are handed the roots and have to rebuild the equation. The link is that a root is the value that makes its bracket zero, so a root of four comes from the bracket x minus four, and a root of negative six comes from x plus six. Multiply the two brackets out and you have the equation itself, with everything in the right place. Reading p and q off it is then just a matter of comparing your line with the one in the question, term by term. Watch the sign on q — it is negative twenty four, not twenty four.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:323:13"
+      ]
+    },
+    "eqn-level4#61": {
+      "en": "Hence determine the value of k for which &nbsp;x² + px + q = k &nbsp;has EQUAL roots, and write down that equal root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:331:13"
+      ]
+    },
+    "eqn-level4#62": {
+      "en": "You cannot read a, b and c off an equation that is not equal to zero yet — so move the k across first. Then “equal roots” tells you exactly what Δ has to be.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:334:13"
+      ]
+    },
+    "eqn-level4#63": {
+      "en": "Standard form first — the k must come across: &nbsp;&nbsp;x² + 2x − 24 = k &nbsp;&nbsp;⟹&nbsp;&nbsp; x² + 2x − (24 + k) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:337:37"
+      ]
+    },
+    "eqn-level4#64": {
+      "en": "Δ = (2)² − 4(1)(−(24 + k)) = 4 + 96 + 4k = 100 + 4k",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:338:37"
+      ]
+    },
+    "eqn-level4#65": {
+      "en": "equal roots &nbsp;⟹&nbsp; Δ = 0: &nbsp;&nbsp;100 + 4k = 0 &nbsp;&nbsp;∴&nbsp; k = −25",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:339:37"
+      ]
+    },
+    "eqn-level4#66": {
+      "en": "then the equation is &nbsp;x² + 2x + 1 = 0 &nbsp;⟹&nbsp; (x + 1)² = 0 &nbsp;&nbsp;∴&nbsp; the equal root is &nbsp;x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:340:39"
+      ]
+    },
+    "eqn-level4#67": {
+      "en": "WATCH OUT: reading &nbsp;c = −24&nbsp; straight off &nbsp;x² + 2x − 24 = k&nbsp; is the wreck. Nothing may be read off until the equation says &nbsp;= 0, and once the k crosses over, c becomes &nbsp;−(24 + k). Two negatives then meet inside Δ, which is why the 96 comes out positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:342:15"
+      ]
+    },
+    "eqn-level4#68": {
+      "en": "Two ideas have to be joined here, and neither one is hinted at. The first is that a, b and c only exist once an equation is written as something equals zero, so the k has to be carried across before anything else happens — and when it crosses, it joins the twenty four inside a single negative bracket. The second is that equal roots is the same statement as the discriminant being exactly zero. Substituting carefully gives one hundred plus four k, and setting that to zero gives k equal to negative twenty five. Putting it back turns the equation into x squared plus two x plus one, which is a perfect square, so both roots are negative one. Geometrically you have slid the parabola down until it just touches the axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:346:13"
+      ]
+    },
+    "eqn-level4#69": {
+      "en": "Consider the expression &nbsp;${Q6_EXPR}<br><br>Write down the value of x for which the expression is undefined, and explain why &nbsp;(x + 2)²&nbsp; can never be negative.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:371:13"
+      ]
+    },
+    "eqn-level4#70": {
+      "en": "A fraction dies when its bottom becomes zero — that is the only value that has to be excluded. For the second half, think about what squaring does to a number, whichever sign it started with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:374:13"
+      ]
+    },
+    "eqn-level4#71": {
+      "en": "A fraction is undefined when its denominator is zero:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:377:37"
+      ]
+    },
+    "eqn-level4#72": {
+      "en": "(x + 2)² = 0 &nbsp;⟹&nbsp; x + 2 = 0 &nbsp;&nbsp;∴&nbsp; the expression is undefined at &nbsp;x = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:378:39"
+      ]
+    },
+    "eqn-level4#73": {
+      "en": "(x + 2)² is a square, and no real number multiplied by itself gives a negative &nbsp;∴&nbsp; (x + 2)² &gt; 0 for every other value of x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:379:39"
+      ]
+    },
+    "eqn-level4#74": {
+      "en": "REMEMBER: <b>undefined</b> is the right word for a zero denominator — she calls it the ghost under the bed. It is NOT “no solution” (that is for something like 3<sup>x</sup> = −1) and NOT “non-real” (that is for an even root of a negative).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:381:15"
+      ]
+    },
+    "eqn-level4#75": {
+      "en": "Two small facts, and the whole of part (b) rests on them. The first is that a fraction has no value at all when its bottom is zero, because dividing by nothing is not a thing you can do. Setting the bottom to zero gives x equal to negative two, and that value has to be excluded from every answer that follows. The second is that a square can never be negative, whatever you started with: a positive times itself is positive, and a negative times itself is also positive. So apart from that one forbidden value, this denominator is always strictly positive. Being certain of its sign is what makes the next part possible, because a term whose sign you know cannot cause any trouble.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:385:13"
+      ]
+    },
+    "eqn-level4#76": {
+      "en": "Hence solve for x: &nbsp;${Q6_EXPR} ≥ 0",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:393:13"
+      ]
+    },
+    "eqn-level4#77": {
+      "en": "You proved in (a) that the denominator is always positive. What does multiplying an inequality by something you KNOW is positive do to the inequality sign? Once you have used that, you are left with an ordinary quadratic inequality.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:396:13"
+      ]
+    },
+    "eqn-level4#78": {
+      "en": "From (a) the denominator is positive everywhere except at &nbsp;x = −2. Multiplying an inequality by a positive number leaves the sign alone, so the denominator can be dropped — as long as its limit rides along:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:399:37"
+      ]
+    },
+    "eqn-level4#79": {
+      "en": "2x² − 5x − 3 ≥ 0 &nbsp;&nbsp;;&nbsp;&nbsp; x ≠ −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:400:37"
+      ]
+    },
+    "eqn-level4#80": {
+      "en": "(2x + 1)(x − 3) ≥ 0 &nbsp;&nbsp;&nbsp;CP: &nbsp;x = −1/2 &nbsp;or&nbsp; x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:401:37"
+      ]
+    },
+    "eqn-level4#81": {
+      "en": "happy parabola, and the sign is ≥, so read OUTSIDE the bowl: &nbsp;&nbsp;∴&nbsp; x ≤ −1/2 &nbsp;&nbsp;or&nbsp;&nbsp; x ≥ 3 &nbsp;&nbsp;;&nbsp;&nbsp; x ≠ −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:402:39"
+      ]
+    },
+    "eqn-level4#82": {
+      "en": "WATCH OUT: the limit is not decoration on this one. &nbsp;x = −2&nbsp; sits right inside &nbsp;x ≤ −1/2, so leaving &nbsp;; x ≠ −2&nbsp; off really does make the answer wrong — you would be claiming a value at which the expression does not exist. And never cross-multiply an inequality by a denominator whose sign you have not proved.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:404:15"
+      ]
+    },
+    "eqn-level4#83": {
+      "en": "Everything turns on the fact you established in part (a): the bottom of this fraction is positive, always, except at the one forbidden value. A fraction with a positive bottom has the same sign as its top, so asking when the fraction is at least zero is the same as asking when the top is at least zero — and that is an ordinary quadratic inequality. Factorise it, set each factor to zero for the critical points, and picture the happy parabola cutting the axis at negative a half and at three. Since you want it above the axis, the answer is the two outside arms. The last move is the one that is always forgotten: carry the forbidden value along after a semicolon, because negative two really does sit inside one of those arms.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-level4.js:408:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#1": {
+      "en": "Given: &nbsp;x² + (2m − 1)x − (4m + 2) = 0, &nbsp;where m is a real number.<br><br>Show that Δ, the discriminant of this equation, simplifies to 4m² + 12m + 9.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:72:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#2": {
+      "en": "Write a, b and c down before you touch the formula, and take the whole of −(4m + 2) as c — minus sign and all. Then bracket every negative before you square or multiply it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:75:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#3": {
+      "en": "Read a, b and c off the equation first: &nbsp;a = 1, &nbsp;b = 2m − 1, &nbsp;c = −(4m + 2) = −4m − 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:78:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#4": {
+      "en": "Δ = b² − 4ac = (2m − 1)² − 4(1)(−4m − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:79:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#5": {
+      "en": "= 4m² − 4m + 1 + 16m + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:80:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#6": {
+      "en": "Δ = 4m² + 12m + 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:81:39"
+      ]
+    },
+    "eqn-nature-of-roots-2#7": {
+      "en": "WATCH OUT: c is the <b>whole</b> of −(4m + 2), minus sign included. Drop that minus and −4ac turns into −16m − 8 instead of +16m + 8, and every part after this one goes down with it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:83:15"
+      ]
+    },
+    "eqn-nature-of-roots-2#8": {
+      "en": "Nothing new is happening here — it is the same Δ = b² − 4ac you have substituted into all year, except b and c are little expressions instead of plain numbers. Two habits keep it safe. First, write a, b and c down on their own line before you go near the formula, so you can see that c carries a minus in front of a whole bracket. Second, put every negative inside its own brackets before squaring or multiplying, because −4 times a negative c flips to a plus and that is exactly where a rushed substitution loses three marks at once. What you end up with is a quadratic EXPRESSION in m — and the rest of the question is about what that expression can and cannot do.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:87:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#9": {
+      "en": "Hence write Δ as a perfect square, and determine the value of m for which the equation has equal roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:95:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#10": {
+      "en": "Look at 4m² and 9 — what would each of them be the square of? Check whether the middle term matches, and then remember what Δ has to equal for roots to be equal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:98:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#11": {
+      "en": "4m² + 12m + 9 = (2m + 3)² &nbsp;&nbsp;— a perfect □: (2m)² and 3², with a middle term of 2(2m)(3) = 12m ✓",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:101:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#12": {
+      "en": "for equal roots, Δ = 0: &nbsp;(2m + 3)² = 0 &nbsp;⟹&nbsp; 2m + 3 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:102:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#13": {
+      "en": "∴ m = −3/2 = −1,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:103:39"
+      ]
+    },
+    "eqn-nature-of-roots-2#14": {
+      "en": "Two different things are going on in this part and it is worth keeping them apart. Writing Δ as a perfect square is bookkeeping — the same trinomial, wearing a bracket — but it is bookkeeping that changes what you can SEE, because a squared bracket obviously can never go negative, while 4m² + 12m + 9 does not obviously do anything. Then the equal-roots question is the ordinary rule: equal roots mean Δ is exactly zero, no more and no less. A squared bracket is zero in exactly one place, where the bracket itself is zero, so there is precisely one value of m — and that single value is the clue that the rest of the m-line must be doing something else entirely.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:106:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#15": {
+      "en": "Explain why this equation can never have non-real roots, whatever real value m takes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:114:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#16": {
+      "en": "You are being asked about the sign of Δ, not its value. What is the smallest a squared real number is ever allowed to be?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:117:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#17": {
+      "en": "(2m + 3)² ≥ 0 for every real m — a squared real number is never negative",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:120:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#18": {
+      "en": "∴ Δ ≥ 0 for every real m, and non-real roots need Δ &lt; 0, so the roots are real for every real value of m",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:121:39"
+      ]
+    },
+    "eqn-nature-of-roots-2#19": {
+      "en": "REMEMBER: “Δ ≥ 0” is not the same claim as “Δ &gt; 0”. Here Δ really does reach 0, at m = −1,5 — so the roots are always real, but at that one value they are real, rational and <b>equal</b>, not unequal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:123:15"
+      ]
+    },
+    "eqn-nature-of-roots-2#20": {
+      "en": "Non-real roots happen only when Δ is negative, so the question is really asking: can this Δ ever be negative? Once Δ is written as a square the answer is immediate — squaring a real number always lands on zero or above, never below. That one line covers every m at once, which is the whole reason (b) was worth writing the perfect square down for. Be careful with the wording of your conclusion, though. You have shown Δ is never negative, which rules out non-real. You have NOT shown Δ is never zero — it is zero at m = −1,5, and there the roots are equal. “Always real” is the honest claim here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:127:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#21": {
+      "en": "Show that, apart from the one value of m found in (b), the roots of the equation are rational and unequal for every rational value of m.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:135:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#22": {
+      "en": "Solve the equation with the quadratic formula, leaving m in. The √Δ step is the one to watch — you already know Δ is a perfect square, so what happens to the root sign?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:138:13"
+      ]
+    },
+    "eqn-nature-of-roots-2#23": {
+      "en": "x = (−b ± √Δ)/(2a) = <span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">−(2m − 1) ± √((2m + 3)²)</span><span class=\\\"sf-d\\\">2</span></span> = (1 − 2m ± (2m + 3))/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:141:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#24": {
+      "en": "taking + : &nbsp;x = (1 − 2m + 2m + 3)/2 = 4/2 = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:142:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#25": {
+      "en": "taking − : &nbsp;x = (1 − 2m − 2m − 3)/2 = (−4m − 2)/2 = −2m − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:143:37"
+      ]
+    },
+    "eqn-nature-of-roots-2#26": {
+      "en": "both roots are rational whenever m is rational, and they are equal only when −2m − 1 = 2, i.e. m = −3/2 &nbsp;∴ for every other rational m the roots are rational and unequal",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:144:39"
+      ]
+    },
+    "eqn-nature-of-roots-2#27": {
+      "en": "REMEMBER: Δ &gt; 0 on its own only promises REAL and unequal — it says nothing about rational. What makes a root rational is √Δ coming out with no surd left in it, and that is exactly what “Δ is a perfect □” buys you. Skip that check and you have answered half the question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:146:15"
+      ]
+    },
+    "eqn-nature-of-roots-2#28": {
+      "en": "This is the payoff for spotting the perfect square. Normally the quadratic formula leaves a √ in your answer and you cannot say much about it — but here √Δ is the square root of something already squared, so the root sign simply falls away and leaves an ordinary expression in m. Once that happens the two roots are just additions and divisions of rational numbers, which is why they are rational for every rational m. There is a lovely check hiding in the answer too: one root comes out as 2 no matter what m is, and the other is −2m − 1, which only equals 2 at m = −1,5 — precisely the value (b) found for equal roots. The parts agree with each other, and that agreement is how you know nothing slipped. Bank the earlier marks first: (a), (b) and (c) are ordinary Δ work, and this is the reward round at the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-nature-of-roots-2.js:150:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3265
+}
