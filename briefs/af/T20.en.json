@@ -1,0 +1,1269 @@
+{
+  "unit": "T20",
+  "generated": "2026-10-17T18:06:15.002Z",
+  "files": [
+    "js/exam/eqn-siblings-rational-exponents-k.js",
+    "js/exam/eqn-siblings-simultaneous.js"
+  ],
+  "items": {
+    "eqn-siblings-rational-exponents-k#1": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;x<sup>${f(\"1\", \"3\")}</sup> = −5",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:88:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#2": {
+      "en": "The exponent is one third, so the reciprocal you need is three. Raise BOTH sides to that power — and before you panic about the minus, ask yourself what kind of root a third really is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:91:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#3": {
+      "en": "The exponent is undone by multiplying it by its <b>reciprocal</b>: &nbsp;${f(\"1\", \"3\")} × 3 = 1, &nbsp;which leaves a plain x. Whatever you do to the left, you do to the right.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:94:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#4": {
+      "en": "(x<sup>${f(\"1\", \"3\")}</sup>)³ = (−5)³",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:95:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#5": {
+      "en": "The exponent has only ODD numbers in it, so a negative answer is allowed here — a cube root of a negative number really is negative",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:96:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#6": {
+      "en": "∴ x = −125",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:97:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#7": {
+      "en": "A fractional exponent is doing two jobs at once: the number on the bottom is a root and the number on top is a power. You do not have to unpick them one at a time, though — multiplying the exponent by its upside-down twin cancels it to one, and one is the exponent that leaves a bare x standing. So a third gets hit with three, which means cubing both sides. The part that feels wrong is the minus, and it is fine. An exponent of one third is a cube root, and a cube root is happy to be negative, because minus five times minus five times minus five really is minus one hundred and twenty-five. Her note beside this exact case reads: found one that works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:100:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#8": {
+      "en": "Now solve for x: &nbsp;x<sup>${f(\"1\", \"2\")}</sup> = −3, &nbsp;and explain why the answer is not like the one in (a).",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:108:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#9": {
+      "en": "One half means a square root. Ask the same question you asked in (a): is a root of this kind ever allowed to come out negative?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:111:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#10": {
+      "en": "x<sup>${f(\"1\", \"2\")}</sup> means √x, &nbsp;and the 2 on the bottom is an EVEN number — a square root of a real number can never be negative",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:114:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#11": {
+      "en": "√x ≠ −3 &nbsp;&nbsp;∴ no solution",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:115:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#12": {
+      "en": "REMEMBER which of her four words this is. It is <b>no solution</b> — a thing that can never be negative has been asked to be negative. It is not “undefined”, which is only for dividing by zero, and it is not “non-real”, which is for taking an even root OF a negative number. Squaring both sides here would hand you x = 9, and 9 does not work: √9 is 3, not −3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:117:15"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#13": {
+      "en": "Put this next to part (a) and you have the whole rule in two lines. In (a) the root was a cube root, an odd one, and odd roots keep the sign of whatever is inside them — so a negative answer was allowed. Here the root is a square root, an even one, and an even root of a real number is never negative, because squaring anything real gives something positive. So there is nothing x could be. The dangerous move is squaring both sides, because squaring hides the minus and produces nine, which fails the moment you test it in the original equation. Her rule is quicker: look at whether the exponent contains an even number, and if it does, a negative right-hand side kills the question straight away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:121:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#14": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;x<sup>${f(\"−2\", \"3\")}</sup> = 4",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:146:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#15": {
+      "en": "Multiply the exponent by its reciprocal — the reciprocal of a negative fraction is negative too. Then work the right-hand side out as an exact fraction, and check the numerator of the exponent you STARTED with to see whether a ± is needed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:149:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#16": {
+      "en": "Multiply the exponent by its <b>reciprocal</b>: &nbsp;${f(\"−2\", \"3\")} × ${f(\"−3\", \"2\")} = 1, &nbsp;which leaves a plain x. Do the same to the right.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:152:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#17": {
+      "en": "(x<sup>${f(\"−2\", \"3\")}</sup>)<sup>${f(\"−3\", \"2\")}</sup> = 4<sup>${f(\"−3\", \"2\")}</sup>",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:153:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#18": {
+      "en": "A negative exponent means “one over”, so &nbsp;4<sup>${f(\"−3\", \"2\")}</sup> = 1 ÷ 4<sup>${f(\"3\", \"2\")}</sup> = 1 ÷ (√4)³ = 1 ÷ 2³ = 1/8",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:154:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#19": {
+      "en": "The numerator of the <b>original</b> exponent is 2, an EVEN number, so the answer carries a ±",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:155:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#20": {
+      "en": "∴ x = ±1/8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:156:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#21": {
+      "en": "<b>OR</b> — raise, then root (same marks): &nbsp;x<sup>${f(\"−2\", \"3\")}</sup> = 4 &nbsp;⟹&nbsp; 1 ÷ x<sup>${f(\"2\", \"3\")}</sup> = 4 &nbsp;⟹&nbsp; x<sup>${f(\"2\", \"3\")}</sup> = 1/4 &nbsp;⟹&nbsp; (∛(x²))³ = (1/4)³ &nbsp;⟹&nbsp; x² = 1/64 &nbsp;⟹&nbsp; x = ±1/8",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:157:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#22": {
+      "en": "REMEMBER where the ± comes from: the <i>numerator</i> of the exponent you started with. Here it is 2, which is even, so there are two answers. In eqn.km.t1q2(a) the numerator was 3, odd, and there was only one. The minus sign in the exponent decides nothing about the ± — it only turns the answer upside down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:159:15"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#23": {
+      "en": "A negative fractional exponent is two ideas stacked together and neither of them is new. The minus means one over the thing, and the fraction means a root and a power. The tidiest way through is still the reciprocal: multiply minus two thirds by minus three halves, get one, and the x is standing alone. Do the same to the right and you have four to the power minus three halves, which is one over four to the three halves, which is one over two cubed, which is one eighth. Then the ± question, and it is decided by the numerator of the exponent you were given — a two, which is even, so both plus and minus an eighth work. Test the negative one if you doubt it: the cube root of minus an eighth is minus a half, squared is a quarter, upside down is four.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:163:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#24": {
+      "en": "Hence solve for x: &nbsp;(x + 1)<sup>${f(\"3\", \"2\")}</sup> = 8",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:171:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#25": {
+      "en": "The whole bracket is now doing the job x did in (a), so treat it as one thing. Multiply the exponent by its reciprocal, work the right-hand side out, and only solve for x at the very end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:174:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#26": {
+      "en": "The bracket (x + 1) is doing the job x did in (a). Multiply the exponent by its reciprocal, &nbsp;${f(\"2\", \"3\")}:",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:177:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#27": {
+      "en": "((x + 1)<sup>${f(\"3\", \"2\")}</sup>)<sup>${f(\"2\", \"3\")}</sup> = 8<sup>${f(\"2\", \"3\")}</sup>",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:178:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#28": {
+      "en": "8<sup>${f(\"2\", \"3\")}</sup> = (∛8)² = 2² = 4, &nbsp;and the numerator of the original exponent is 3, an ODD number, so there is no ±",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:179:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#29": {
+      "en": "x + 1 = 4 &nbsp;&nbsp;∴ x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:180:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#30": {
+      "en": "WATCH OUT: the bracket only disappears at the LAST step. Writing x + 1 = 8<sup>${f(\"2\", \"3\")}</sup> and then solving is right; taking the exponent apart term by term inside the bracket is not — (x + 1)<sup>${f(\"3\", \"2\")}</sup> is not x<sup>${f(\"3\", \"2\")}</sup> + 1.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:182:15"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#31": {
+      "en": "Everything you did in part (a) works here, and the only change is what the exponent is sitting on. A bracket is a single object as far as the exponent laws are concerned, so raising the whole thing to two thirds cancels the three halves and leaves the bracket standing alone. The right-hand side is eight to the two thirds: take the cube root first, because that keeps the numbers small, then square it, giving four. The numerator of the original exponent is three, an odd number, so there is no plus-or-minus this time. Only now does the bracket come apart, and it comes apart by ordinary subtraction. Check it: four to the three halves is two cubed, which is eight.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:186:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#32": {
+      "en": "Given: &nbsp;(x² − x)² − 8(x² − x) + 12 = 0<br><br>Let &nbsp;K = x² − x. &nbsp;Write the equation as a quadratic in K, and solve for K.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:213:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#33": {
+      "en": "The same bracket appears twice — once squared and once on its own. Give it a short name and read what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:216:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#34": {
+      "en": "The bracket x² − x appears twice: once squared, once on its own. &nbsp;let K = x² − x &nbsp;&nbsp;(then (x² − x)² = K²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:219:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#35": {
+      "en": "K² − 8K + 12 = 0 &nbsp;⟹&nbsp; (K − 2)(K − 6) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:220:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#36": {
+      "en": "∴ K = 2 &nbsp;&nbsp;or&nbsp;&nbsp; K = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:221:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#37": {
+      "en": "The k-method is really a naming trick, and its rule is short: if the same lump of algebra appears twice, once squared and once plain, give the lump a name. Here the lump is x squared minus x. Call it K, and what is left on the page is K squared minus eight K plus twelve — a trinomial you have factorised a hundred times. Two numbers that multiply to twelve and add to minus eight are minus two and minus six, so the brackets are K minus two and K minus six. The whole point of the substitution is that it makes a frightening-looking fourth-degree equation into an ordinary quadratic, and nothing has been lost — the lump is still waiting to be unpacked.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:224:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#38": {
+      "en": "Hence solve for x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:232:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#39": {
+      "en": "K is not what the question asked for. Put x² − x back in place of K — once for each of your two answers — and solve the two quadratics you get.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:235:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#40": {
+      "en": "K is not what you were asked for, so <b>every</b> branch has to be walked back to x:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:238:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#41": {
+      "en": "K = 2: &nbsp;x² − x = 2 &nbsp;⟹&nbsp; x² − x − 2 = 0 &nbsp;⟹&nbsp; (x − 2)(x + 1) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:239:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#42": {
+      "en": "∴ x = 2 &nbsp;&nbsp;or&nbsp;&nbsp; x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:240:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#43": {
+      "en": "K = 6: &nbsp;x² − x = 6 &nbsp;⟹&nbsp; x² − x − 6 = 0 &nbsp;⟹&nbsp; (x − 3)(x + 2) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:241:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#44": {
+      "en": "∴ x = 3 &nbsp;&nbsp;or&nbsp;&nbsp; x = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:242:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#45": {
+      "en": "∴ x = −2 &nbsp;or&nbsp; x = −1 &nbsp;or&nbsp; x = 2 &nbsp;or&nbsp; x = 3 &nbsp;&nbsp;— four solutions in all",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:243:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#46": {
+      "en": "WATCH OUT: stopping at K = 2 and K = 6 is the classic way to lose most of this question — K was never the unknown. And do not expect two answers just because the first equation was a quadratic: each K branch opens into its own quadratic, so there are FOUR roots here, and all four have to be handed in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:245:15"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#47": {
+      "en": "This is the part the k-method exists for, and the trap it exists to catch. K was a nickname, not an answer, so both values of K have to be put back where the nickname came from. Each substitution gives an ordinary quadratic: x squared minus x equals two, and x squared minus x equals six. Take each one to zero and factorise, and each hands you two roots. That is four altogether, which is exactly what you should expect — the original equation had a squared bracket in it, so it is really a fourth-degree equation, and a fourth-degree equation can have up to four solutions. Check any one of them by working the bracket out first: at x equals three the bracket is six, and six squared minus eight sixes plus twelve is zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:249:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#48": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;2<sup>2x</sup> − 6·2<sup>x</sup> + 8 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:274:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#49": {
+      "en": "Look at the shape rather than the letters: there is a squared thing, that same thing on its own, and a number. What is 2 to the power 2x, written in terms of 2 to the power x?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:277:13"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#50": {
+      "en": "2<sup>2x</sup> = (2<sup>x</sup>)², so this is a quadratic wearing a disguise.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:280:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#51": {
+      "en": "let K = 2<sup>x</sup> &nbsp;&nbsp;(then K² = 2<sup>2x</sup>)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:281:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#52": {
+      "en": "K² − 6K + 8 = 0 &nbsp;⟹&nbsp; (K − 2)(K − 4) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:282:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#53": {
+      "en": "∴ K = 2 &nbsp;&nbsp;or&nbsp;&nbsp; K = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:283:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#54": {
+      "en": "K = 2: &nbsp;2<sup>x</sup> = 2¹ &nbsp;— the guns are equal, so the helmets fall to the ground &nbsp;⟹&nbsp; x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:284:37"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#55": {
+      "en": "K = 4: &nbsp;2<sup>x</sup> = 2² &nbsp;⟹&nbsp; x = 2 &nbsp;&nbsp;∴ x = 1 &nbsp;or&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:285:39"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#56": {
+      "en": "WATCH OUT: 2<sup>2x</sup> is (2<sup>x</sup>)², not 2·2<sup>x</sup>. The 2x is an exponent, so it means 2 multiplied by itself 2x times — which is 2<sup>x</sup> multiplied by itself. Reading it as 2 lots of 2<sup>x</sup> turns the whole equation into a linear one and loses every mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:287:15"
+      ]
+    },
+    "eqn-siblings-rational-exponents-k#57": {
+      "en": "The k-method does not belong to any one topic — it is a way of seeing. Whenever an equation has a thing, that same thing squared, and a number, it is a quadratic in disguise, whatever the thing happens to be. Here the thing is 2 to the power x, because 2 to the power 2x is exactly 2 to the power x multiplied by itself. Name it K and the page turns into K squared minus six K plus eight, which factorises straight away. Then every branch has to be walked back, because K was never the unknown. Two to the power x equals two gives x equal to one, and two to the power x equals four gives x equal to two. Both branches survive here, because 2 and 4 are both positive — a negative branch would have died on the spot.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-rational-exponents-k.js:291:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#1": {
+      "en": "Make y the subject of the equation &nbsp;2x − y = −2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:73:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#2": {
+      "en": "Get the y alone on one side. The quickest way is to add y to both sides and take the −2 across, so you never have to divide by a negative.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:76:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#3": {
+      "en": "Add y to both sides and take the −2 across:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:79:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#4": {
+      "en": "y = 2x + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:80:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#5": {
+      "en": "WATCH OUT for the sign. Moving &nbsp;−y&nbsp; across makes it &nbsp;+y, and moving the &nbsp;−2&nbsp; across makes it &nbsp;+2. Writing &nbsp;y = 2x − 2&nbsp; here quietly wrecks everything that follows.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:82:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#6": {
+      "en": "This little step is step one of her whole simultaneous method, which is why it gets its own mark. Making a variable the subject just means rearranging until that letter stands alone on one side with everything else on the other. Here the y is negative, so rather than dividing the whole equation by negative one it is safer to move the y across to the right, where it becomes positive, and move the negative two across to the left, where it becomes positive too. Read it back afterwards to check: two x plus two, minus y, would give you back negative two. It does, so the rearrangement is right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:86:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#7": {
+      "en": "Hence solve for x and y simultaneously:<br>&nbsp;&nbsp;2x − y = −2 &nbsp;&nbsp;and&nbsp;&nbsp; y = x² + 5x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:94:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#8": {
+      "en": "You now have y written two different ways. Put them equal to each other, solve the quadratic that appears, then take each x back to the LINEAR equation for its y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:97:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#9": {
+      "en": "From (a), &nbsp;y = 2x + 2. Substitute that into the second equation:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:100:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#10": {
+      "en": "2x + 2 = x² + 5x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:101:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#11": {
+      "en": "0 = x² + 3x − 4 = (x + 4)(x − 1) &nbsp;&nbsp;∴&nbsp; x = −4 &nbsp;or&nbsp; x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:102:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#12": {
+      "en": "Now put each x back into the LINEAR equation, one at a time:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:103:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#13": {
+      "en": "x = −4: &nbsp;y = 2(−4) + 2 = −6 &nbsp;&nbsp;∴&nbsp; (−4 ; −6)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:104:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#14": {
+      "en": "x = 1: &nbsp;y = 2(1) + 2 = 4 &nbsp;&nbsp;∴&nbsp; (1 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:105:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#15": {
+      "en": "WATCH OUT: pair every x with ITS y. The answers are &nbsp;(−4 ; −6)&nbsp; and &nbsp;(1 ; 4)&nbsp; — not a list of four loose numbers, and never &nbsp;(−4 ; 4). Substitute back into the LINEAR equation, not the quadratic: it is easier and there is no chance of picking up an extra answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:107:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#16": {
+      "en": "Two equations, two unknowns, and one of the equations is straight. That straight one is the door in: rearrange it so y stands alone, and now you have a description of y you can carry into the other equation. Once you do, the y disappears and you are left with an ordinary quadratic in x, which factorises to give two x-values. Each of those is half an answer. To finish it you take each x back and work out the y that goes with it, and the safest place to do that is the linear equation, because it is short and it cannot produce a second y by accident. Write the two answers as coordinate pairs with a semicolon between the numbers, since the comma is already the decimal separator.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:111:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#17": {
+      "en": "Solve for x and y simultaneously:<br>&nbsp;&nbsp;x + y = 7 &nbsp;&nbsp;and&nbsp;&nbsp; xy = 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:136:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#18": {
+      "en": "Only one of these is a straight-line equation — start there. Make one letter the subject of it, then carry that expression into the other equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:139:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#19": {
+      "en": "Start from the LINEAR equation and make y the subject:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:142:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#20": {
+      "en": "y = 7 − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:143:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#21": {
+      "en": "substitute into &nbsp;xy = 12: &nbsp;&nbsp;x(7 − x) = 12 &nbsp;&nbsp;⟹&nbsp;&nbsp; 7x − x² = 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:144:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#22": {
+      "en": "0 = x² − 7x + 12 = (x − 3)(x − 4) &nbsp;&nbsp;∴&nbsp; x = 3 &nbsp;or&nbsp; x = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:145:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#23": {
+      "en": "x = 3: &nbsp;y = 7 − 3 = 4 &nbsp;&nbsp;∴&nbsp; (3 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:146:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#24": {
+      "en": "x = 4: &nbsp;y = 7 − 4 = 3 &nbsp;&nbsp;∴&nbsp; (4 ; 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:147:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#25": {
+      "en": "WATCH OUT: pair every x with ITS y. Here the two answers are each other's mirror image, so it is very easy to write &nbsp;(3 ; 3)&nbsp; and &nbsp;(4 ; 4)&nbsp; without noticing. Test one: 3 × 3 is 9, not 12. Always substitute your pair back into BOTH original equations if you have a second to spare.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:149:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#26": {
+      "en": "Both equations here describe the same two numbers: they add up to seven and multiply to twelve. The method does not change just because the second equation is a product. Take the straight equation, make y the subject, and carry seven minus x into the other one. Multiplying out gives a quadratic, and once everything is on the side that keeps x squared positive it factorises easily. The two x-values are three and four, and each one carries its own y back from the linear equation. Notice what you end up with: the pair three and four, and the pair four and three. They really are two different answers, because x and y are different letters, and the marker wants both written as proper coordinate pairs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:153:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#27": {
+      "en": "Solve for x and y simultaneously:<br>&nbsp;&nbsp;x² + y² = 20 &nbsp;&nbsp;and&nbsp;&nbsp; y = x + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:178:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#28": {
+      "en": "The second equation already says what y is, so it can go straight into the first. Take care when you square the bracket — squaring a sum always leaves a middle term behind.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:181:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#29": {
+      "en": "The linear equation is already y = something, so substitute it into the first:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:184:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#30": {
+      "en": "x² + (x + 2)² = 20",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:185:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#31": {
+      "en": "x² + x² + 4x + 4 = 20",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:186:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#32": {
+      "en": "2x² + 4x − 16 = 0 &nbsp;&nbsp;⟹ ÷ 2 ⟹&nbsp;&nbsp; x² + 2x − 8 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:187:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#33": {
+      "en": "(x + 4)(x − 2) = 0 &nbsp;&nbsp;∴&nbsp; x = −4 &nbsp;or&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:188:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#34": {
+      "en": "x = −4: &nbsp;y = −4 + 2 = −2 &nbsp;&nbsp;∴&nbsp; (−4 ; −2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:189:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#35": {
+      "en": "x = 2: &nbsp;y = 2 + 2 = 4 &nbsp;&nbsp;∴&nbsp; (2 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:190:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#36": {
+      "en": "WATCH OUT: &nbsp;(x + 2)²&nbsp; is &nbsp;x² + 4x + 4, not &nbsp;x² + 4. The middle term is the whole reason this question has two sensible answers instead of a mess. Divide by 2 before factorising — it is legal because the right-hand side is zero, and it makes the trinomial much friendlier.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:192:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#37": {
+      "en": "The first equation is a circle centred at the origin, the second is a straight line, and solving them together finds the places where the line crosses the circle. The method is the same one as always: the line is the simple equation, so its y goes into the circle equation. Squaring x plus two is where marks disappear, because it is a square of a sum and therefore has three terms. After collecting you get two x squared plus four x minus sixteen equals zero, and since the other side is zero you may divide the whole thing by two before factorising. Two x-values come out, and each one takes its y from the line. Two crossing points, written as coordinate pairs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:196:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#38": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² + x + 2, &nbsp;and the straight line g, defined by &nbsp;g(x) = 2x + 4. &nbsp;The two graphs cut each other at A and B.<br><br>Determine the coordinates of A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:245:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#39": {
+      "en": "“Where do they cut?” is a simultaneous-equations question wearing different clothes. At a crossing point the two graphs have the same height for the same x — so put the two expressions equal to each other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:248:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#40": {
+      "en": "At a crossing point both graphs give the same y for the same x, so put &nbsp;f(x) = g(x):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:251:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#41": {
+      "en": "x² + x + 2 = 2x + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:252:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#42": {
+      "en": "x² − x − 2 = 0 &nbsp;&nbsp;⟹&nbsp;&nbsp; (x − 2)(x + 1) = 0 &nbsp;&nbsp;∴&nbsp; x = 2 &nbsp;or&nbsp; x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:253:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#43": {
+      "en": "x = −1: &nbsp;y = 2(−1) + 4 = 2 &nbsp;&nbsp;∴&nbsp; A(−1 ; 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:254:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#44": {
+      "en": "x = 2: &nbsp;y = 2(2) + 4 = 8 &nbsp;&nbsp;∴&nbsp; B(2 ; 8)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:255:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#45": {
+      "en": "WATCH OUT: the x-values on their own are not the answer — the question asks for COORDINATES, so each x needs its y beside it in a bracket. Use the straight line to find each y; it is one multiplication and an add, where the parabola is three steps and a chance to slip.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:257:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#46": {
+      "en": "A point that lies on two graphs at once belongs to both of their equations, so it has the same x and the same y in each. Saying that out loud is exactly what f of x equals g of x means, and from there it is ordinary algebra. Bring everything to one side so the quadratic reads equals zero, factorise, and read off the two x-values. Each one is only half of a point. To finish, drop each x into the simpler of the two equations — the straight line — and you get the height that goes with it. Look back at the sketch afterwards: the left crossing sits lower and the right one higher, which is a quick sanity check that you have paired the numbers up the right way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:261:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#47": {
+      "en": "Solve for x and y simultaneously:<br>&nbsp;&nbsp;x + y = 8 &nbsp;&nbsp;and&nbsp;&nbsp; x² + 2xy − 3y² = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:286:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#48": {
+      "en": "Nothing changes: the linear equation is still the door in. Make y the subject and substitute — and then take your time expanding, because there are three terms to get through and one of them is a bracket squared.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:289:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#49": {
+      "en": "From the LINEAR equation: &nbsp;&nbsp;y = 8 − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:292:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#50": {
+      "en": "substitute into the second equation: &nbsp;&nbsp;x² + 2x(8 − x) − 3(8 − x)² = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:293:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#51": {
+      "en": "x² + 16x − 2x² − 3(64 − 16x + x²) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:294:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#52": {
+      "en": "−4x² + 64x − 192 = 0 &nbsp;&nbsp;⟹ ÷ (−4) ⟹&nbsp;&nbsp; x² − 16x + 48 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:295:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#53": {
+      "en": "(x − 4)(x − 12) = 0 &nbsp;&nbsp;∴&nbsp; x = 4 &nbsp;or&nbsp; x = 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:296:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#54": {
+      "en": "x = 4: &nbsp;y = 8 − 4 = 4 &nbsp;&nbsp;∴&nbsp; (4 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:297:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#55": {
+      "en": "x = 12: &nbsp;y = 8 − 12 = −4 &nbsp;&nbsp;∴&nbsp; (12 ; −4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:298:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#56": {
+      "en": "WATCH OUT: the &nbsp;−3&nbsp; has to reach every term of &nbsp;(8 − x)². Expand the bracket FIRST, in its own set of brackets, and only then multiply the −3 in — &nbsp;−3(64 − 16x + x²) = −192 + 48x − 3x². Multiplying only the first term is the slip that turns this into an unfactorisable mess.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:300:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#57": {
+      "en": "This one looks frightening because the second equation has x's and y's tangled together, but the method never changes. The straight equation is still simple, so make y the subject and carry eight minus x into the other one. Then expand slowly. There are three pieces: x squared stays as it is, two x times the bracket gives sixteen x minus two x squared, and the last piece needs the bracket squared before the negative three touches it. Collect everything and you get negative four x squared plus sixty four x minus one hundred and ninety two. Since the right side is zero you may divide the whole line by negative four, which makes the trinomial small and friendly. Two x-values, two y-values, two coordinate pairs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:304:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#58": {
+      "en": "Solve for x and y simultaneously:<br>&nbsp;&nbsp;x/3 + y/2 = 4 &nbsp;&nbsp;and&nbsp;&nbsp; xy = 18",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:329:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#59": {
+      "en": "Deal with the fractions before anything else — multiply every term of the first equation by the lowest common denominator. Only then make one letter the subject.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:332:13"
+      ]
+    },
+    "eqn-siblings-simultaneous#60": {
+      "en": "Clear the fractions in the LINEAR equation first. LCD = 6, so multiply every term by 6:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:335:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#61": {
+      "en": "2x + 3y = 24",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:336:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#62": {
+      "en": "make x the subject: &nbsp;&nbsp;x = ${sf(\"24 − 3y\", \"2\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:337:37"
+      ],
+      "nested": [
+        "24 − 3y"
+      ]
+    },
+    "eqn-siblings-simultaneous#63": {
+      "en": "substitute into &nbsp;xy = 18: &nbsp;&nbsp;y × ${sf(\"24 − 3y\", \"2\")} = 18 &nbsp;&nbsp;⟹&nbsp;&nbsp; y(24 − 3y) = 36",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:338:37"
+      ],
+      "nested": [
+        "24 − 3y"
+      ]
+    },
+    "eqn-siblings-simultaneous#64": {
+      "en": "24y − 3y² = 36 &nbsp;&nbsp;⟹&nbsp;&nbsp; 0 = 3y² − 24y + 36 &nbsp;&nbsp;⟹ ÷ 3 ⟹&nbsp;&nbsp; 0 = y² − 8y + 12 = (y − 2)(y − 6) &nbsp;&nbsp;∴&nbsp; y = 2 &nbsp;or&nbsp; y = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:339:37"
+      ]
+    },
+    "eqn-siblings-simultaneous#65": {
+      "en": "y = 2: &nbsp;2x + 3(2) = 24 &nbsp;⟹&nbsp; 2x = 18 &nbsp;&nbsp;∴&nbsp; (9 ; 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:340:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#66": {
+      "en": "y = 6: &nbsp;2x + 3(6) = 24 &nbsp;⟹&nbsp; 2x = 6 &nbsp;&nbsp;∴&nbsp; (3 ; 6)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:341:39"
+      ]
+    },
+    "eqn-siblings-simultaneous#67": {
+      "en": "WATCH OUT: multiplying by the LCD has to reach EVERY term, including the plain 4 on the right — it becomes 24, not 4. Missing the term with no fraction under it is the classic wreck here, and everything after it is wrong even though the working looks tidy.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:343:15"
+      ]
+    },
+    "eqn-siblings-simultaneous#68": {
+      "en": "Fractions make a simultaneous system look much worse than it is, so get rid of them first. The two denominators are three and two, so the lowest common denominator is six, and multiplying every single term by six leaves a clean linear equation. The plain four on the right has an invisible denominator of one, so it becomes twenty four — forgetting that term is the usual mistake. After that it is her ordinary routine: make one letter the subject, substitute into the other equation, and solve the quadratic that appears. Here it came out in y rather than x, which is perfectly fine, so each y goes back into the tidied linear equation to collect its x. Two coordinate pairs, both rational, exactly as her protip promises.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-simultaneous.js:347:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3102
+}
