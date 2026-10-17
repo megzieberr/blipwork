@@ -108,7 +108,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T69 | exam: euclid-siblings-chords-and-angles | ~4 735 words | verify-exam.html
 - ⏳ 2026-10-17 22:51 T70 | exam: euclid-siblings-cyclic-quads | ~5 790 words | verify-exam.html
 - ⏳ 2026-10-17 22:51 T71 | exam: euclid-siblings-tangents | ~4 566 words | verify-exam.html
-- ☐ T72 | exam: euclid-tangents-and-cyclic-quads | ~1 071 words | verify-exam.html
+- ☑ 2026-10-17 T72 | exam: euclid-tangents-and-cyclic-quads | ~1 071 words | verify-exam.html
 
 ### Algebraic Expressions (exam-only)
 - ☑ 2026-10-17 T73 | concepts: the `algx` block: NONE EXISTS (exam-only chapter, no concept cards), nothing to translate

@@ -1,0 +1,292 @@
+{
+  "unit": "T72",
+  "generated": "2026-10-17T20:54:49.282Z",
+  "files": [
+    "js/exam/euclid-tangents-and-cyclic-quads.js"
+  ],
+  "items": {
+    "euclid-tangents-and-cyclic-quads#1": {
+      "en": "In the diagram, O is the centre of the circle. TA and TB are tangents to the circle at A and B. C is a point on the major arc AB, and CA and CB are chords. &nbsp;∠ATB = x.<br><br>Give a reason why &nbsp;∠OAT = 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:138:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#2": {
+      "en": "Look at what the two lines meeting at A actually are — one is a tangent, the other runs to the centre. There is a single theorem about exactly that pair.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:141:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#3": {
+      "en": "A tangent to a circle is perpendicular to the radius drawn to the point of contact. &nbsp;(short form: <b>tangent ⊥ radius</b>)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:144:39"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#4": {
+      "en": "REMEMBER: this one line is the hinge of the whole question. Every tangent in a Grade 11 diagram is worth marking with a little right angle onto the radius the moment you see it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:146:15"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#5": {
+      "en": "WATCH OUT: in every Euclidean geometry part the <b>reason</b> carries a mark of its own, and it must be written <b>in words</b>. “∠OAT = 90°” with no reason beside it is half an answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:149:15"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#6": {
+      "en": "A tangent touches the circle at exactly one point, and the radius to that point is the shortest possible line from the centre to the tangent — and the shortest line from a point to a line is always the perpendicular one. That is the whole reason the angle is a right angle. In an exam this is one mark and thirty seconds, but its real value is what it unlocks: the moment you write 90° at A you have created a right angle inside a quadrilateral, and every remaining part of this question is built on that. Get into the habit of pencilling the right-angle square onto every tangent-and-radius pair the instant you read the diagram, before you even look at what is being asked.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:153:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#7": {
+      "en": "Prove that OATB is a cyclic quadrilateral.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:161:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#8": {
+      "en": "You already have one right angle from (a). Is there a second one anywhere? Then think about which pair of angles in OATB those two are, and what their total tells you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:164:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#9": {
+      "en": "∠OBT = 90° &nbsp;&nbsp;<i>(tangent ⊥ radius)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:167:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#10": {
+      "en": "∠OAT + ∠OBT = 90° + 90° = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:168:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#11": {
+      "en": "∴ OATB is a cyclic quadrilateral &nbsp;&nbsp;<i>(opposite ∠s of quadrilateral OATB are supplementary)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:169:39"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#12": {
+      "en": "WATCH OUT: say the word <b>opposite</b>. In OATB the vertices run O → A → T → B, so the angles at A and at B sit across from each other — that is why supplementary angles prove anything here. Two angles that happen to add to 180° but are next to each other prove nothing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:171:15"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#13": {
+      "en": "The test for a cyclic quadrilateral you need here is the converse of a theorem you already know: if opposite angles of a quadrilateral add to 180°, then all four of its corners lie on one circle. So the job is to find a pair of OPPOSITE angles and show they total 180°. (a) handed you one right angle at A, and the second tangent gives you the identical argument at B, so you have two right angles — and 90 + 90 is exactly 180. The one thing that makes it a proof rather than a coincidence is checking that A and B really are opposite corners. Read the name of the quadrilateral in order: O, A, T, B. A is the second corner and B is the fourth, so they face each other across the shape. Neighbouring angles adding to 180° would say nothing at all, which is why the word “opposite” has to be in your reason.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:175:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#14": {
+      "en": "Hence write down the size of &nbsp;∠AOB&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:183:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#15": {
+      "en": "“Hence” means use what you just proved. In a cyclic quadrilateral there are two pairs of opposite angles — you used one pair in (b), so what does the other pair have to do?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:186:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#16": {
+      "en": "∠AOB and ∠ATB are the <i>other</i> pair of opposite angles in the cyclic quadrilateral OATB:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:189:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#17": {
+      "en": "∠AOB + x = 180° &nbsp;&nbsp;<i>(opposite ∠s of a cyclic quad)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:190:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#18": {
+      "en": "∴ ∠AOB = 180° − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:191:39"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#19": {
+      "en": "<b>OR</b> — without using (b) at all: the angles of quadrilateral OATB add up to 360°, so ∠AOB = 360° − 90° − 90° − x = 180° − x. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:192:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#20": {
+      "en": "Once a quadrilateral is known to be cyclic, BOTH pairs of opposite angles are supplementary, not just the pair you used to prove it. You spent the A-and-B pair in (b); the leftovers are the angles at O and at T, and those must total 180° as well. Since the angle at T is x, the angle at O is whatever is left of 180°. Notice the answer is an expression, not a number — that is fine and it is deliberate. The OR route is worth knowing too, because it needs no theorem at all: the four angles of any quadrilateral add to 360°, and you already know three of them (90°, 90° and x), so subtraction finishes it. Both roads earn the same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:195:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#21": {
+      "en": "Prove that &nbsp;∠ACB = 90° − x/2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:203:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#22": {
+      "en": "C is on the circle and O is the centre, and both ∠ACB and ∠AOB stand on the same arc AB. There is one theorem that links an angle at the centre to an angle at the circumference — and you already have ∠AOB in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:206:13"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#23": {
+      "en": "C sits on the major arc, and ∠AOB and ∠ACB stand on the same arc AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:209:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#24": {
+      "en": "∠ACB = ½ · ∠AOB &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> &nbsp;— the statement earns one tick and the reason earns its own",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:210:37"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#25": {
+      "en": "= ½(180° − x) = 90° − x/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:211:39"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#26": {
+      "en": "WATCH OUT: C has to be on the <b>major</b> arc — the far side of AB from T. The theorem pairs the angle at the circumference with the <i>non-reflex</i> angle at the centre, which is the 180° − x you just found, not the reflex one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:213:15"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#27": {
+      "en": "REMEMBER: the answer is in terms of x, so no number is ever going to appear. Working with a letter is exactly the same work as working with a number — do not sit waiting for a value that is not coming.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:216:15"
+      ]
+    },
+    "euclid-tangents-and-cyclic-quads#28": {
+      "en": "Nothing in this part is cued: the question does not mention arcs, does not mention the centre, and does not tell you to use (c). Spotting that ∠ACB and ∠AOB both stand on the chord AB — one from the circumference, one from the centre — is the fetch, and it is why the part is starred. Once you see it, the theorem does the work: the angle at the centre is always double the angle at the circumference standing on the same arc, so the angle at C is half of the angle at O. You already own the angle at O from (c), so halving 180° − x gives 90° − x/2 in one line. Two cautions. C must be on the major arc, because the theorem pairs the circumference angle with the non-reflex angle at the centre, and C sitting on the far side of AB from T is exactly what guarantees that. And do not be unsettled by having only letters — an algebraic proof is the same reasoning as a numerical one, and it is stronger, because it holds for every x at once. Bank (a), (b) and (c) first; they are three straightforward marks, and this one is the reward round at the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-tangents-and-cyclic-quads.js:220:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1059
+}
