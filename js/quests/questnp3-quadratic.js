@@ -100,7 +100,7 @@ const SKILLS = {
       L(`Find the general term Tₙ of <b>${list(seq)}</b>.`, `Vind die algemene term Tₙ van <b>${list(seq)}</b>.`),
       correct, wrongs,
       { layout: "grid2", graph: full(seq),
-        hint: L("Find a, then b, then c with the three relationships, and write an² + bn + c.", "Vind a, dan b, dan c met die drie verbande, en skryf an² + bn + c."),
+        hint: L("Find a, then b, then c with the three relationships, and write an² + bn + c.", "Vind a, dan b, dan c met die drie vergelykings, en skryf an² + bn + c."),
         answerLabel: L(`Tₙ = ${correct}.`, `Tₙ = ${correct}.`),
         solution: [
           { s: L(`2a = second difference = ${C(sd)}  →  a = ${C(a)}`, `2a = tweede verskil = ${C(sd)}  →  a = ${C(a)}`) },

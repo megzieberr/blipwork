@@ -85,7 +85,7 @@ const SKILLS = {
       L(`For <b>${list(seq)} ; …</b>, find T${C(k)}.`, `Vir <b>${list(seq)} ; …</b>: vind T${C(k)}.`),
       geoTn(a1, r)(k),
       { allowNeg: false,
-        hint: L(`Tₙ = a·rⁿ⁻¹ = ${C(a1)} × ${C(r)}^(${C(k)} − 1). Do the power first.`, `Tₙ = a·rⁿ⁻¹ = ${C(a1)} × ${C(r)}^(${C(k)} − 1). Werk eers die mag uit.`),
+        hint: L(`T${C(k)} = a·r^(${C(k)} − 1) = ${C(a1)} × ${C(r)}^(${C(k)} − 1). Do the power first.`, `T${C(k)} = a·r^(${C(k)} − 1) = ${C(a1)} × ${C(r)}^(${C(k)} − 1). Werk eers die mag uit.`),
         answerLabel: L(`T${C(k)} = ${C(a1)} × ${C(r)}${SUP("", C(k - 1))} = ${C(geoTn(a1, r)(k))}.`, `T${C(k)} = ${C(a1)} × ${C(r)}${SUP("", C(k - 1))} = ${C(geoTn(a1, r)(k))}.`),
         solution: [
           { s: L(`a = ${C(a1)} and r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}  →  Tₙ = ${geoStr(a1, r)}`, `a = ${C(a1)} en r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}  →  Tₙ = ${geoStr(a1, r)}`), r: L("Tₙ = a·rⁿ⁻¹", "Tₙ = a·rⁿ⁻¹") },

@@ -130,8 +130,8 @@ export const CONCEPTS_PAT = {
         <li>eerste term = T₂ − T₁ (die eerste gaping),</li>
         <li>gemeenskaplike verskil = die konstante <b>tweede verskil</b>.</li>
       </ul>
-      <p>Dus word 'n vraag oor 'n gaping 'n vraag oor 'n term van daardie lineêre gaping-patroon:</p>
-      <div class="formula">gaping tussen Tₖ en Tₖ₊₁ = die k-de term van die gaping-patroon<br>gapingₙ = an + c &nbsp;&nbsp;(a = die tweede verskil, c = gaping₀ = eerste gaping − a)</div>
+      <p>Dus word 'n vraag oor 'n gaping 'n vraag oor 'n term van daardie lineêre gapingpatroon:</p>
+      <div class="formula">gaping tussen Tₖ en Tₖ₊₁ = die k-de term van die gapingpatroon<br>gapingₙ = an + c &nbsp;&nbsp;(a = die tweede verskil, c = gaping₀ = eerste gaping − a)</div>
       <div class="eg">−5 ; 0 ; 7 ; 16 ; 27 → gapings 5 ; 7 ; 9 ; 11 (lineêr, gemeenskaplike verskil 2). Dus a = 2, c = 5 − 2 = 3, en gapingₙ = 2n + 3. Die gaping tussen T₁₀ en T₁₁ is 2(10) + 3 = 23.</div>`),
   },
   patGeometric: {
