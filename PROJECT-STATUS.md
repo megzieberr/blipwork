@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-18 02:50 (🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`, a fix round for 70 maths slips in the TEACHING TEXT is READY on her "run it"; background fixes committed local, NOT pushed; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
+# Project status — updated 2026-10-18 12:15 (🚀 sw v102 `9e4fda6` LIVE 12:08: the audit's FIX ROUND shipped, 146 teaching-text fixes in both languages + f8 overflow + admin pinned to English; 0 unpushed; her calls: 49 skipped items in `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, "deploy send-push" (NOW button), cron.sql re-run after exams; 🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -7,6 +7,15 @@ the top). Keep THIS file short: when an entry here stops being current, move it 
 the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🚀 Sun 2026-10-18 11:36–12:08: the audit FIX ROUND, shipped as sw v102 `9e4fda6` (her "Run it: the audit fix round, one
+  Opus worker per chapter …, then one ship").** One Workflow inside the session: 15 Opus fix workers (one per chapter, the
+  hub alone at the end), an Opus reviewer per chapter (2 repair passes: gtrig's LCD rule, one missed midline string), then
+  unit D (f8 jug margin, t5 hint, super-special table: sweep D = 0 in EN and AF) and unit E (admin.html always English,
+  never writes `mhq.lang`). 146 findings fixed, 49 skipped on purpose (unsure / her teaching or marking choice / her own
+  words) → `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`. Full gate before the push: 34 EN pages + 16 AF pages ALL GOOD,
+  node checks green, af_check 12 075 / 12 072 / 0 errors, lazy_playthrough 18/18, sweep A = D = 0; sw_check OK; pushed
+  12:08, 18 chapter/fix commits + the bump. Cost: 36 workers, 4.05M tokens. ⚠️ Her phone: close and reopen the app twice
+  to pick up v102. NOT done (her yes): deploy send-push (the NOW button), re-run cron.sql on live, S12–S14 (before "show it").
 - **🔍 Sun 2026-10-18 01:28–02:50: the FULL AUDIT (Fable, her bedtime /go: read-only + background fixes).** 94 workers,
   42 min, 13.7M worker tokens (weekly meter 84% → 89%). Report: `Desktop/Claude Code Projects/_docs/BLIPWORK-AUDIT-2026-10-18.md`
   (scorecard 6/10 = "fix this week"; appendices, per-chapter `fix-lists/` and `FIX-ROUND-BRIEF.md` in the folder of the
@@ -86,13 +95,19 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   setup rows + wave 2), three at a time after that.
 - 2026-10-18 (hers, 01:20): "Ship sw v101: bump, sw_check, push. The Afrikaans switch stays hidden." Shipped `f7d832b`,
   live-verified 01:22.
+- 2026-10-18 (hers, 01:36, bedtime): "here is my /go ahead … audit is read only, but you can make fixes that don't need my
+  input, i.e. background things I don't see or interact with"; 01:44 "shut my laptop down when you're done" (the shutdown
+  command failed from the Bash tool; laptop stayed on).
+- 2026-10-18 (hers, 11:36): "Run it: the audit fix round, one Opus worker per chapter from … FIX-ROUND-BRIEF.md, then one
+  ship." Shipped sw v102 `9e4fda6` 12:08.
 - 2026-10-18 (audit, live read): f8–f13 are already OPEN on live (all 99 quests open); the Term toggle is ON since 2026-10-06. Both pending lines settled.
 
 ## ⏳ Pending on Megan
-- 💻 1 word [this week, before Paper 1 on 26 Oct]: "run it" for the audit's fix round (14 Opus workers, one per chapter,
-  ~3M tokens; brief + lists in `_docs/BLIPWORK-AUDIT-2026-10-18/`). Read the report's scorecard first (2 min).
 - 🌐 1 word [whenever]: "deploy send-push" so the admin NOW button finally works (daytime homework then buzzes phones at
-  once). Also your call: re-run `supabase/cron.sql` on live (the 60 s timeout) after exams.
+  once). Also your call, after exams: re-run `supabase/cron.sql` on live (the 60 s timeout).
+- 📱 2 taps [today]: close and reopen Blipwork twice on your phone so it picks up v102 (the fix round).
+- 💻 whenever, in pieces: `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, 49 skipped items that need your word (teaching
+  and marking choices, your device words); say the id and your word and a worker applies it.
 - 🌐 1 word [your call, whenever]: "run S11" (one Opus worker, about 200k) so the seven dice test pages can check the
   Afrikaans dice rounds too, or leave it (the app renders them; only the harness can't read Afrikaans there).
 - 📱 [after exams, your 19:17 ruling]: play Blipwork start to finish with `?lang=af` (your phone already remembers it) and
