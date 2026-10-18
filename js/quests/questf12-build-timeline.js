@@ -232,7 +232,7 @@ function coinStep(sc, x, first) {
     kind: "mc", layout: "grid2",
     prompt: L(`${first ? "Where does each coin go?<br>" : ""}${cap(coinName(x))}: which T?`, `${first ? "Waar gaan elke munt?<br>" : ""}${cap(coinName(x))}: watter T?`),
     options: tOptions(ts, x.t, t => `${T(t)} is ${whatAt(sc, t, { skip: x })}.`),
-    hint: L("Find the coin's day in the words: now is T0, and “after so many years” is that many T's on from T0.", "Vind die munt se dag in die woorde: nou is T0, en “na soveel jaar” is soveel T's verder as T0."),
+    hint: L("Find the coin's day in the words: now is T0, and “after so many years” is that many T's on from T0.", "Vind die munt se dag in die woorde: nou is T0, en “ná soveel jaar” is soveel T's verder as T0."),
   };
 }
 

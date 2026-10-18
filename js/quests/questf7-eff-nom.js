@@ -107,7 +107,7 @@ const SKILLS = {
       answerLabel: L(`i_eff ≈ ${effC}%`, `i_eff ≈ ${effC}%`),
       solution: [
         { s: L(`1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`, `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`), r: L(`n = ${o.k} because interest is added ${o.k} times a year`, `n = ${o.k} want rente word ${o.k} keer per jaar bygetel`) },
-        { s: L(`i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1`, `i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1`) },
+        { s: L(`i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)} − 1`, `i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)} − 1`) },
         { s: L(`i_eff ≈ ${effC}%`, `i_eff ≈ ${effC}%`), r: L("× 100 to write it as a percentage", "× 100 om dit as 'n persentasie te skryf") },
       ],
     };

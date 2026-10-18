@@ -66,7 +66,7 @@ export const CONCEPTS_FINANCE = {
       </ul>
       <div class="formula">A = P(1 + i/k)<sup>n·k</sup></div>
       <p>Times per year k: annually 1 · half‑yearly 2 · quarterly 4 · monthly 12 · weekly 52 · daily 365.</p>
-      <div class="eg">12% p.a. compounded quarterly for 5 years → i = 0,12/4 = 0,03 and exponent = 5×4 = 20.</div>`, `
+      <div class="eg">12% p.a. compounded quarterly for 5 years → i/k = 0,12/4 = 0,03 and exponent n·k = 5×4 = 20.</div>`, `
       <p>As rente meer as een keer per jaar bygetel word, verdeel die jaar:</p>
       <ul>
         <li><b>koers per periode</b> = jaarlikse koers ÷ (keer per jaar)</li>
@@ -74,7 +74,7 @@ export const CONCEPTS_FINANCE = {
       </ul>
       <div class="formula">A = P(1 + i/k)<sup>n·k</sup></div>
       <p>Keer per jaar k: jaarliks 1 · halfjaarliks 2 · kwartaalliks 4 · maandeliks 12 · weekliks 52 · daagliks 365.</p>
-      <div class="eg">12% p.j. kwartaalliks saamgestel vir 5 jaar → i = 0,12/4 = 0,03 en eksponent = 5×4 = 20.</div>`),
+      <div class="eg">12% p.j. kwartaalliks saamgestel vir 5 jaar → i/k = 0,12/4 = 0,03 en eksponent n·k = 5×4 = 20.</div>`),
   },
   timelineMove: {
     title: L("Moving money along a timeline", "Skuif geld langs 'n tydlyn"),
