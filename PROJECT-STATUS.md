@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-18 12:15 (🚀 sw v102 `9e4fda6` LIVE 12:08: the audit's FIX ROUND shipped, 146 teaching-text fixes in both languages + f8 overflow + admin pinned to English; 0 unpushed; her calls: 49 skipped items in `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, "deploy send-push" (NOW button), cron.sql re-run after exams; 🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
+# Project status — updated 2026-10-18 12:55 (🔔 send-push v3 DEPLOYED 12:52 with CORS, Verify JWT off: the admin "tell the kids NOW" button can reach the function for the first time; 🚀 sw v102 `9e4fda6` LIVE 12:08: the audit's FIX ROUND shipped, 146 teaching-text fixes in both languages + f8 overflow + admin pinned to English; 0 unpushed; her calls: 49 skipped items in `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, cron.sql re-run after exams; 🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -7,6 +7,15 @@ the top). Keep THIS file short: when an entry here stops being current, move it 
 the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🔔 Sun 2026-10-18 12:52: send-push v3 DEPLOYED (her 12:49 "Deploy send-push … Verify JWT stays off, then prove the admin
+  NOW button works").** Deployed through the Supabase MCP from the repo file (the deployed source was re-read and matches
+  byte for byte; Verify JWT false, as before). Proof without sending a push: the browser preflight (OPTIONS from
+  megzieberr.github.io with the app's request headers) now answers 200 with `Access-Control-Allow-Origin: *`; a POST with a
+  wrong admin password answers 401 "forbidden" WITH the CORS headers, so the browser now reads the reply instead of a CORS
+  block (before: the preflight got 401 and the real POST never left the browser). Not exercised: a real announce with her
+  password (the active assignment p2 is already announced, so a real call today would return `already_announced`); her next
+  homework save inside 07:00–19:00 is the live test, and the push should land at once. The 17:00 and 07:00 cron runs use the
+  unchanged secret path.
 - **🚀 Sun 2026-10-18 11:36–12:08: the audit FIX ROUND, shipped as sw v102 `9e4fda6` (her "Run it: the audit fix round, one
   Opus worker per chapter …, then one ship").** One Workflow inside the session: 15 Opus fix workers (one per chapter, the
   hub alone at the end), an Opus reviewer per chapter (2 repair passes: gtrig's LCD rule, one missed midline string), then
@@ -100,11 +109,14 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   command failed from the Bash tool; laptop stayed on).
 - 2026-10-18 (hers, 11:36): "Run it: the audit fix round, one Opus worker per chapter from … FIX-ROUND-BRIEF.md, then one
   ship." Shipped sw v102 `9e4fda6` 12:08.
+- 2026-10-18 (hers, 12:49): "Deploy send-push: redeploy the edge function with the CORS fix (Verify JWT stays off), then
+  prove the admin NOW button works." Deployed v3 12:52; preflight + CORS proven, no push sent.
 - 2026-10-18 (audit, live read): f8–f13 are already OPEN on live (all 99 quests open); the Term toggle is ON since 2026-10-06. Both pending lines settled.
 
 ## ⏳ Pending on Megan
-- 🌐 1 word [whenever]: "deploy send-push" so the admin NOW button finally works (daytime homework then buzzes phones at
-  once). Also your call, after exams: re-run `supabase/cron.sql` on live (the 60 s timeout).
+- 💻 your call, after exams: re-run `supabase/cron.sql` on live (the 60 s timeout for the two push jobs).
+- 📱 next homework you set in the daytime: the NOW push should land on the kids' phones at once (send-push v3, deployed
+  18 Oct 12:52); if it does not, tell a session.
 - 📱 2 taps [today]: close and reopen Blipwork twice on your phone so it picks up v102 (the fix round).
 - 💻 whenever, in pieces: `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, 49 skipped items that need your word (teaching
   and marking choices, your device words); say the id and your word and a worker applies it.
