@@ -63,10 +63,12 @@ select cron.schedule(
   'blipwork-morning-homework',
   '0 5 * * *',
   $job$
+  -- 2026-10-18 audit: send-push takes 17 to 22 s; pg_net's 5 s default logged every run as a timeout
   select net.http_post(
     url     := 'https://<PROJECT_REF>.supabase.co/functions/v1/send-push',
     headers := jsonb_build_object('Content-Type', 'application/json', 'x-cron-secret', '<CRON_SECRET>'),
-    body    := jsonb_build_object('type', 'morning')
+    body    := jsonb_build_object('type', 'morning'),
+    timeout_milliseconds := 60000
   );
   $job$
 );
@@ -82,10 +84,12 @@ select cron.schedule(
   'blipwork-blip-reminder',
   '0 15 * * *',
   $job$
+  -- 2026-10-18 audit: send-push takes 17 to 22 s; pg_net's 5 s default logged every run as a timeout
   select net.http_post(
     url     := 'https://<PROJECT_REF>.supabase.co/functions/v1/send-push',
     headers := jsonb_build_object('Content-Type', 'application/json', 'x-cron-secret', '<CRON_SECRET>'),
-    body    := jsonb_build_object('type', 'daily')
+    body    := jsonb_build_object('type', 'daily'),
+    timeout_milliseconds := 60000
   );
   $job$
 );

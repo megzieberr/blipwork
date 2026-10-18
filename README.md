@@ -10,11 +10,14 @@ roster; a learner finds their own name in the picker and sets a password the fir
 time (or after a teacher reset). The teacher can only clear a password, never read
 one.
 
-Twelve chapters ship in the hub, split across a **Term 3** tab (Statistics, Finance,
-Probability, 2D Trigonometry, Measurement) and a **Revision** tab (Functions, Trig
-Graphs, Analytical Geometry, Number Patterns, Exponents & Surds, Equations &
-Inequalities, General Trig). Two more, **Euclidean Geometry** and **Algebraic
+Twelve chapters ship in the hub, split across a **Paper 1** tab (Exponents & Surds,
+Equations & Inequalities, Number Patterns, Functions, Finance, Probability) and a
+**Paper 2** tab (Statistics, Analytical Geometry, General Trig, Trig Graphs, 2D
+Trigonometry, Measurement). Two more, **Euclidean Geometry** and **Algebraic
 Expressions**, exist only inside Exam Focus: they own no hub quests of their own.
+
+Every maths string also has an Afrikaans twin (`js/lang.js`). The switch is hidden for
+now, so learners see English; `?lang=af` turns Afrikaans on for one device.
 
 ## Blip, the companion
 Every learner has a blob companion called **Blip** (renameable). Completed rounds pay
@@ -43,10 +46,10 @@ Open <http://localhost:5191/>. With no backend reachable it falls back to a loca
 backend; append `?local=1` to force it.
 
 ## Backend (Supabase)
-- `supabase/schema.sql` — tables, row-level security (on, no policies) and the
-  `SECURITY DEFINER` RPC API. Run once in the SQL editor.
+- `supabase/schema.sql`: the record of the tables, row-level security (on, no policies) and the
+  `SECURITY DEFINER` RPC API. Live changes ship as additive `supabase/migration-*.sql` files pasted into the SQL editor; never re-run schema.sql on the live database.
 - `supabase/seed-private.sql` — set your real admin password **privately**
-  (never committed). There is no class list to seed: learners sign themselves up.
+  (never committed). The teacher seeds the class roster (add or remove learners on the admin page); there is no sign-up.
 - Put your project URL + **publishable** key in `js/supabase-config.js` (the publishable
   key is safe to commit; the secret/service-role key never goes in the repo).
 

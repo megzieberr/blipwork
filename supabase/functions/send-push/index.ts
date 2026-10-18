@@ -336,11 +336,18 @@ async function spendBudget(delivered: string[], kind: string, day: string, stage
   await admin.from("push_subscriptions").update(patch).in("endpoint", delivered);
 }
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
 function json(body: unknown, status = 200) {
-  return Response.json(body as Record<string, unknown>, { status });
+  return Response.json(body as Record<string, unknown>, { status, headers: corsHeaders });
 }
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   let body: { test?: boolean; mode?: string; type?: string; admin_pw?: string } = {};
   try { body = await req.json(); } catch { body = {}; }
 
@@ -352,7 +359,7 @@ Deno.serve(async (req) => {
     if (error) return json({ ok: false, error: `admin check: ${error.message}` }, 500);
     adminOk = ok === true;
   }
-  if (!cronOk && !adminOk) return new Response("forbidden", { status: 401 });
+  if (!cronOk && !adminOk) return new Response("forbidden", { status: 401, headers: corsHeaders });
 
   // An admin-password caller is her browser, not the scheduler. It may
   // announce homework and nothing else — no test pings, no Blip runs.

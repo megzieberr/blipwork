@@ -49,29 +49,30 @@ password the first time, then play short question rounds ("quests") on the
 chapters she has opened, and get hints, worked solutions and concept cards
 only when they're stuck. She runs the class from an admin page: opening and
 closing quests, watching who's struggling with which concept, and resetting
-forgotten passwords. Twelve chapters live in the hub (five on the Term 3 tab,
-seven on Revision), plus two more that exist only inside Exam Focus
+forgotten passwords. Twelve chapters live in the hub (six on the Paper 1 tab,
+six on Paper 2), plus two more that exist only inside Exam Focus
 (Euclidean Geometry, Algebraic Expressions) and own no hub quests.
 
 ## Technical map (for you, Claude — translate when discussing)
 
 - **Frontend**: a static site of plain-JavaScript ES modules — **no build
-  step, no npm, no node_modules**. Entry `index.html` (learner app) and
+  step; the app itself needs no npm** (only `tools/` has a package.json and node_modules, acorn for the Afrikaans tools: `cd tools && npm ci` once). Entry `index.html` (learner app) and
   `admin.html` (teacher dashboard). App code lives in `js/`:
   - `js/quests/` — one file per quest (`quest01…`, `questf1…`, `questag1…`
     etc.), plus per-chapter builders (`_func.js`, `_trig.js`, …) and shared
     helpers (`_shared.js`, home of `mc()`). Registered in `js/quests/index.js`.
-  - `js/engine/` — 10 "accuracy-critical" diagram engines (stats graphs,
-    timelines, Venn, trees, triangles, solids, function/trig/analytical
+  - `js/engine/` — 11 "accuracy-critical" diagram engines (stats graphs,
+    timelines, Venn, trees, triangles, quadrant triangles, solids, function/trig/analytical
     graphs, pattern pyramids). Each has a `verify()` that proves the drawing
     is to scale and honest.
   - Per-chapter maths libraries (`statlib.js`, `finlib.js`, `problib.js`,
     `triglib.js`, `measlib.js`, `funclib.js`, `tgraphlib.js`,
     `analyticslib.js`, `patternlib.js`) — every answer key is computed here,
     never hand-typed.
-  - `js/config.js` — chapter list, tabs (Term 3 / Revision), per-chapter
+  - `js/config.js`: chapter list (each chapter's `paper` field files it on the hub's Paper 1 / Paper 2 tabs, drawn in `js/screens.js`; the old `term` field stays but no tab reads it), per-chapter
     colour families. `js/concepts/<id>.js` per chapter, assembled by `js/concepts.js` (split 2026-10-17, row S4 of the Afrikaans queue) — the "I'm lost" concept cards.
   - `js/calculator.js` — the in-app Casio fx-991ZA Plus II simulator.
+  - `js/lang.js`: the Afrikaans layer. Every maths string goes through `L(en, af)` (buttons, Blip, shop and login stay English, her ruling 2026-10-15). Per-device key `mhq.lang` (default "en"), header switch hidden behind `SHOW_TOGGLE = false`, `?lang=af` / `?lang=en` to test on one device. Exam Focus keeps its own toggle in `js/exam/lang.js`. Tools: `tools/AF-TOOLS.md`; words: `AF-GLOSSARY.md`; work list: `QUEUE.md`.
 - **Data storage**: Supabase (a hosted database with login features).
   Everything goes through `SECURITY DEFINER` RPC functions defined in
   `supabase/schema.sql`; row-level security is on with no policies, so the
@@ -80,8 +81,8 @@ seven on Revision), plus two more that exist only inside Exam Focus
   passwords are **bcrypt-hashed server-side** (the teacher can only reset,
   never read).
 - **Local mode**: with no Supabase reachable, or with `?local=1` on the URL
-  (which sticks via localStorage key `mhq.forceLocal` — note: a comment in
-  `supabase-config.js` says `cgg.forceLocal`, that's wrong), the app uses
+  (which sticks via localStorage key `mhq.forceLocal`; `?local=0` undoes it),
+  the app uses
   `js/local-backend.js` with demo data and all quests open. Local and cloud
   data never mix.
 - **Secrets**: `js/supabase-config.js` holds the project URL + *publishable*
@@ -111,8 +112,8 @@ seven on Revision), plus two more that exist only inside Exam Focus
   it prints OK only when nothing under `js/` or `css/` has changed since the
   last bump.
 - **Local dev**: `python -m http.server 5191` in the repo root, then open
-  http://localhost:5191/ — port **5191**. No install step.
-- **Testing**: 10 `verify-*.html` pages (open in a browser, or drive
+  http://localhost:5191/ — port **5191**. No install step for the app (the Afrikaans tools in `tools/` need `npm ci` once).
+- **Testing**: 34 `verify-*.html` pages and 7 `verify-*.mjs` node checks (open in a browser, or drive
   headlessly) fuzz every engine and quest generator; all must PASS before
   shipping. Quest modules can also be imported headlessly in node for
   fuzzing.
@@ -122,8 +123,8 @@ seven on Revision), plus two more that exist only inside Exam Focus
   history lives verbatim in `STATUS-ARCHIVE.md` (append-only — when a
   head entry stops being current, move it to the archive's top, never
   delete it). Keep the head under a few hundred lines.
-- **Sibling repo**: `maths-quest-grade7` ("Wiskunde Avontuur", cloned at
-  /workspace/maths-quest-grade7) is her separate Grade 7 app, all content in
+- **Sibling repo**: `maths-quest-grade7` ("Wiskunde Avontuur", at
+  C:/Users/megzi/Desktop/Claude Code Projects/maths-quest-grade7) is her separate Grade 7 app, all content in
   Afrikaans. Separate git history and code, but the same architecture
   (bcrypt password RPCs, reactive help, GitHub Pages, service worker) —
   lessons learned in one often apply to the other, but a fix here does not
@@ -155,7 +156,7 @@ Five boundaries, each with a **loader** beside the registry it mirrors:
 
 Rules that keep this safe:
 
-- **The registries never change shape.** 19 `verify-*.html` pages,
+- **The registries never change shape.** The `verify-*.html` pages (34 today),
   `tools/sweep.py`, the shoot tools and `verify-exam*.mjs` import them
   synchronously and expect every def and every card to be there. The
   loaders are a second door onto the same modules, not a copy of them.
@@ -207,8 +208,9 @@ Rules that keep this safe:
   `supabase/migration-roster-login.sql`). A learner finds their own name in
   the list and sets a password the first time. The teacher never sees
   passwords, only "resets" (clears) them so the learner sets a new one and
-  keeps their progress. Two test accounts are hidden from the picker via
-  `students.hidden`. Do not reintroduce a sign-up screen.
+  keeps their progress. `students.hidden` hides a row from the picker (on
+  2026-10-18 none are hidden; megzieberr is visible; hiding it is her call). Do not
+  reintroduce a sign-up screen.
 - **Casio-EXCLUSIVE quartiles in the calculator sim; (n+1)/4 school method
   everywhere else** (calculator.js comment + PROJECT-STATUS). The simulator
   matches the real fx-991ZA Plus II key-for-key; quests and box plots use

@@ -368,7 +368,8 @@ let stageOk = false, W = null, D = null, FB = null, APP = null;
       tick(!/Zola/i.test(snap), "⚠️ hub: the learner's FIRST NAME is not in the snapshot");
       tick(!/Mokoena/i.test(snap), "⚠️ hub: the learner's SURNAME is not in the snapshot");
       tick(!snap.includes(seedUser), "⚠️ hub: the learner's USERNAME is not in the snapshot");
-      tick(snap.length < 900, `hub: the snapshot is short, not a page dump (${snap.length} chars)`);
+      /* RAISED 900 → 1400 on 2026-10-18 (Blipwork audit): the Paper 1 / Paper 2 hub (v97) opens on six chapter cards, so the hub snapshot grew from 793 to 1119 chars (measured at 9ef7f91^ vs 9ef7f91); only tile labels, nothing private. */
+      tick(snap.length < 1400, `hub: the snapshot is short, not a page dump (${snap.length} chars)`);
       sn.push(`hub     ${snap.length} chars · ${JSON.stringify(snap.slice(0, 90))}`);
     }
 

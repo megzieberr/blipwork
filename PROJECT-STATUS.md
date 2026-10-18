@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-18 01:22 (🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
+# Project status — updated 2026-10-18 02:50 (🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`, a fix round for 70 maths slips in the TEACHING TEXT is READY on her "run it"; background fixes committed local, NOT pushed; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -7,6 +7,20 @@ the top). Keep THIS file short: when an entry here stops being current, move it 
 the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🔍 Sun 2026-10-18 01:28–02:50: the FULL AUDIT (Fable, her bedtime /go: read-only + background fixes).** 94 workers,
+  42 min, 13.7M worker tokens (weekly meter 84% → 89%). Report: `Desktop/Claude Code Projects/_docs/BLIPWORK-AUDIT-2026-10-18.md`
+  (scorecard 6/10 = "fix this week"; appendices, per-chapter `fix-lists/` and `FIX-ROUND-BRIEF.md` in the folder of the
+  same name). VERIFIED CLEAN: every answer key verifies (34 EN + 15 AF pages green), Supabase security clean, live = HEAD.
+  FINDINGS: A the teaching text carries 70 skeptic-confirmed maths slips + 58 misleading sentences + 5 mistranslations +
+  22 AF term clashes (4 serious), fix round = one Opus worker per chapter (14, ~3M) then ONE ship; B send-push has no CORS,
+  so the admin "tell the kids NOW" button has never worked (CORS now in the repo file, deploy = her yes); C the cloud
+  keepalive ping missed Blipwork on 16 + 17 Oct while WhenWorks got both (endpoint 200, Blipwork safe, watch Mon 05:00);
+  D f8 overflows at 375 px (6 EN / 11 AF lines); E admin.html follows the phone language (her Android remembers ?lang=af:
+  homework set from the phone would push Afrikaans titles); F before "show it": Stats id-as-label leaks, reload on language
+  change, AF ordinals/fraction words in ui.js, Fun Functions tile titles (proposed rows S12–S14); G housekeeping her call.
+  BACKGROUND FIXES in this commit: CLAUDE.md/README/this file/SITES.md stale lines, duplicate `.claude/.claude/launch.json`
+  removed, verify-exam-modules' stale EN-only guard retired, verify-feedback-snapshot cap 900 → 1400 (the Paper 1 hub is
+  bigger), cron.sql `timeout_milliseconds := 60000` (file only), send-push CORS (file only). Nothing under js/ or css/.
 - **🇿🇦 Sat 2026-10-17 22:24 – Sun 00:20: the SECOND PUSH (Fable foreman, Opus workers three at a time, her "Run it: the
   whole queue tonight").** All 33 open rows done: S8 (af_check allow-list), S10 (verify-gtrig language-aware), S7 (the finance
   twin harness: AF card built from recorded draws, English twin in a hidden frame, every check reads the twin; the foreman fixed
@@ -31,10 +45,10 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 - **🚀 Live site = sw v101 `f7d832b` (2026-10-18 01:22):** the whole Afrikaans translation (both pushes, 93 rows) is LIVE,
   hidden (Pages built within 20 s; live sw.js reads mhq-v101; live js/lang.js SHOW_TOGGLE = false; index 200; live euclid-siblings-cyclic-quads.js and skills.js sha1 = local, live questf12-build-timeline.js sha1 = the committed blob b565c53fac56); before it sw v100 `d983c83` (22:16) carried the Saturday push. Still: `SHOW_TOGGLE` false, default "en", a phone shows Afrikaans only after it visited `?lang=af` once (her
   phone did, at the 18:36 tile sign-off) and `?lang=en` flips it back; learners see English. Hub tiles T89 + S1–S6 +
-  the pilot since v99; hub tabs Paper 1 / Paper 2 since v97; f8–f13 live CLOSED (she opens each from the admin
-  page). 0 unpushed; the routine's nightly `AF:` commits (T94 next) ride with whatever ship comes next.
+  the pilot since v99; hub tabs Paper 1 / Paper 2 since v97; f8–f13 live and OPEN (live read 2026-10-18: all 99 quests
+  open). 0 unpushed; the routine's nightly `AF:` commits (T94 next) ride with whatever ship comes next.
 - 🧮 Calculator Builds 9 + 10 live (v94), 📥 Inbox (v95), 💰 Finance part 2 f8–f13 (v96): STATUS-ARCHIVE.md.
-  12 hub chapters + 2 exam-only; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live; roster 20.
+  12 hub chapters + 2 exam-only; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live; roster 19 (live read 2026-10-18, nobody hidden).
 - ⚠️ **EVERY SHIP: `python tools/sw_check.py` must print OK before the push** (it counts only a COMMITTED bump).
   Her own Chrome on localhost:5191 holds code 7 days (CLAUDE.md gotcha 10); the headless tools start clean.
   The harness needs `PYTHONUTF8=1` and `python -m http.server 5191` in the repo root.
@@ -72,8 +86,13 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   setup rows + wave 2), three at a time after that.
 - 2026-10-18 (hers, 01:20): "Ship sw v101: bump, sw_check, push. The Afrikaans switch stays hidden." Shipped `f7d832b`,
   live-verified 01:22.
+- 2026-10-18 (audit, live read): f8–f13 are already OPEN on live (all 99 quests open); the Term toggle is ON since 2026-10-06. Both pending lines settled.
 
 ## ⏳ Pending on Megan
+- 💻 1 word [this week, before Paper 1 on 26 Oct]: "run it" for the audit's fix round (14 Opus workers, one per chapter,
+  ~3M tokens; brief + lists in `_docs/BLIPWORK-AUDIT-2026-10-18/`). Read the report's scorecard first (2 min).
+- 🌐 1 word [whenever]: "deploy send-push" so the admin NOW button finally works (daytime homework then buzzes phones at
+  once). Also your call: re-run `supabase/cron.sql` on live (the 60 s timeout) after exams.
 - 🌐 1 word [your call, whenever]: "run S11" (one Opus worker, about 200k) so the seven dice test pages can check the
   Afrikaans dice rounds too, or leave it (the app renders them; only the harness can't read Afrikaans there).
 - 📱 [after exams, your 19:17 ruling]: play Blipwork start to finish with `?lang=af` (your phone already remembers it) and
@@ -84,8 +103,6 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   "GLOSSARY CALL" words are your G2 input, the "MATHS SLIP" lines are English fixes for one Opus worker.
 - 📱 [whenever]: any Afrikaans word you dislike as you play → tell a session the word and your word; it
   becomes a glossary row and `tools/af_glossary_apply.mjs --write` back-fills every chapter.
-- 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13 (live but CLOSED).
-- 💻 1 min [after exams]: admin page → Term toggle ON again (OFF since 2026-09-05).
 - 📱 3 min [whenever]: 📝 Exam Focus → one card: your Blip's outline in his body colour; the exponential card
   reads y = a·b^(x − p) + q.
 - 🌐 1 line [your call]: hide megzieberr from the class name-picker (one SQL line, reversible).
@@ -107,7 +124,7 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   (a steep negative gradient cuts), reflections#87 (x = 1, y = 2), exp-level4#21 (0/0), questag7-mixed#43
   (centre vs midpoint both middelpunt); plus the per-row "report only" lines (loose wording, "her" with no
   name on learner cards, an internal card id shown in rational-exponents-k#22).
-- **Her play-through with `?lang=af`** (after exams, her 19:17 ruling) can start chapter by chapter: sw v100 is
+- **Her play-through with `?lang=af`** (after exams, her 19:17 ruling) can start chapter by chapter: sw v101 is
   live. Nightly routine commits ride with whatever ship comes next.
 - **Parked cosmetic lists, her one-line call:** `briefs/finance-2/brief-3b-f10-review.md`, `brief-4b-f8-review.md`,
   `brief-5b-f12-review.md` and the f3 / f5 / f7 / f8 nits listed in STATUS-ARCHIVE.md 2026-10-11.
@@ -118,4 +135,4 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   schema.sql cannot rebuild the DB from scratch (a mirror-back build or the next audit); Analytical and
   Probability dice chapters UNBLOCKED; Measurement / Trig Graphs dice blockers; carried nits (CRON_SECRET,
   dice-gtrig.js header, verify-dice-exp double banner, verify-feedback-papers 4 stale fails, gt2 lone "Cash").
-- DECEMBER: the Gr12 layer planning session (GR12-LAYER-PLAN.md, not started).
+- DECEMBER: the Gr12 layer planning session (not started; no plan file yet).

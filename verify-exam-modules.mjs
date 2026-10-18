@@ -606,16 +606,16 @@ tick(glyphBad.length === 0, `glyph issues: ${glyphBad.join(" | ")}`);
 console.log(`  ${glyphBad.length ? "FAIL: " + glyphBad.join("\n       ") : "OK — no dot-decimals, no ASCII minus, no font-risky fraction glyphs"}`);
 
 /* ---------- 6. English-only + required fields ---------- */
-console.log("\n== 6. English-only (session E) + every part has hint/memo/esplain ==");
+console.log("\n== 6. every part has hint/memo/esplain (the session E English-only rule retired 2026-10-18) ==");
 let afFound = 0, missing = [];
 mine.forEach(({ q }) => q.parts.forEach(p => {
   if (p.prompt.af || p.hint.af || p.esplain.af) afFound++;
   p.memo.forEach(b => { if (b.text.af) afFound++; });
   if (!p.hint || !p.esplain || !p.memo.length) missing.push(`${q.id}(${p.id})`);
 }));
-tick(afFound === 0, `${afFound} af strings present — session E composes EN-only`);
+/* RETIRED 2026-10-18 (Blipwork audit): the EN-only tick ended when the Afrikaans translation landed (sw v101); af twins are policed by tools/af_check, so this harness only counts them now. */
 tick(missing.length === 0, `parts missing hint/memo/esplain: ${missing.join(", ")}`);
-console.log(`  af strings: ${afFound} (want 0) · parts missing a required field: ${missing.length} — ${afFound === 0 && !missing.length ? "OK" : "FAIL"}`);
+console.log(`  af strings: ${afFound} (counted only, see the RETIRED note) · parts missing a required field: ${missing.length} — ${!missing.length ? "OK" : "FAIL"}`);
 
 /* ---------- 7. topic slugs vs scope walls (mirrors verify-exam.html Part 6) ---------- */
 console.log("\n== 7. topic slugs vs scope walls ==");
