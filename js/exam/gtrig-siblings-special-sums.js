@@ -312,7 +312,7 @@ const q4 = {
         { type: "step", text: { en: "② <b>Determine the quadrant.</b> Tick the cross twice: cos θ is negative in <b>II and III</b>; θ ∈ (180° ; 360°) allows <b>III and IV</b>. The double tick lands on <b>III</b>.", af: "② <b>Bepaal die kwadrant.</b> Merk die kruis twee keer: cos θ is negatief in <b>II en III</b>; θ ∈ (180° ; 360°) laat <b>III en IV</b> toe. Die dubbele regmerkie val op <b>III</b>." }, ticks: ["ca"] },
         { type: "step", text: { en: "③ <b>Sketch it</b> in the third quadrant, with &nbsp;x = −24&nbsp; and&nbsp; r = 25.", af: "③ <b>Skets dit</b> in die derde kwadrant, met &nbsp;x = −24&nbsp; en&nbsp; r = 25." } },
         { type: "step", text: { en: "④ &nbsp;y² = 25² − (−24)² &nbsp;(pyth) &nbsp;⟹&nbsp; √y² = √49 &nbsp;⟹&nbsp; y = ±7", af: "④ &nbsp;y² = 25² − (−24)² &nbsp;(pyth) &nbsp;⟹&nbsp; √y² = √49 &nbsp;⟹&nbsp; y = ±7" } },
-        { type: "answer", text: { en: "In the third quadrant y is negative &nbsp;∴&nbsp; y = −7", af: "In die derde kwadrant is y negatief &nbsp;∴&nbsp; y = −7" }, ticks: ["a"] },
+        { type: "answer", text: { en: "In the third quadrant y is negative &nbsp;∴&nbsp; y = −7, so the third side is 7 units long", af: "In die derde kwadrant is y negatief &nbsp;∴&nbsp; y = −7, dus is die derde sy 7 eenhede lank" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: the given negative coordinate stays INSIDE the square — write 25² − (−24)², not 625 − 576 straight off. It costs one extra line and it keeps you honest about which number was negative.", af: "PASOP: die gegewe negatiewe koördinaat bly BINNE die kwadraat: skryf 25² − (−24)², nie dadelik 625 − 576 nie. Dit kos een ekstra reël, en dit hou jou eerlik oor watter getal negatief was.",
         } },

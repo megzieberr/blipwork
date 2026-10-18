@@ -229,7 +229,7 @@ const q3 = {
         en: "Determine the value of &nbsp;cos 30°/tan 30°", af: "Bepaal die waarde van &nbsp;cos 30°/tan 30°",
       },
       hint: {
-        en: "Flip and multiply, then remember what √3 × √3 comes to. It is not √9 written out and it is not 3√3.", af: "Keer om en vermenigvuldig, en onthou dan wat √3 × √3 is. Dit is nie √9 uitgeskryf nie en dit is nie 3√3 nie.",
+        en: "Flip and multiply, then remember what √3 × √3 comes to. It is not √9 left as it stands, and it is not 3√3.", af: "Keer om en vermenigvuldig, en onthou dan wat √3 × √3 is. Dit is nie √9 wat so bly staan nie, en dit is nie 3√3 nie.",
       },
       memo: [
         { type: "step", text: { en: "cos 30° = A/H = √3/2 &nbsp;and&nbsp; tan 30° = O/A = 1/√3 &nbsp;(left unrationalised, the way she writes it)", af: "cos 30° = A/H = √3/2 &nbsp;en&nbsp; tan 30° = O/A = 1/√3 &nbsp;(nie gerasionaliseer nie, soos sy dit skryf)" }, ticks: ["s/f"] },
@@ -448,7 +448,7 @@ const q6 = {
         } },
       ],
       esplain: {
-        en: "Same trick as (a), three numbers instead of two. Write every value with the same bottom and the comparison does itself. cos 30° is √3 over 2 already. sin 45° is 1 over √2, and rationalising turns it into √2 over 2. tan 45° is 1, which is 2 over 2. So you are comparing √2, √3 and 2 sitting on top of three halves. Since 2 is the same as √4, the three tops are √2, √3 and √4, and square roots keep their order — the bigger the number inside, the bigger the root. So sin 45° is the smallest, then cos 30°, then tan 45°. Ascending order means smallest first, so that is the order to write them in.", af: "Dieselfde truuk as (a), drie getalle in plaas van twee. Skryf elke waarde oor dieselfde noemer, dan vergelyk jy maklik. cos 30° is reeds √3 oor 2. sin 45° is 1 oor √2, en rasionalisering maak dit √2 oor 2. tan 45° is 1, wat 2 oor 2 is. Jy vergelyk dus √2, √3 en 2, almal oor dieselfde noemer. Omdat 2 dieselfde as √4 is, is die drie tellers √2, √3 en √4, en vierkantswortels hou hul volgorde: hoe groter die getal binne, hoe groter die wortel. Dus is sin 45° die kleinste, dan cos 30°, dan tan 45°. Stygende volgorde beteken kleinste eerste, so dis die volgorde waarin jy hulle skryf.",
+        en: "Same trick as (a), three numbers instead of two. Write every value with the same bottom and the comparison does itself. cos 30° is √3 over 2 already. sin 45° is 1 over √2, and rationalising turns it into √2 over 2. tan 45° is 1, which is 2 over 2. So you are comparing √2, √3 and 2, each sitting on top of a 2. Since 2 is the same as √4, the three tops are √2, √3 and √4, and square roots keep their order — the bigger the number inside, the bigger the root. So sin 45° is the smallest, then cos 30°, then tan 45°. Ascending order means smallest first, so that is the order to write them in.", af: "Dieselfde truuk as (a), drie getalle in plaas van twee. Skryf elke waarde oor dieselfde noemer, dan vergelyk jy maklik. cos 30° is reeds √3 oor 2. sin 45° is 1 oor √2, en rasionalisering maak dit √2 oor 2. tan 45° is 1, wat 2 oor 2 is. Jy vergelyk dus √2, √3 en 2, almal oor dieselfde noemer. Omdat 2 dieselfde as √4 is, is die drie tellers √2, √3 en √4, en vierkantswortels hou hul volgorde: hoe groter die getal binne, hoe groter die wortel. Dus is sin 45° die kleinste, dan cos 30°, dan tan 45°. Stygende volgorde beteken kleinste eerste, so dis die volgorde waarin jy hulle skryf.",
       },
     },
   ],

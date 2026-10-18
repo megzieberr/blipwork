@@ -115,7 +115,7 @@ function tanItem() {
     answerLabel: afL(`✓ in ${ticksText(quadrants)} — and ${CIRC[quadrants[0] - 1]} on its own is accepted, because tan repeats every 180° and the second line is a waste of time! · ref. ∠ = ${negNum(Math.round(ref * 100) / 100)}°`, `✓ in ${ticksText(quadrants)}, en ${CIRC[quadrants[0] - 1]} alleen word aanvaar, want tan herhaal elke 180° en die tweede reël is 'n mors van tyd! · verwysingshoek = ${negNum(Math.round(ref * 100) / 100)}°`),
     solution: [
       { s: afL(`tan ${L} = ${negNum(value)} → ${ticksText(quadrants)}`, `tan ${L} = ${negNum(value)} → ${ticksText(quadrants)}`), r: afL("All Strippers Take Cash.", "All Strippers Take Cash.") },
-      { s: afL(`${L} = ref. ∠ + K.180°`, `${L} = verwysingshoek + K.180°`), r: afL("ONE line — tan repeats every 180°.", "EEN reël: tan herhaal elke 180°.") },
+      { s: afL(`${L} = ${sign > 0 ? "ref. ∠" : "180° − ref. ∠"} + K.180°`, `${L} = ${sign > 0 ? "verwysingshoek" : "180° − verwysingshoek"} + K.180°`), r: afL("ONE line — tan repeats every 180°.", "EEN reël: tan herhaal elke 180°.") },
       { s: afL(`ref. ∠ = ${negNum(Math.round(ref * 100) / 100)}°`, `verwysingshoek = ${negNum(Math.round(ref * 100) / 100)}°`), r: afL("from the size of the number.", "uit die grootte van die getal.") },
     ],
   };

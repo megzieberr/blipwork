@@ -98,7 +98,7 @@ const q1 = {
         { type: "step", text: { en: "tan x = sin x/cos x, so tan x is undefined wherever the denominator is zero: &nbsp;cos x = 0", af: "tan x = sin x/cos x, dus is tan x onbepaald waar die noemer nul is: &nbsp;cos x = 0" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "x = 90° &nbsp;or&nbsp; x = 270°", af: "x = 90° &nbsp;of&nbsp; x = 270°" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: undefined means division by zero, and nothing else. It is not the same as \"no solution\" (which is what you write when a ratio is asked for a value outside −1 to 1) and it is not the same as \"non-real\".", af: "ONTHOU: onbepaald beteken deling deur nul, en niks anders nie. Dit is nie dieselfde as \"geen oplossing\" nie (wat jy skryf as 'n verhouding 'n waarde buite −1 tot 1 moet kry), en dit is nie dieselfde as \"nie-reëel\" nie.",
+          en: "REMEMBER: undefined means division by zero, and nothing else. It is not the same as \"no solution\" (which is what you write when sin or cos is asked for a value outside −1 to 1) and it is not the same as \"non-real\".", af: "ONTHOU: onbepaald beteken deling deur nul, en niks anders nie. Dit is nie dieselfde as \"geen oplossing\" nie (wat jy skryf as sin of cos 'n waarde buite −1 tot 1 moet kry), en dit is nie dieselfde as \"nie-reëel\" nie.",
         } },
       ],
       esplain: {

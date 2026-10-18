@@ -173,7 +173,7 @@ function twoLabelTriangle() {
     graph: triSpec(),
     hint: L("The two acute angles of a right triangle share the SAME sides — they just call them different names.", "Die twee skerp hoeke van 'n reghoekige driehoek deel DIESELFDE sye: hulle gee net ander name daarvoor."),
     answerLabel: L(`${it.ask} = ${it.correct} — same triangle, same sides, just relabelled.`, `${it.ask} = ${it.correct}: dieselfde driehoek, dieselfde sye, net anders benoem.`),
-    solution: [{ s: `${it.ask} = ${it.correct}`, r: L("the shared-sides argument (D1).", "die argument van die gedeelde sye (D1).") }],
+    solution: [{ s: `${it.ask} = ${it.correct}`, r: L("the shared-sides argument.", "die argument van die gedeelde sye.") }],
   };
 }
 

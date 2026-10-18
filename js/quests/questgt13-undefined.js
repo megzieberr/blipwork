@@ -30,7 +30,7 @@ import { L as afL } from "../lang.js";
 const CON = "gtrigUndefined";
 const LETTERS = [afL("x", "x"), afL("θ", "θ")];
 
-const H_PICK = afL("Look at the BOTTOM of every fraction — those are the only things that can break. A tan does not get its own line: tan is sin over cos, so its cos is already on the list.", "Kyk na die ONDERKANT van elke breuk: dit is die enigste dinge wat kan breek. tan kry nie sy eie reël nie: tan is sin oor cos, dus is sy cos reeds op die lys.");
+const H_PICK = afL("Look at the BOTTOM of every fraction — those are the only things that can break. A tan does not get its own line: tan is sin over cos, so it puts cos on the list (once, even if it is there already).", "Kyk na die ONDERKANT van elke breuk: dit is die enigste dinge wat kan breek. tan kry nie sy eie reël nie: tan is sin oor cos, dus sit dit cos op die lys (net een keer, al is dit reeds daar).");
 const H_ZERO = afL("A fraction dies when its bottom is nothing at all.", "'n Breuk gaan dood as sy onderkant glad niks is nie.");
 const H_FACT = afL("Solve it like any other equation — get the ratio on its own, and then it is an ordinary general solution.", "Los dit op soos enige ander vergelyking: kry die verhouding alleen, en dan is dit 'n gewone algemene oplossing.");
 const ROUTINE = afL("List every denominator, set each one = 0, solve each as a general solution, then read the interval off the list.", "Lys elke noemer, stel elkeen = 0, los elkeen op as 'n algemene oplossing, en lees dan die interval van die lys af.");

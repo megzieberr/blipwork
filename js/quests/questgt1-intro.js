@@ -18,7 +18,7 @@ function reveal(q, frames, mode) { q.reveal = frames; if (mode) q.revealMode = m
 
 const WORD_FRAMES = [
   L(`<div style="font-size:16px"><b style="color:var(--accent)">tri</b>gonometry &nbsp;→&nbsp; <b>three</b></div>`, `<div style="font-size:16px"><b style="color:var(--accent)">tri</b>gonometrie &nbsp;→&nbsp; <b>drie</b></div>`),
-  L(`<div style="font-size:16px">trigo<b style="color:var(--accent)">no</b>metry &nbsp;→&nbsp; <b>angled</b></div>`, `<div style="font-size:16px">trigo<b style="color:var(--accent)">no</b>metrie &nbsp;→&nbsp; <b>hoekig</b></div>`),
+  L(`<div style="font-size:16px">tri<b style="color:var(--accent)">gono</b>metry &nbsp;→&nbsp; <b>angled</b></div>`, `<div style="font-size:16px">tri<b style="color:var(--accent)">gono</b>metrie &nbsp;→&nbsp; <b>hoekig</b></div>`),
   L(`<div style="font-size:16px">trigono<b style="color:var(--accent)">metry</b> &nbsp;→&nbsp; <b>measurement</b></div>`, `<div style="font-size:16px">trigono<b style="color:var(--accent)">metrie</b> &nbsp;→&nbsp; <b>meting</b></div>`),
 ];
 

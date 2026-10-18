@@ -10,12 +10,12 @@ export const CONCEPTS_GTRIG = {
     fractions: true,
     title: L("Trigonometry: where the ratios come from", "Trigonometrie: waar die verhoudings vandaan kom"),
     body: L(`
-      <p><b>tri</b>gonometry → <b>three</b> · trigo<b>no</b>metry → <b>angled</b> · trigono<b>metry</b> → <b>measurement</b> — the study of angles and of the angular relationships of triangles.</p>
+      <p><b>tri</b>gonometry → <b>three</b> · tri<b>gono</b>metry → <b>angled</b> · trigono<b>metry</b> → <b>measurement</b> — the study of angles and of the angular relationships of triangles.</p>
       <p>SOHCAHTOA only works in a <b>right</b> triangle. <b>Opposite</b> = across from θ. <b>Adjacent</b> = next to θ. <b>Hypotenuse</b> = across from the right angle.</p>
       <div class="formula">sin θ = O/H = y/r &nbsp;·&nbsp; cos θ = A/H = x/r &nbsp;·&nbsp; tan θ = O/A = y/x</div>
       <p>Picture a point moving round a circle: the <b>radius stays the same</b>, but θ, the x-coordinate and the y-coordinate all change. A ratio on its own means nothing — it only means something once you know its θ.</p>
       <div class="eg">"The sine is 0,6" tells you nothing alone. Fix r, move the point, watch x and y — the ratio IS the angle.</div>`, `
-      <p><b>tri</b>gonometrie → <b>drie</b> · trigo<b>no</b>metrie → <b>hoeke</b> · trigono<b>metrie</b> → <b>meting</b>: die studie van hoeke en van die hoekverwantskappe van driehoeke.</p>
+      <p><b>tri</b>gonometrie → <b>drie</b> · tri<b>gono</b>metrie → <b>hoeke</b> · trigono<b>metrie</b> → <b>meting</b>: die studie van hoeke en van die hoekverwantskappe van driehoeke.</p>
       <p>SOHCAHTOA werk net in 'n <b>reghoekige</b> driehoek. <b>Teenoorstaande</b> = oorkant θ. <b>Aangrensende</b> = langs θ. <b>Skuinssy</b> = oorkant die regte hoek.</p>
       <div class="formula">sin θ = O/H = y/r &nbsp;·&nbsp; cos θ = A/H = x/r &nbsp;·&nbsp; tan θ = O/A = y/x</div>
       <p>Stel jou 'n punt voor wat om 'n sirkel beweeg: die <b>radius bly dieselfde</b>, maar θ, die x-koördinaat en die y-koördinaat verander almal. 'n Verhouding op sy eie beteken niks: dit beteken eers iets as jy sy θ ken.</p>
@@ -225,18 +225,18 @@ export const CONCEPTS_GTRIG = {
         <tr><td>tan θ = t</td><td>1</td><td>t</td><td>√(t² + 1)</td></tr>
         <tr><td>sin θ = t</td><td>√(1 − t²)</td><td>t</td><td>1</td></tr>
         <tr><td>cos θ = 1/t</td><td>1</td><td>√(t² − 1)</td><td>t</td></tr></table>
-      <p><b>√(1 − t²) or √(t² − 1)?</b> Pythagoras decides: the HYPOTENUSE squared is the one that gets the plus, so the missing leg is (hypotenuse)² − (other leg)². If the 1 is the hypotenuse you get √(1 − t²); if the letter is the hypotenuse you get √(t² − 1).</p>
+      <p><b>√(1 − t²) or √(t² − 1)?</b> Pythagoras decides: the HYPOTENUSE squared is the one that gets the plus, so the missing leg is √((hypotenuse)² − (other leg)²). If the 1 is the hypotenuse you get √(1 − t²); if the letter is the hypotenuse you get √(t² − 1).</p>
       <p>If the question asks about a different angle, <b>reduce it to the acute one first</b>, then read it off.</p>
       <div class="eg">cos 20° = t. Then sin 20° = √(1 − t²), tan 20° = √(1 − t²)/t, and cos 160° = −cos 20° = −t.</div>`, `
       <p>Jy kry iets soos <b>cos 20° = t</b> en moet alles anders in terme van t gee. 'n Kaal waarde kan jy nie van 'n driehoek aflees nie, dus laat jy dit op 'n 1 staan. Dit is die <b>flamingo</b>:</p>
       <div class="formula">cos 20° = t = t/1 = a/h</div>
       <p>Nou is t die aangrensende sy, 1 is die skuinssy, en die driehoek teken homself in die eerste kwadrant. Pythagoras kry die derde sy, en dan lees jy net die antwoorde van die prentjie af.</p>
       <p>Die <b>Kortpad</b> is drie klaargemaakte driehoeke:</p>
-      <table class="q-table"><tr><th>gegee</th><th>aangrensende</th><th>teenoorstaande</th><th>skuinssy</th></tr>
+      <table class="q-table"><tr><th>gegee</th><th>aangrensende</th><th>teenoor</th><th>skuinssy</th></tr>
         <tr><td>tan θ = t</td><td>1</td><td>t</td><td>√(t² + 1)</td></tr>
         <tr><td>sin θ = t</td><td>√(1 − t²)</td><td>t</td><td>1</td></tr>
         <tr><td>cos θ = 1/t</td><td>1</td><td>√(t² − 1)</td><td>t</td></tr></table>
-      <p><b>√(1 − t²) of √(t² − 1)?</b> Pythagoras besluit: die SKUINSSY in die kwadraat is die een wat die plus kry, dus is die ontbrekende sy (skuinssy)² − (ander sy)². As die 1 die skuinssy is, kry jy √(1 − t²); as die letter die skuinssy is, kry jy √(t² − 1).</p>
+      <p><b>√(1 − t²) of √(t² − 1)?</b> Pythagoras besluit: die SKUINSSY in die kwadraat is die een wat die plus kry, dus is die ontbrekende sy √((skuinssy)² − (ander sy)²). As die 1 die skuinssy is, kry jy √(1 − t²); as die letter die skuinssy is, kry jy √(t² − 1).</p>
       <p>As die vraag oor 'n ander hoek vra, <b>reduseer dit eers na die skerp hoek</b>, lees dit dan af.</p>
       <div class="eg">cos 20° = t. Dan is sin 20° = √(1 − t²), tan 20° = √(1 − t²)/t, en cos 160° = −cos 20° = −t.</div>`),
   },
@@ -300,7 +300,7 @@ export const CONCEPTS_GTRIG = {
         <li>solve each one as an ordinary <b>general solution</b></li>
         <li>read the interval off the list</li>
       </ol>
-      <p>Two things people get wrong. <b>Numerators do not count</b> — a top of zero is a perfectly ordinary answer. And <b>tan does not get its own line</b>: tan x is sin x over cos x, so its cos x is already on your list.</p>
+      <p>Two things people get wrong. <b>Numerators do not count</b> — a top of zero is a perfectly ordinary answer. And <b>tan does not get its own line</b>: tan x is sin x over cos x, so it puts cos x on your list (once, even if it is there already).</p>
       <div class="eg">tan x + cos x/(1 + sin x) = 1/cos x → the denominators are 1 + sin x and cos x. So 1 + sin x = 0 (sin x = −1, ref ∠ = 90°, III and IV) or cos x = 0 (ref ∠ = 90°, I and IV). On (−180°; 180°) that gives x ∈ {−90°; 90°}.</div>`, `
       <p><b>Onbepaald ↳ noemer = 0.</b> 'n Breuk breek wanneer sy onderkant glad niks is nie, dus is die vraag altyd net "wat staan onder?"</p>
       <p>Die roetine:</p>
@@ -310,7 +310,7 @@ export const CONCEPTS_GTRIG = {
         <li>los elkeen op as 'n gewone <b>algemene oplossing</b></li>
         <li>lees die interval van die lys af</li>
       </ol>
-      <p>Twee dinge wat mense verkeerd kry. <b>Tellers tel nie</b>: 'n bokant van nul is 'n heel gewone antwoord. En <b>tan kry nie sy eie reël nie</b>: tan x is sin x oor cos x, dus is sy cos x klaar op jou lys.</p>
+      <p>Twee dinge wat mense verkeerd kry. <b>Tellers tel nie</b>: 'n bokant van nul is 'n heel gewone antwoord. En <b>tan kry nie sy eie reël nie</b>: tan x is sin x oor cos x, dus sit dit cos x op jou lys (net een keer, al is dit klaar daar).</p>
       <div class="eg">tan x + cos x/(1 + sin x) = 1/cos x → die noemers is 1 + sin x en cos x. Dus 1 + sin x = 0 (sin x = −1, verwysingshoek = 90°, III en IV) of cos x = 0 (verwysingshoek = 90°, I en IV). Op (−180°; 180°) gee dit x ∈ {−90°; 90°}.</div>`),
   },
 };

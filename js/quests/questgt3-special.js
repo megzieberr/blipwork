@@ -129,7 +129,7 @@ const MASK_ITEMS = [
     sol: [
       { s: L("Start from sin²θ + cos²θ = 1", "Begin by sin²θ + cos²θ = 1") },
       { s: L("Take sin²θ across to the other side: cos²θ = 1 − sin²θ", "Bring sin²θ oor na die ander kant: cos²θ = 1 − sin²θ"), r: L("the same identity wearing a mask", "dieselfde identiteit met 'n masker op") },
-      { s: L("The two wrong-looking ones bring in tan, or turn the − into a +", "Die twee wat verkeerd lyk, bring tan in, of maak die − 'n +"), r: L("only one term ever moves, and it changes sign", "net een term skuif ooit, en dit verander van teken") },
+      { s: L("The wrong ones bring in tan, or get the sign wrong", "Die verkeerdes bring tan in, of kry die teken verkeerd"), r: L("only one term ever moves, and it changes sign", "net een term skuif ooit, en dit verander van teken") },
     ] },
   { prompt: L("Which of these is a masked identity?", "Watter een hiervan is 'n gemaskerde identiteit?"), correct: L("sin²θ = 1 − cos²θ", "sin²θ = 1 − cos²θ"),
     wrongs: [L("tan²θ = 1 − cos²θ", "tan²θ = 1 − cos²θ"), L("cos²θ = 1 + sin²θ", "cos²θ = 1 + sin²θ"), L("cos²θ − sin²θ = 1", "cos²θ − sin²θ = 1")],
