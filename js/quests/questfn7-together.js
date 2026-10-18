@@ -63,8 +63,8 @@ const SKILLS = {
         answerLabel: L(`f(x) &gt; g(x) for ${correct}.`, `f(x) &gt; g(x) vir ${correct}.`),
         solution: [
           { s: L(`The two lines cross at ${ptStr(ix, iy)}, so cut a line down through x = ${C(ix)}`, `Die twee lyne sny mekaar by ${ptStr(ix, iy)}, dus sny ons reguit af deur x = ${C(ix)}`), r: L("that cut is the only place they swap over", "net by dié snit ruil hulle plek") },
-          { s: L(`f has gradient ${C(a1)} and g has gradient ${C(a2)}, so f is the ${fSteeper ? "steeper" : "flatter"} of the two`, `f het gradiënt ${C(a1)} en g het gradiënt ${C(a2)}, dus is f ${fSteeper ? "steiler" : "platter"} as g`) },
-          { s: L(`To the right of the cut the steeper line is on top, so f is above g ${fSteeper ? "on the right" : "on the left"}`, `Regs van die snit is die steiler lyn bo, dus is f bo g aan die ${fSteeper ? "regterkant" : "linkerkant"}`) },
+          { s: L(`f has gradient ${C(a1)} and g has gradient ${C(a2)}, so f has the ${fSteeper ? "bigger" : "smaller"} gradient`, `f het gradiënt ${C(a1)} en g het gradiënt ${C(a2)}, dus het f die ${fSteeper ? "groter" : "kleiner"} gradiënt`) },
+          { s: L(`To the right of the cut the line with the bigger gradient is on top, so f is above g ${fSteeper ? "on the right" : "on the left"}`, `Regs van die snit is die lyn met die groter gradiënt bo, dus is f bo g aan die ${fSteeper ? "regterkant" : "linkerkant"}`) },
           { s: `∴ ${correct}`, r: L("answer in x, written x first", "antwoord in x, skryf x eerste") },
         ] });
   },

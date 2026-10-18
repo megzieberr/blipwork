@@ -48,7 +48,7 @@ const SKILLS = {
               { s: L(`Everything else is fine, so ${domainStr(cv)}`, `Alles anders is reg, dus ${domainStr(cv)}`), r: L("the restriction rides after a semicolon", "die beperking kom ná 'n kommapunt") },
             ] })
       : mc("domainRange", L(`What is the <b>range</b> of ${eqStr(cv, "f(x)")}?`, `Wat is die <b>waardeversameling</b> van ${eqStr(cv, "f(x)")}?`),
-          rangeStr(cv), [L(`y ∈ ℝ`, `y ∈ ℝ`), L(`y ∈ ℝ, y ≠ ${C(cv.p)}`, `y ∈ ℝ, y ≠ ${C(cv.p)}`), L(`y ≠ ${C(-cv.q)} only`, `net y ≠ ${C(-cv.q)}`)],
+          rangeStr(cv), [L(`y ∈ ℝ`, `y ∈ ℝ`), L(`y ∈ ℝ, y ≠ ${C(cv.p)}`, `y ∈ ℝ, y ≠ ${C(cv.p)}`), L(`y ≠ ${C(cv.q === 0 ? 1 : -cv.q)} only`, `net y ≠ ${C(cv.q === 0 ? 1 : -cv.q)}`)],
           { graph: g.spec, hint: L("The y-values cover everything except the horizontal asymptote y = q.", "Die y-waardes dek alles behalwe die horisontale asimptoot y = q."), answerLabel: rangeStr(cv),
             solution: [
               { s: L("Range asks: which y-values does the graph actually reach?", "Waardeversameling vra: watter y-waardes bereik die grafiek werklik?") },
@@ -92,8 +92,8 @@ const SKILLS = {
         solution: [
           { s: L(`b is the base — the number carrying the x. Here b = ${C(cv.b)}`, `b is die grondtal: die getal wat die x dra. Hier is b = ${C(cv.b)}`) },
           { s: grows
-              ? L(`b &gt; 1, so every step to the right multiplies the y-value by more than 1 and it climbs`, `b &gt; 1, dus vermenigvuldig elke tree na regs die y-waarde met meer as 1 en dit klim`)
-              : L(`0 &lt; b &lt; 1, so every step to the right multiplies the y-value by less than 1 and it shrinks`, `0 &lt; b &lt; 1, dus vermenigvuldig elke tree na regs die y-waarde met minder as 1 en dit krimp`) },
+              ? L(`b &gt; 1, so every step to the right multiplies the power part bˣ by b (more than 1): bˣ grows and the graph climbs`, `b &gt; 1, dus vermenigvuldig elke tree na regs die magsdeel bˣ met b (meer as 1): bˣ groei en die grafiek klim`)
+              : L(`0 &lt; b &lt; 1, so every step to the right multiplies the power part bˣ by b (less than 1): bˣ shrinks and the graph falls`, `0 &lt; b &lt; 1, dus vermenigvuldig elke tree na regs die magsdeel bˣ met b (minder as 1): bˣ krimp en die grafiek daal`) },
           { s: `∴ ${grows ? L("growth — the graph is taking off", "groei: die grafiek styg op") : L("decay — the graph is landing", "verval: die grafiek land")}`, r: L("the aeroplane picture", "die vliegtuigprent") },
         ] });
   },

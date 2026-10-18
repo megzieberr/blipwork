@@ -116,7 +116,7 @@ export const CONCEPTS_FUNC = {
         <li><b>Asymptote:</b> y = q (the graph flattens towards it).</li>
         <li><b>b &gt; 1</b> → growth (“taking off”, increasing). <b>0 &lt; b &lt; 1</b> → decay (“landing”, decreasing).</li>
         <li><b>a &gt; 0</b> → graph above the asymptote (range y &gt; q). <b>a &lt; 0</b> → below (y &lt; q).</li>
-        <li><b>p</b> — the exponent is (x − p). Read p as the number after the sign, and the graph moves the <b>opposite</b> way: 2<sup>x − 3</sup> is 3 units to the <b>right</b>, and 2<sup>x + 3</sup> is 3 units to the <b>left</b>.</li>
+        <li><b>p</b> — the exponent is (x − p), so p has the <b>opposite</b> sign to the number you see: 2<sup>x − 3</sup> has p = 3 and is 3 units to the <b>right</b>, and 2<sup>x + 3</sup> has p = −3 and is 3 units to the <b>left</b>.</li>
       </ul>
       <p>In Grade 10 the exponential was y = a·bˣ + q. Grade 11 adds the p.</p>
       <div class="eg">A fraction base is a negative exponent: (½)ˣ = 2⁻ˣ.</div>`, `
@@ -125,7 +125,7 @@ export const CONCEPTS_FUNC = {
         <li><b>Asimptoot:</b> y = q (die grafiek plat af na hom toe).</li>
         <li><b>b &gt; 1</b> → groei (“styg op”, stygend). <b>0 &lt; b &lt; 1</b> → verval (“land”, dalend).</li>
         <li><b>a &gt; 0</b> → grafiek bo die asimptoot (waardeversameling y &gt; q). <b>a &lt; 0</b> → onder (y &lt; q).</li>
-        <li><b>p</b>: die eksponent is (x − p). Lees p as die getal ná die teken, en die grafiek skuif die <b>teenoorgestelde</b> kant toe: 2<sup>x − 3</sup> is 3 eenhede na <b>regs</b>, en 2<sup>x + 3</sup> is 3 eenhede na <b>links</b>.</li>
+        <li><b>p</b>: die eksponent is (x − p), dus het p die <b>teenoorgestelde</b> teken van die getal wat jy sien: 2<sup>x − 3</sup> het p = 3 en is 3 eenhede na <b>regs</b>, en 2<sup>x + 3</sup> het p = −3 en is 3 eenhede na <b>links</b>.</li>
       </ul>
       <p>In Graad 10 was die eksponensiële grafiek y = a·bˣ + q. Graad 11 voeg die p by.</p>
       <div class="eg">'n Breuk as grondtal is 'n negatiewe eksponent: (½)ˣ = 2⁻ˣ.</div>`),

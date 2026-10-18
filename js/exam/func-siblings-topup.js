@@ -102,7 +102,7 @@ const nor4 = {
       memo: [
         { type: "step", text: { en: "The roots of f(x) = 0 are the x-values where the graph MEETS the x-axis.", af: "Die wortels van f(x) = 0 is die x-waardes waar die grafiek die x-as ONTMOET." } },
         { type: "answer", text: { en: "the sketch shows two <b>different</b> crossings, so the roots are real and unequal", af: "die skets toon twee <b>verskillende</b> snypunte, dus is die wortels reëel en ongelyk" }, ticks: ["a"] },
-        { type: "answer", text: { en: "the crossings are at −3 and 1, which are whole numbers &nbsp;&nbsp;∴&nbsp; the roots are real, unequal and <b>rational</b>", af: "die snypunte is by −3 en 1, wat heelgetalle is &nbsp;&nbsp;∴&nbsp; die wortels is reëel, ongelyk en <b>rasionaal</b>" }, ticks: ["a"] },
+        { type: "answer", text: { en: "the crossings are at −3 and 1, which are integers &nbsp;&nbsp;∴&nbsp; the roots are real, unequal and <b>rational</b>", af: "die snypunte is by −3 en 1, wat heelgetalle is &nbsp;&nbsp;∴&nbsp; die wortels is reëel, ongelyk en <b>rasionaal</b>" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: \"nature of the roots\" is asking what KIND of numbers they are, not what they are. Writing x = −3 and x = 1 answers a different question and earns nothing here.", af: "PASOP: \"aard van die wortels\" vra watter SOORT getalle hulle is, nie wat hulle is nie. As jy x = −3 en x = 1 skryf, beantwoord jy 'n ander vraag en kry jy niks hier nie.",
         } },

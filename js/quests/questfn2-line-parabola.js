@@ -163,7 +163,7 @@ const SKILLS = {
     return mc("domainRange", L(`What is the <b>range</b> of ${eqStr(cv, "f(x)")}?`, `Wat is die <b>waardeversameling</b> van ${eqStr(cv, "f(x)")}?`),
       correct, wrongs,
       { graph: g.spec,
-        hint: L("Range = the y-values covered. A happy parabola starts at its minimum y and goes up (y ≥ min); a sad one (y ≤ max).", "Waardeversameling = die y-waardes wat gedek word. 'n happy parabool begin by sy minimum y en gaan op (y ≥ min); 'n sad een (y ≤ maks)."),
+        hint: L("Range = the y-values covered. A happy parabola starts at its minimum y and goes up (y ≥ min); a sad one (y ≤ max).", "Waardeversameling = die y-waardes wat gedek word. 'n Happy parabool begin by sy minimum y en gaan op (y ≥ min); 'n sad een (y ≤ maks)."),
         answerLabel: L(`Range: ${correct}.`, `Waardeversameling: ${correct}.`),
         solution: [
           { s: L("Range means: which y-values does the graph actually reach? So find the turning point first", "Waardeversameling beteken: watter y-waardes bereik die grafiek werklik? Kry dus eers die draaipunt") },

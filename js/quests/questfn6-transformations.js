@@ -159,7 +159,7 @@ const SKILLS = {
         hint: L("A vertical shift moves the horizontal asymptote y = q only; the vertical asymptote x = p stays put.", "'n Vertikale skuif beweeg net die horisontale asimptoot y = q; die vertikale asimptoot x = p bly staan."),
         answerLabel: L(`x = ${C(cv.p)} and y = ${C(nq)}.`, `x = ${C(cv.p)} en y = ${C(nq)}.`),
         solution: [
-          { s: L(`Shifting ${up ? "up" : "down"} by ${k} lifts every part of the picture, the flat asymptote included`, `'n Skuif ${up ? "op" : "af"} met ${k} skuif elke deel van die prent saam, die plat asimptoot ingesluit`) },
+          { s: L(`Shifting ${up ? "up" : "down"} by ${k} carries every part of the picture with it, the flat asymptote included`, `'n Skuif ${up ? "op" : "af"} met ${k} skuif elke deel van die prent saam, die plat asimptoot ingesluit`) },
           { s: L(`y = ${C(cv.q)} ${up ? "+" : "−"} ${C(k)} → y = ${C(nq)}`, `y = ${C(cv.q)} ${up ? "+" : "−"} ${C(k)} → y = ${C(nq)}`) },
           { s: L(`The upright asymptote x = ${C(cv.p)} is a left-right position, so a vertical shift cannot touch it`, `Die regop asimptoot x = ${C(cv.p)} is 'n links-regs-posisie, dus kan 'n vertikale skuif hom nie raak nie`),
             r: L(`∴ x = ${C(cv.p)} and y = ${C(nq)}`, `∴ x = ${C(cv.p)} en y = ${C(nq)}`) },
