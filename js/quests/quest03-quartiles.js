@@ -180,11 +180,11 @@ function boxAxis(max) {
 /* ---------- 5 · read a value off a box-and-whisker plot ---------- */
 function genReadBox() {
   const five = fiveSummary();
-  const which = pick([L("median", "median"), L("q1", "q1"), L("q3", "q3"), L("min", "min"), L("max", "max")]);
-  const map = { median: five.med, q1: five.q1, q3: five.q3, min: five.min, max: five.max };
-  const name = { median: L("median", "median"), q1: L("lower quartile (Q1)", "onderste kwartiel (Q1)"), q3: L("upper quartile (Q3)", "boonste kwartiel (Q3)"), min: L("minimum", "minimum"), max: L("maximum", "maksimum") }[which];
+  const which = pick([L("med", "med"), L("q1", "q1"), L("q3", "q3"), L("min", "min"), L("max", "max")]);   // the data ids; the learner reads name below (audit U37-3 split)
+  const map = { med: five.med, q1: five.q1, q3: five.q3, min: five.min, max: five.max };
+  const name = { med: L("median", "mediaan"), q1: L("lower quartile (Q1)", "onderste kwartiel (Q1)"), q3: L("upper quartile (Q3)", "boonste kwartiel (Q3)"), min: L("minimum", "minimum"), max: L("maximum", "maksimum") }[which];
   const where = {
-    median: L("the line inside the box", "die lyn binne die mond"), q1: L("the left edge of the box", "die linkerkant van die mond"),
+    med: L("the line inside the box", "die lyn binne die mond"), q1: L("the left edge of the box", "die linkerkant van die mond"),
     q3: L("the right edge of the box", "die regterkant van die mond"), min: L("the left whisker end", "die punt van die linkersnor"), max: L("the right whisker end", "die punt van die regtersnor"),
   }[which];
   return {
@@ -201,16 +201,19 @@ function genReadBox() {
 /* ---------- 6 · tap a part of the box plot ---------- */
 function genTapBox() {
   const five = fiveSummary();
-  const target = pick([
-    { id: "box", q: L("Tap the part of the plot that shows the <b>interquartile range</b>.", "Klik op die deel van die diagram wat die <b>interkwartielomvang</b> wys."), a: L("the box — from Q1 to Q3", "die mond, van Q1 tot Q3") },
-    { id: L("median", "median"), q: L("Tap the <b>median</b>.", "Klik op die <b>mediaan</b>."), a: L("the line inside the box", "die lyn binne die mond") },
-    { id: "whiskerL", q: L("Tap the section holding the <b>lowest 25%</b> of the data.", "Klik op die deel met die <b>laagste 25%</b> van die data."), a: L("the left whisker (minimum → Q1)", "die linkersnor (minimum → Q1)") },
-    { id: "whiskerR", q: L("Tap the section holding the <b>highest 25%</b> of the data.", "Klik op die deel met die <b>hoogste 25%</b> van die data."), a: L("the right whisker (Q3 → maximum)", "die regtersnor (Q3 → maksimum)") },
-  ]);
+  /* keyed by the box plot's tap-region ids (questions.js addBoxHits): the ids stay
+     object KEYS so the learner word median below is free to take its twin (audit U37-3 split) */
+  const TARGETS = {
+    box: { q: L("Tap the part of the plot that shows the <b>interquartile range</b>.", "Klik op die deel van die diagram wat die <b>interkwartielomvang</b> wys."), a: L("the box — from Q1 to Q3", "die mond, van Q1 tot Q3") },
+    median: { q: L("Tap the <b>median</b>.", "Klik op die <b>mediaan</b>."), a: L("the line inside the box", "die lyn binne die mond") },
+    whiskerL: { q: L("Tap the section holding the <b>lowest 25%</b> of the data.", "Klik op die deel met die <b>laagste 25%</b> van die data."), a: L("the left whisker (minimum → Q1)", "die linkersnor (minimum → Q1)") },
+    whiskerR: { q: L("Tap the section holding the <b>highest 25%</b> of the data.", "Klik op die deel met die <b>hoogste 25%</b> van die data."), a: L("the right whisker (Q3 → maximum)", "die regtersnor (Q3 → maksimum)") },
+  };
+  const id = pick(Object.keys(TARGETS)), target = TARGETS[id];   // same draw as the old pick of four
   return {
     type: "tap", concept: "boxplot",
     graph: { type: "box", five, axis: boxAxis(five.max), showValues: true },
-    tap: { targets: ["whiskerL", "box", L("median", "median"), "whiskerR"], correctId: target.id },
+    tap: { targets: Object.keys(TARGETS), correctId: id },
     prompt: target.q,
     tapHint: L("Tap the matching part of the box-and-whisker plot.", "Klik op die regte deel van die mond-en-snor-diagram."),
     answerLabel: target.a,

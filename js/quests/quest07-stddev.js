@@ -45,13 +45,14 @@ function genSdFromVar() {
 }
 
 function genBoundary() {
-  const m = randInt(20, 60), sd = randInt(3, 12), which = pick([L("lower", "lower"), L("upper", "upper")]);
-  const exp = which === L("lower", "lower") ? m - sd : m + sd;
+  const m = randInt(20, 60), sd = randInt(3, 12), isLower = pick([true, false]);   // the data (same draw as the old pick of two words)
+  const which = isLower ? L("lower", "onder") : L("upper", "bo");   // what the learner reads (audit U37-2 split)
+  const exp = isLower ? m - sd : m + sd;
   return {
     type: "calc", concept: "withinSD", dp: 0, allowNeg: true, expected: exp, answerLabel: `${exp}`,
-    prompt: L(`A data set has mean x̄ = <b>${m}</b> and standard deviation σ = <b>${sd}</b>. Calculate the <b>${which} boundary</b> (one σ ${which === "lower" ? "below" : "above"} the mean).`, `'n Datastel het gemiddelde x̄ = <b>${m}</b> en standaardafwyking σ = <b>${sd}</b>. Bereken die <b>${which}-grens</b> (een σ ${which === "lower" ? "onder" : "bo"} die gemiddelde).`),
-    hint: which === L("lower", "lower") ? L("lower = x̄ − σ.", "ondergrens = x̄ − σ.") : L("upper = x̄ + σ.", "bogrens = x̄ + σ."),
-    solution: [{ s: which === L("lower", "lower") ? L(`lower = x̄ − σ = ${m} − ${sd} = ${exp}`, `ondergrens = x̄ − σ = ${m} − ${sd} = ${exp}`) : L(`upper = x̄ + σ = ${m} + ${sd} = ${exp}`, `bogrens = x̄ + σ = ${m} + ${sd} = ${exp}`), r: L(`${which} boundary`, `${which}-grens`) }],
+    prompt: L(`A data set has mean x̄ = <b>${m}</b> and standard deviation σ = <b>${sd}</b>. Calculate the <b>${which} boundary</b> (one σ ${isLower ? "below" : "above"} the mean).`, `'n Datastel het gemiddelde x̄ = <b>${m}</b> en standaardafwyking σ = <b>${sd}</b>. Bereken die <b>${which}grens</b> (een σ ${isLower ? "onder" : "bo"} die gemiddelde).`),
+    hint: isLower ? L("lower = x̄ − σ.", "ondergrens = x̄ − σ.") : L("upper = x̄ + σ.", "bogrens = x̄ + σ."),
+    solution: [{ s: isLower ? L(`lower = x̄ − σ = ${m} − ${sd} = ${exp}`, `ondergrens = x̄ − σ = ${m} − ${sd} = ${exp}`) : L(`upper = x̄ + σ = ${m} + ${sd} = ${exp}`, `bogrens = x̄ + σ = ${m} + ${sd} = ${exp}`), r: L(`${which} boundary`, `${which}grens`) }],
   };
 }
 

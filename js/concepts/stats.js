@@ -185,14 +185,14 @@ export const CONCEPTS_STATS = {
         <li><b>Plot</b> each point at (<b>upper</b> boundary of the class ; cumulative frequency).</li>
         <li><b>Anchor</b> the curve at the <b>lower</b> boundary of the first class, at height 0.</li>
       </ul>
-      <p>The curve is always S-shaped, and the <b>modal class</b> is the steepest part.</p>`, `
+      <p>The curve always rises (it never goes down), and the <b>modal class</b> is the steepest part.</p>`, `
       <p>'n Ogief is die kumulatiewe-frekwensiekurwe.</p>
       <ul>
         <li><b>Kumulatiewe frekwensie</b> = die lopende totaal van die frekwensies.</li>
-        <li><b>Stip</b> elke punt by (<b>boonste</b> grens van die klas ; kumulatiewe frekwensie).</li>
-        <li><b>Anker</b> die kurwe by die <b>onderste</b> grens van die eerste klas, op hoogte 0.</li>
+        <li><b>Stip</b> elke punt by (<b>bogrens</b> van die klas ; kumulatiewe frekwensie).</li>
+        <li><b>Anker</b> die kurwe by die <b>ondergrens</b> van die eerste klas, op hoogte 0.</li>
       </ul>
-      <p>Die kurwe is altyd S-vormig, en die <b>modale klas</b> is die steilste deel.</p>`),
+      <p>Die kurwe styg altyd (dit daal nooit nie), en die <b>modale klas</b> is die steilste deel.</p>`),
   },
   ogiveRead: {
     title: L("Reading off an ogive", "Lees 'n ogief af"),

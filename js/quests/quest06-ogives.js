@@ -71,11 +71,11 @@ function genModalSteepest() {
 
 function genReadQuartile() {
   const classes = ogiveClasses(), n = totalFreq(classes);
-  const which = pick([L("median", "median"), "q1", "q3"]);
-  const level = which === L("median", "median") ? n / 2 : which === "q1" ? n / 4 : 3 * n / 4;
+  const which = pick(["med", "q1", "q3"]);   // the data ids; the learner reads name below (audit U37-3 split)
+  const level = which === "med" ? n / 2 : which === "q1" ? n / 4 : 3 * n / 4;
   const val = ogiveAnswerAtCum({ classes }, level);
-  const name = { median: L("median", "median"), q1: L("lower quartile (Q1)", "onderste kwartiel (Q1)"), q3: L("upper quartile (Q3)", "boonste kwartiel (Q3)") }[which];
-  const formula = which === L("median", "median") ? L("n/2", "n/2") : which === "q1" ? L("n/4", "n/4") : L("3n/4", "3n/4");
+  const name = { med: L("median", "mediaan"), q1: L("lower quartile (Q1)", "onderste kwartiel (Q1)"), q3: L("upper quartile (Q3)", "boonste kwartiel (Q3)") }[which];
+  const formula = which === "med" ? L("n/2", "n/2") : which === "q1" ? L("n/4", "n/4") : L("3n/4", "3n/4");
   return {
     type: "calc", concept: "ogiveRead", dp: 0, tol: TOL.graphRead,
     graph: { type: "ogive", classes }, graphCap: L("cumulative frequency", "kumulatiewe frekwensie"),
