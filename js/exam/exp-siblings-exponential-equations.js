@@ -100,7 +100,7 @@ const q2 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "<em>No calculator.</em><br>Solve for x: &nbsp;(1/4)<sup>x−1</sup> = 64", af: "<em>Sonder sakrekenaar.</em><br>Los op vir x: &nbsp;(1/4)<sup>x−1</sup> = 64",
+        en: "<em>No calculator.</em><br>Solve for x: &nbsp;(1/4)<sup>x−1</sup> = 64", af: "<em>Sonder 'n sakrekenaar.</em><br>Los op vir x: &nbsp;(1/4)<sup>x−1</sup> = 64",
       },
       hint: {
         en: "A fraction base is a base with a hidden negative exponent — 1/4 is 4 to the power of what? Once the left-hand side is a plain power of 4, both sides can be compared.", af: "'n Breuk as grondtal is 'n grondtal met 'n versteekte negatiewe eksponent: 1/4 is 4 tot watter mag? Sodra die linkerkant 'n gewone mag van 4 is, kan albei kante vergelyk word.",
@@ -139,7 +139,7 @@ const q3 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Solve for x: &nbsp;3<sup>x+2</sup> − 3<sup>x</sup> = 72", af: "<em>Sonder sakrekenaar.</em><br>Los op vir x: &nbsp;3<sup>x+2</sup> − 3<sup>x</sup> = 72",
+        en: "<em>No calculator.</em><br>Solve for x: &nbsp;3<sup>x+2</sup> − 3<sup>x</sup> = 72", af: "<em>Sonder 'n sakrekenaar.</em><br>Los op vir x: &nbsp;3<sup>x+2</sup> − 3<sup>x</sup> = 72",
       },
       hint: {
         en: "There is a − between two terms, so no guns can be equal yet. Divorce the first power so both terms carry 3<sup>x</sup>, then take that out as a common factor and see what is left.", af: "Daar is 'n − tussen twee terme, dus kan geen gewere nog gelyk wees nie. Skei die eerste mag sodat albei terme 3<sup>x</sup> dra, haal dit dan uit as 'n gemene faktor en kyk wat oorbly.",

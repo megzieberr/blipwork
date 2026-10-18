@@ -104,7 +104,7 @@ const q2 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "<em>No calculator.</em><br>Evaluate: &nbsp;√(36⁻¹)", af: "<em>Sonder sakrekenaar.</em><br>Bereken: &nbsp;√(36⁻¹)",
+        en: "<em>No calculator.</em><br>Evaluate: &nbsp;√(36⁻¹)", af: "<em>Sonder 'n sakrekenaar.</em><br>Bereken: &nbsp;√(36⁻¹)",
       },
       hint: {
         en: "Deal with the depressed exponent before you touch the root. What does a negative exponent do to a number — does it change its sign, or does it move it?", af: "Hanteer die neerslagtige eksponent voordat jy aan die wortel raak. Wat doen 'n negatiewe eksponent aan 'n getal: verander dit sy teken, of beweeg dit die getal?",
@@ -219,7 +219,7 @@ const q5 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Evaluate: &nbsp;(3⁻¹ + 6⁻¹)⁻²", af: "<em>Sonder sakrekenaar.</em><br>Bereken: &nbsp;(3⁻¹ + 6⁻¹)⁻²",
+        en: "<em>No calculator.</em><br>Evaluate: &nbsp;(3⁻¹ + 6⁻¹)⁻²", af: "<em>Sonder 'n sakrekenaar.</em><br>Bereken: &nbsp;(3⁻¹ + 6⁻¹)⁻²",
       },
       hint: {
         en: "The + inside the bracket is the whole difficulty. It stops you moving the 3 and the 6 anywhere, so turn each of them into an ordinary fraction first and add them the way you have always added fractions.", af: "Die + in die hakie is die hele probleem. Dit keer dat jy die 3 en die 6 enige plek heen neem, dus maak eers van elkeen 'n gewone breuk en tel hulle op soos jy nog altyd breuke opgetel het.",
@@ -259,7 +259,7 @@ const q6 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Write each term with a positive exponent and then evaluate: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³", af: "<em>Sonder sakrekenaar.</em><br>Skryf elke term met 'n positiewe eksponent en bereken dan: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³",
+        en: "<em>No calculator.</em><br>Write each term with a positive exponent and then evaluate: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³", af: "<em>Sonder 'n sakrekenaar.</em><br>Skryf elke term met 'n positiewe eksponent en bereken dan: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³",
       },
       hint: {
         en: "Three terms, three different laws — take them one at a time and write each one down before you add anything. Look carefully at what the zero exponent is sitting on.", af: "Drie terme, drie verskillende wette: doen hulle een op 'n slag en skryf elkeen neer voordat jy iets optel. Kyk mooi waarop die nul-eksponent sit.",

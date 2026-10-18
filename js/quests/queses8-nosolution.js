@@ -62,18 +62,18 @@ const SKILLS = {
         sol: [{ s: L("There is a + between the terms, so no law fires yet — it has to be factorised", "Daar is 'n + tussen die terme, dus tree nog geen wet in nie: dit moet gefaktoriseer word") },
               { s: L("Divorce the first power: 2ˣ⁺¹ = 2ˣ·2¹", "Skei die eerste mag: 2ˣ⁺¹ = 2ˣ·2¹"), r: L("split x^(a+b) into xᵃ·xᵇ", "breek x^(a+b) op in xᵃ·xᵇ") },
               { s: L("Both terms now carry 2ˣ, so take it out: 2ˣ(2 + 1) = 192", "Albei terme dra nou 2ˣ, dus haal dit uit: 2ˣ(2 + 1) = 192"), r: L("common factor — always the base with the variable exponent", "gemene faktor: altyd die grondtal met die veranderlike eksponent") }] },
-      { e: L("3²ˣ + 6·3ˣ − 27 = 0", "3²ˣ + 6·3ˣ − 27 = 0"), correct: L("Let k = 3ˣ (trinomial)", "Stel k = 3ˣ (drieterm)"), wrongs: [L("Common factor of 27", "Gemene faktor van 27"), L("Equate the exponents directly", "Stel die eksponente dadelik gelyk"), L("Square both sides", "Kwadreer albei kante")], ans: L("Three terms in 3ˣ → let k = 3ˣ → k² + 6k − 27 = 0.", "Drie terme in 3ˣ → stel k = 3ˣ → k² + 6k − 27 = 0."),
+      { e: L("3²ˣ + 6·3ˣ − 27 = 0", "3²ˣ + 6·3ˣ − 27 = 0"), correct: L("Let K = 3ˣ (trinomial)", "Stel K = 3ˣ (drieterm)"), wrongs: [L("Common factor of 27", "Gemene faktor van 27"), L("Equate the exponents directly", "Stel die eksponente dadelik gelyk"), L("Square both sides", "Kwadreer albei kante")], ans: L("Three terms in 3ˣ → let K = 3ˣ → K² + 6K − 27 = 0.", "Drie terme in 3ˣ → stel K = 3ˣ → K² + 6K − 27 = 0."),
         sol: [{ s: L("Count the terms: three of them, and 3²ˣ is the square of 3ˣ", "Tel die terme: daar is drie, en 3²ˣ is die kwadraat van 3ˣ") },
               { s: L("That is the K², K, constant shape — so let K = 3ˣ", "Dit is die vorm K², K, konstante, dus stel K = 3ˣ") },
               { s: L("It becomes K² + 6K − 27 = 0, an ordinary trinomial", "Dit word K² + 6K − 27 = 0, 'n gewone drieterm"), r: L("factorise it, then always substitute back to x", "faktoriseer dit, en vervang dan altyd terug na x") }] },
-      { e: L("2²ˣ⁺² − 5·2ˣ + 1 = 0", "2²ˣ⁺² − 5·2ˣ + 1 = 0"), correct: L("Let k = 2ˣ (trinomial)", "Stel k = 2ˣ (drieterm)"), wrongs: [L("Common factor of 1", "Gemene faktor van 1"), L("Equate the exponents directly", "Stel die eksponente dadelik gelyk"), L("Difference of squares", "Verskil van twee vierkante")], ans: L("Rewrite as 4·2²ˣ − 5·2ˣ + 1; let k = 2ˣ → 4k² − 5k + 1 = 0.", "Herskryf as 4·2²ˣ − 5·2ˣ + 1; stel k = 2ˣ → 4k² − 5k + 1 = 0."),
+      { e: L("2²ˣ⁺² − 5·2ˣ + 1 = 0", "2²ˣ⁺² − 5·2ˣ + 1 = 0"), correct: L("Let K = 2ˣ (trinomial)", "Stel K = 2ˣ (drieterm)"), wrongs: [L("Common factor of 1", "Gemene faktor van 1"), L("Equate the exponents directly", "Stel die eksponente dadelik gelyk"), L("Difference of squares", "Verskil van twee vierkante")], ans: L("Rewrite as 4·2²ˣ − 5·2ˣ + 1; let K = 2ˣ → 4K² − 5K + 1 = 0.", "Herskryf as 4·2²ˣ − 5·2ˣ + 1; stel K = 2ˣ → 4K² − 5K + 1 = 0."),
         sol: [{ s: L("Divorce the + 2 out of the exponent first: 2²ˣ⁺² = 2²ˣ·2² = 4·2²ˣ", "Skei eers die + 2 uit die eksponent: 2²ˣ⁺² = 2²ˣ·2² = 4·2²ˣ") },
               { s: L("The three terms are now 4·2²ˣ − 5·2ˣ + 1, and 2²ˣ is the square of 2ˣ", "Die drie terme is nou 4·2²ˣ − 5·2ˣ + 1, en 2²ˣ is die kwadraat van 2ˣ") },
               { s: L("let K = 2ˣ → 4K² − 5K + 1 = 0", "stel K = 2ˣ → 4K² − 5K + 1 = 0"), r: L("a trinomial in K, then substitute back", "'n drieterm in K, vervang dan terug") }] },
     ];
     const it = pick(items);
     return mc(EXPQ, L(`Which method solves <b>${it.e}</b>?`, `Watter metode los <b>${it.e}</b> op?`), it.correct, it.wrongs,
-      { hint: L("A + or − between terms means factorise: common factor (shared power) or trinomial (let k = baseˣ).", "'n + of − tussen terme beteken faktoriseer: gemene faktor (gedeelde mag) of drieterm (stel k = grondtalˣ)."), answerLabel: it.ans, solution: it.sol });
+      { hint: L("A + or − between terms means factorise: common factor (shared power) or trinomial (let K = baseˣ).", "'n + of − tussen terme beteken faktoriseer: gemene faktor (gedeelde mag) of drieterm (stel K = grondtalˣ)."), answerLabel: it.ans, solution: it.sol });
   },
 
   /* reject a negative k */

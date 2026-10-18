@@ -150,7 +150,7 @@ const q3 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "<em>No calculator.</em><br>Simplify: &nbsp;2/(4⁻¹ + 12⁻¹)", af: "<em>Sonder sakrekenaar.</em><br>Vereenvoudig: &nbsp;2/(4⁻¹ + 12⁻¹)",
+        en: "<em>No calculator.</em><br>Simplify: &nbsp;2/(4⁻¹ + 12⁻¹)", af: "<em>Sonder 'n sakrekenaar.</em><br>Vereenvoudig: &nbsp;2/(4⁻¹ + 12⁻¹)",
       },
       hint: {
         en: "The + underneath is what stops you moving the 4 and the 12 upstairs. Break the fraction up into a division instead, add the two little fractions properly, and finish with keep–flip–change.", af: "Die + onder keer dat jy die 4 en die 12 na bo neem. Breek die breuk eerder op in 'n deling, tel die twee breukies behoorlik op, en eindig met KFC (keep, flip, change).",

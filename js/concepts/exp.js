@@ -103,7 +103,7 @@ export const CONCEPTS_EXP = {
     body: L(`
       <p>A surd is a root written with the radical sign. The index sits on the root; powers inside convert to a fraction.</p>
       <div class="formula">ⁿ√(xᵃ) = x^(a/n) &nbsp;— inside power on TOP, index on the BOTTOM<br>
-        √a·√b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(same root; a, b ≥ 0)</div>
+        √a·√b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(same root; a ≥ 0, b ≥ 0 for ×, b &gt; 0 for ÷)</div>
       <ul>
         <li><b>Like surds add like terms:</b> 5√x − 2√x = 3√x; √x + √x = 2√x.</li>
         <li><b>BIG NO-NO:</b> √a + √b ≠ √(a+b). You cannot add the insides.</li>
@@ -111,7 +111,7 @@ export const CONCEPTS_EXP = {
       <div class="eg">√(x⁴) = x^(4/2) = x². And ³√(y⁶) = y^(6/3) = y².</div>`, `
       <p>'n Wortelvorm is 'n wortel wat met die wortelteken geskryf word. Die indeks sit op die wortel; magte binne-in word 'n breuk.</p>
       <div class="formula">ⁿ√(xᵃ) = x^(a/n) &nbsp;(binnemag BO, indeks ONDER)<br>
-        √a·√b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(dieselfde wortel; a, b ≥ 0)</div>
+        √a·√b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(dieselfde wortel; a ≥ 0, b ≥ 0 vir ×, b &gt; 0 vir ÷)</div>
       <ul>
         <li><b>Gelyksoortige wortelvorme tel op soos gelyksoortige terme:</b> 5√x − 2√x = 3√x; √x + √x = 2√x.</li>
         <li><b>GROOT NEE-NEE:</b> √a + √b ≠ √(a+b). Jy kan nie die dele binne-in optel nie.</li>
@@ -174,6 +174,7 @@ export const CONCEPTS_EXP = {
       <ul>
         <li><b>Numerator (top) even, k positive → ± two answers.</b> x^(2/3) = 4 → x = ±8.</li>
         <li><b>Top and bottom both odd → one answer, and a negative is allowed.</b> x^(3/5) = −2 → x = (−2)^(5/3), real and negative.</li>
+        <li><b>Bottom (denominator) even, k positive → one positive answer.</b> x^(3/2) = 8 → x = 4.</li>
         <li><b>No real solution</b> when you’d need an <b>even root of a negative</b> (even bottom, k negative) or an <b>even power equal to a negative</b> (even top, k negative). x^(1/2) = −5 and x^(2/5) = −4 both have no solution.</li>
       </ul>`, `
       <p>Om x^(p/q) = k op te los, verhef <b>albei kante</b> tot die resiprook q/p (die eksponente kanselleer dan: (p/q)·(q/p) = 1).</p>
@@ -181,6 +182,7 @@ export const CONCEPTS_EXP = {
       <ul>
         <li><b>Teller (bo) ewe, k positief → ± twee antwoorde.</b> x^(2/3) = 4 → x = ±8.</li>
         <li><b>Bo en onder albei onewe → een antwoord, en 'n negatiewe antwoord mag.</b> x^(3/5) = −2 → x = (−2)^(5/3), reëel en negatief.</li>
+        <li><b>Onder (noemer) ewe, k positief → een positiewe antwoord.</b> x^(3/2) = 8 → x = 4.</li>
         <li><b>Geen reële oplossing</b> as jy 'n <b>ewe wortel van 'n negatiewe getal</b> (onder ewe, k negatief) of 'n <b>ewe mag gelyk aan 'n negatiewe getal</b> (bo ewe, k negatief) nodig het. x^(1/2) = −5 en x^(2/5) = −4 het albei geen oplossing nie.</li>
       </ul>`),
   },
@@ -221,14 +223,14 @@ export const CONCEPTS_EXP = {
         <li><b>ALWAYS test both answers</b> in the original equation — squaring can create <b>extraneous</b> answers that don’t really work.</li>
       </ol>
       <p>Two quick no-solution checks: a root can never equal a negative (√(x−1) = −3 → no solution), and √x is only defined for x ≥ 0.</p>
-      <div class="eg">√(2 − 7x) = −2x → square → 2 − 7x = 4x²; solve, then reject any answer that makes the original root negative.</div>`, `
+      <div class="eg">√(2 − 7x) = −2x → square → 2 − 7x = 4x²; solve, then test both: reject any answer that makes −2x negative (a root can never equal a negative). Here x = −2 works and x = ¼ is rejected.</div>`, `
       <ol>
         <li><b>Isoleer die wortel</b>: kry √(…) alleen aan een kant.</li>
         <li><b>Kwadreer albei kante</b> (wys die stap). Kwadrering maak die wortel ongedaan.</li>
         <li><b>Toets ALTYD albei antwoorde</b> in die oorspronklike vergelyking: kwadrering kan <b>ekstra</b> antwoorde skep wat nie regtig werk nie.</li>
       </ol>
       <p>Twee vinnige toetse vir geen oplossing: 'n wortel kan nooit gelyk wees aan 'n negatiewe getal nie (√(x−1) = −3 → geen oplossing), en √x bestaan net vir x ≥ 0.</p>
-      <div class="eg">√(2 − 7x) = −2x → kwadreer → 2 − 7x = 4x²; los op, en verwerp dan enige antwoord wat die oorspronklike wortel negatief maak.</div>`),
+      <div class="eg">√(2 − 7x) = −2x → kwadreer → 2 − 7x = 4x²; los op en toets albei: verwerp enige antwoord wat −2x negatief maak ('n wortel kan nooit gelyk wees aan 'n negatiewe getal nie). Hier werk x = −2 en x = ¼ word verwerp.</div>`),
   },
 
 };

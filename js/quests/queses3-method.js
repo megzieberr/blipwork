@@ -18,7 +18,7 @@ const SKILLS = {
       L(`An expression mixes bases like <b>${bases}</b>. What is the <b>first</b> step to simplify it?`, `'n Uitdrukking meng grondtalle soos <b>${bases}</b>. Wat is die <b>eerste</b> stap om dit te vereenvoudig?`),
       L("Rewrite every base as a product of prime factors", "Skryf elke grondtal as 'n produk van priemfaktore"),
       [L("Add the exponents straight away", "Tel die eksponente dadelik op"), L("Multiply all the bases together", "Vermenigvuldig al die grondtalle met mekaar"), L("Cancel the common terms first", "Kanselleer eers die gemeenskaplike terme")],
-      { hint: L("You can only use the laws once every base is written as the same prime base.", "Jy kan die wette eers gebruik as elke grondtal as dieselfde priemgrondtal geskryf is."),
+      { hint: L("You can only use the laws once every base is broken into prime factors, so matching bases can meet.", "Jy kan die wette eers gebruik as elke grondtal in priemfaktore opgebreek is, sodat dieselfde grondtalle kan saamkom."),
         answerLabel: L("Rewrite each base as prime factors (8 = 2³, 9 = 3², 27 = 3³ …) so the bases match.", "Skryf elke grondtal as priemfaktore (8 = 2³, 9 = 3², 27 = 3³ …) sodat die grondtalle ooreenstem."),
         solution: [
           { s: L(`With bases like ${bases} nothing matches, and every law needs the SAME base`, `Met grondtalle soos ${bases} pas niks nie, en elke wet het DIESELFDE grondtal nodig`) },

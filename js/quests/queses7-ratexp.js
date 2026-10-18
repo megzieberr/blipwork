@@ -25,15 +25,15 @@ const POOL = [
   { e: L("x^(3/7) = −5", "x^(3/7) = −5"), cat: B, why: L("All odd → one real, negative answer.", "Alles onewe → een reële, negatiewe antwoord.") },
   { e: L("x^(3/2) = 8", "x^(3/2) = 8"), cat: B, why: L("Odd numerator (3) → one answer: raise to 2/3 → x = 4. The even denominator only means x can’t be negative — it does NOT give ±.", "Onewe teller (3) → een antwoord: verhef tot 2/3 → x = 4. Die ewe noemer beteken net dat x nie negatief kan wees nie: dit gee NIE ± nie.") },
   { e: L("x^(3/5) = 2", "x^(3/5) = 2"), cat: B, why: L("Top and bottom both odd → exactly one real answer: x = 2^(5/3) (positive, because the right side is positive).", "Bo en onder albei onewe → presies een reële antwoord: x = 2^(5/3) (positief, want die regterkant is positief).") },
-  { e: L("x^(1/2) = −5", "x^(1/2) = −5"), cat: C, why: L("Even root (denominator 2) of a negative → non-real → no solution.", "Ewe wortel (noemer 2) van 'n negatiewe getal → nie-reëel → geen oplossing.") },
-  { e: L("x^(3/4) = −8", "x^(3/4) = −8"), cat: C, why: L("Even root (denominator 4) of a negative → no real solution.", "Ewe wortel (noemer 4) van 'n negatiewe getal → geen reële oplossing.") },
+  { e: L("x^(1/2) = −5", "x^(1/2) = −5"), cat: C, why: L("An even root (denominator 2) is never negative → no solution.", "'n Ewe wortel (noemer 2) is nooit negatief nie → geen oplossing.") },
+  { e: L("x^(3/4) = −8", "x^(3/4) = −8"), cat: C, why: L("x^(3/4) = (⁴√x)³, and ⁴√x is never negative → no real solution.", "x^(3/4) = (⁴√x)³, en ⁴√x is nooit negatief nie → geen reële oplossing.") },
   { e: L("x^(2/5) = −4", "x^(2/5) = −4"), cat: C, why: L("Even power (numerator 2) can’t equal a negative → no real solution.", "Ewe mag (teller 2) kan nie 'n negatiewe getal gee nie → geen reële oplossing.") },
 ];
 
 const SKILLS = {
   classify1: () => { const it = pick(POOL); return mc(CON, L(`Solve <b>${it.e}</b>. What does the solution look like?`, `Los <b>${it.e}</b> op. Hoe lyk die oplossing?`), it.cat, [A, B, C, D].filter((x) => x !== it.cat), { hint: L("Even numerator + positive → ±. All odd → one (can be negative). Even root/power of a negative → none.", "Ewe teller + positief → ±. Alles onewe → een (kan negatief wees). Ewe wortel/mag van 'n negatiewe getal → geen."), answerLabel: it.why }); },
   classify2: () => { const it = pick(POOL); return mc(CON, L(`Solve <b>${it.e}</b>. What does the solution look like?`, `Los <b>${it.e}</b> op. Hoe lyk die oplossing?`), it.cat, [A, B, C, D].filter((x) => x !== it.cat), { hint: L("Look at whether the top and bottom of the exponent are odd or even, and the sign of the right side.", "Kyk of bo en onder in die eksponent onewe of ewe is, en kyk na die teken van die regterkant."), answerLabel: it.why }); },
-  classify3: () => { const it = pick(POOL); return mc(CON, L(`Solve <b>${it.e}</b>. What does the solution look like?`, `Los <b>${it.e}</b> op. Hoe lyk die oplossing?`), it.cat, [A, B, C, D].filter((x) => x !== it.cat), { hint: L("An even root of a negative is non-real; an even power is never negative.", "'n Ewe wortel van 'n negatiewe getal is nie-reëel; 'n ewe mag is nooit negatief nie."), answerLabel: it.why }); },
+  classify3: () => { const it = pick(POOL); return mc(CON, L(`Solve <b>${it.e}</b>. What does the solution look like?`, `Los <b>${it.e}</b> op. Hoe lyk die oplossing?`), it.cat, [A, B, C, D].filter((x) => x !== it.cat), { hint: L("An even root is never negative; an even power is never negative.", "'n Ewe wortel is nooit negatief nie; 'n ewe mag is nooit negatief nie."), answerLabel: it.why }); },
 
   /* the method step.  PARAMETRISED 2026-08-23 (dice wave 2 — the one
      CARE skill in this quest, DICE-AUDIT §11): the exponent p/q now
@@ -73,13 +73,13 @@ const SKILLS = {
 
   /* the no-solution rule */
   noSolutionRule: () => ynQ(CON,
-    L("An <b>even root</b> of a <b>negative</b> number (like x^(1/2) = −4) gives a non-real result, so there is no real solution. True or false?", "'n <b>Ewe wortel</b> van 'n <b>negatiewe</b> getal (soos x^(1/2) = −4) gee 'n nie-reële antwoord, dus is daar geen reële oplossing nie. Waar of onwaar?"),
+    L("An <b>even root</b> can never come out <b>negative</b>, so x^(1/2) = −4 has no real solution. True or false?", "'n <b>Ewe wortel</b> kan nooit <b>negatief</b> uitkom nie, dus het x^(1/2) = −4 geen reële oplossing nie. Waar of onwaar?"),
     true,
-    { hint: L("Can the square root of a negative be a real number?", "Kan die vierkantswortel van 'n negatiewe getal 'n reële getal wees?"), answerLabel: L("True — an even root of a negative is non-real, so the equation has no real solution.", "Waar: 'n ewe wortel van 'n negatiewe getal is nie-reëel, dus het die vergelyking geen reële oplossing nie."),
+    { hint: L("Can a square root ever come out negative?", "Kan 'n vierkantswortel ooit negatief uitkom?"), answerLabel: L("True: √x is never negative, so √x = −4 has no solution (not non-real: nothing negative is under the root).", "Waar: √x is nooit negatief nie, dus het √x = −4 geen oplossing nie (dit is nie nie-reëel nie: daar is niks negatiefs onder die wortel nie)."),
       solution: [
         { s: L("x^(1/2) means √x, and the 2 underneath is an EVEN root", "x^(1/2) beteken √x, en die 2 onder is 'n EWE wortel") },
-        { s: L("Squaring any real number gives a positive answer, so no real number squares back to a negative", "Enige reële getal gekwadreer gee 'n positiewe antwoord, dus gee geen reële getal gekwadreer 'n negatiewe getal nie") },
-        { s: L("∴ true — the even root of a negative is non-real, so there is no real solution", "∴ waar: die ewe wortel van 'n negatiewe getal is nie-reëel, dus is daar geen reële oplossing nie"),
+        { s: L("Squaring any real number gives 0 or a positive answer, so no real number squares back to a negative", "Enige reële getal gekwadreer gee 0 of 'n positiewe antwoord, dus gee geen reële getal gekwadreer 'n negatiewe getal nie") },
+        { s: L("∴ true: √x is never negative, so √x = −4 has no solution (not non-real: nothing negative is under the root)", "∴ waar: √x is nooit negatief nie, dus het √x = −4 geen oplossing nie (dit is nie nie-reëel nie: daar is niks negatiefs onder die wortel nie)"),
           r: L("an ODD root would be fine: ³√(−8) = −2", "'n ONEWE wortel sou in orde wees: ³√(−8) = −2") },
       ] }),
 };
