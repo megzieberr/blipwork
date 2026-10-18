@@ -210,7 +210,7 @@ const bw1 = {
           en: "WATCH OUT: <b>the construction line is a mark.</b> The printed figure never shows OA and OB — you draw them and you write “join OA and OB” as your first line. A proof that starts at “OA = OB” has already lost a mark for a line that takes three seconds.", af: "PASOP: <b>die konstruksielyn is 'n punt werd.</b> Die gedrukte figuur wys nooit OA en OB nie: jy trek hulle self en jy skryf “verbind OA en OB” as jou eerste reël. 'n Bewys wat by “OA = OB” begin, het reeds 'n punt verloor vir 'n lyn wat drie sekondes vat.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the triangles really are congruent.", af: "ONTHOU: kongruensie het <b>drie</b> feite en die regte etiket nodig. Regte hoek, hipotenusa (skuinssy), sy &nbsp;⟹&nbsp; <b>RHS</b>. As jy hier SSS of SHS skryf, kry jy niks, al is die driehoeke regtig kongruent.",
+          en: "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the triangles really are congruent.", af: "ONTHOU: kongruensie het <b>drie</b> feite en die regte etiket nodig. Regte hoek, hipotenusa (skuinssy), sy &nbsp;⟹&nbsp; <b>RHS</b>. As jy hier SSS of SHS skryf, kry jy niks nie, al is die driehoeke regtig kongruent.",
         } },
       ],
       esplain: {
