@@ -132,10 +132,12 @@ export const CONCEPTS_TGRAPH = {
       <p>A tan graph has no max or min, so use two reference points <b>45° on either side</b> of an inflection point (where a branch crosses its midline).</p>
       <div class="formula">a = ("y at +45°" − "y at −45°") ÷ 2</div>
       <p>This works because tan 45° = 1 and tan(−45°) = −1, so 45° from the centre the graph sits one a above (or below) the midline.</p>
+      <p>That is for tan x. For tan bx the period is 180° ÷ b, so use the points 45° ÷ b on either side instead (a quarter of the period).</p>
       <div class="eg">If the references are 3 and −1, then a = (3 − (−1)) ÷ 2 = 2.</div>`, `
       <p>'n Tan-grafiek het geen maks of min nie, so gebruik twee verwysingspunte <b>45° aan weerskante</b> van 'n buigpunt (waar die kurwe sy middelste lyn sny).</p>
       <div class="formula">a = ("y by +45°" − "y by −45°") ÷ 2</div>
       <p>Dit werk omdat tan 45° = 1 en tan(−45°) = −1, dus lê die grafiek 45° van die middel af een a bo (of onder) die middelste lyn.</p>
+      <p>Dit geld vir tan x. Vir tan bx is die periode 180° ÷ b, so gebruik eerder die punte 45° ÷ b aan weerskante ('n kwart van die periode).</p>
       <div class="eg">As die verwysingswaardes 3 en −1 is, dan is a = (3 − (−1)) ÷ 2 = 2.</div>`),
   },
   findTrigEquation: {
@@ -165,14 +167,14 @@ export const CONCEPTS_TGRAPH = {
       <ul>
         <li><b>Intersections</b> are the x-values where f(x) = g(x) — read them where the curves cross.</li>
         <li><b>f(x) &gt; g(x)</b> wherever the f-curve is <b>above</b> the g-curve.</li>
-        <li><b>f(x) &gt; 0</b> wherever the curve is above the x-axis (between its x-intercepts).</li>
+        <li><b>f(x) &gt; 0</b> wherever the curve is above the x-axis (between the x-intercepts where it sits above the axis).</li>
       </ul>
       <p>Always work within the interval the question gives you.</p>`, `
       <p>As twee trig-grafieke dieselfde asse deel:</p>
       <ul>
         <li><b>Snypunte</b> is die x-waardes waar f(x) = g(x): lees hulle af waar die kurwes mekaar sny.</li>
         <li><b>f(x) &gt; g(x)</b> waar die f-kurwe <b>bo</b> die g-kurwe is.</li>
-        <li><b>f(x) &gt; 0</b> waar die kurwe bo die x-as is (tussen sy x-afsnitte).</li>
+        <li><b>f(x) &gt; 0</b> waar die kurwe bo die x-as is (tussen die x-afsnitte waar dit bo die as lê).</li>
       </ul>
       <p>Werk altyd binne die interval wat die vraag gee.</p>`),
   },
