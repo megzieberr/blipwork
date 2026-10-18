@@ -37,14 +37,14 @@ export const CONCEPTS_MEAS = {
         <li><b>Cone or pyramid:</b> a third of the matching prism/cylinder — V = ⅓ · (base area) · H.</li>
         <li><b>Sphere</b> = 4/3·πr³; <b>hemisphere</b> = ⅔πr³ (half of it).</li>
       </ul>
-      <div class="formula">cube ℓ³ · prism ℓbh · cylinder πr²h · cone ⅓πr²H · pyramid ⅓ℓ²H</div>`, `
+      <div class="formula">cube ℓ³ · rectangular prism ℓbh · cylinder πr²h · cone ⅓πr²H · square pyramid ⅓ℓ²H</div>`, `
       <p>Volume is hoeveel ruimte daar binne-in is (kubieke eenhede).</p>
       <ul>
         <li><b>Prisma of silinder:</b> V = (oppervlakte van die basis) × hoogte. Dus is 'n silinder πr²·h.</li>
         <li><b>Keël of piramide:</b> 'n derde van die passende prisma/silinder: V = ⅓ · (basisoppervlakte) · H.</li>
         <li><b>Sfeer</b> = 4/3·πr³; <b>halfsfeer</b> = ⅔πr³ (die helfte daarvan).</li>
       </ul>
-      <div class="formula">kubus ℓ³ · prisma ℓbh · silinder πr²h · keël ⅓πr²H · piramide ⅓ℓ²H</div>`),
+      <div class="formula">kubus ℓ³ · reghoekige prisma ℓbh · silinder πr²h · keël ⅓πr²H · vierkantige piramide ⅓ℓ²H</div>`),
   },
   saFormula: {
     title: L("Surface area — which formula", "Buite-oppervlakte: watter formule"),

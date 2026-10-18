@@ -45,7 +45,7 @@ const SKILLS = {
       L("What solid is this?", "Watter liggaam is dit?"),
       correct, wrong,
       { graph: FIG[key](ACC),
-        hint: L("Look at the faces: flat polygons make a prism/pyramid; a curved face means a cylinder, cone or sphere.", "Kyk na die vlakke: plat veelhoeke maak 'n prisma/piramide; 'n geboë vlak beteken 'n silinder, keël of sfeer."),
+        hint: L("Look at the faces: flat polygons make a prism/pyramid; a curved face means a cylinder, cone, sphere or hemisphere.", "Kyk na die vlakke: plat veelhoeke maak 'n prisma/piramide; 'n geboë vlak beteken 'n silinder, keël, sfeer of halfsfeer."),
         answerLabel: L(`This is a ${correct}.`, `Dit is 'n ${correct}.`),
         solution: [{ s: L(`A ${correct} — read it off the faces and the cross-section.`, `'n ${correct}: lees dit af van die vlakke en die dwarssnit.`) }] });
   },
