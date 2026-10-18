@@ -114,12 +114,16 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 - 2026-10-18 (audit, live read): f8–f13 are already OPEN on live (all 99 quests open); the Term toggle is ON since 2026-10-06. Both pending lines settled.
 
 ## ⏳ Pending on Megan
+- ⛔ **FIRST, next Blipwork session, before ANY building** (her ruling 2026-10-18 12:57) 💻 ~10 min per batch: rule on the
+  49 audit items that need your word, `Desktop/Claude Code Projects/_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`
+  (teaching and marking choices, your device words, "unsure" maths). How the session does it: open with this list, show
+  it in batches of about 10 grouped by chapter, you say the id + your word (or "leave it"), one Opus worker applies each
+  batch (both languages, harness green, one ship at the end). Building continues only after you have looked, or said
+  "later". Tick this line when the list is empty.
 - 💻 your call, after exams: re-run `supabase/cron.sql` on live (the 60 s timeout for the two push jobs).
 - 📱 next homework you set in the daytime: the NOW push should land on the kids' phones at once (send-push v3, deployed
   18 Oct 12:52); if it does not, tell a session.
 - 📱 2 taps [today]: close and reopen Blipwork twice on your phone so it picks up v102 (the fix round).
-- 💻 whenever, in pieces: `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, 49 skipped items that need your word (teaching
-  and marking choices, your device words); say the id and your word and a worker applies it.
 - 🌐 1 word [your call, whenever]: "run S11" (one Opus worker, about 200k) so the seven dice test pages can check the
   Afrikaans dice rounds too, or leave it (the app renders them; only the harness can't read Afrikaans there).
 - 📱 [after exams, your 19:17 ruling]: play Blipwork start to finish with `?lang=af` (your phone already remembers it) and
@@ -136,6 +140,7 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 - 💻 1 line [whenever]: remove the stale worktree `.claude/worktrees/recursing-payne-2f126b` (137 MB).
 
 ## Next up
+- ⛔ **FIRST: her 49 calls** (top line of Pending on Megan): the session opens with them before anything below is built.
 - **🇿🇦 Afrikaans queue (AFRIKAANS-PLAN.md + QUEUE.md + tools/AF-TOOLS.md + tools/af-push/):** TRANSLATION DONE.
   Open: T94 (seven small leftovers: the Level 4 sub-line behind verify-exam.html:934, quest02/quest03 reason labels tied to
   ids, two tgraph 'period = …' labels, finlib COMPOUNDING keys vs labels, np7's L('quadratic','quadratic') option, the two
