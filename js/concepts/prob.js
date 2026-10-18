@@ -158,11 +158,11 @@ export const CONCEPTS_PROB = {
       <p>"At least one" is usually quickest as the complement of "none":</p>
       <div class="formula">P(at least one) = 1 − P(none)</div>
       <p>Find P(none) by multiplying the "not it" branch along every stage, then subtract from 1.</p>
-      <div class="eg">e.g. P(no red) = 15/20 × 15/20 = 225/400 → <span class="nowrap">P(at least one red)</span> = 1 − 225/400 = 175/400.</div>`, `
+      <div class="eg">e.g. 5 red balls out of 20, two draws with replacement: P(no red) = 15/20 × 15/20 = 225/400 → <span class="nowrap">P(at least one red)</span> = 1 − 225/400 = 175/400.</div>`, `
       <p>"Ten minste een" werk gewoonlik die vinnigste as die komplement van "geen":</p>
       <div class="formula">P(ten minste een) = 1 − P(geen)</div>
       <p>Kry P(geen) deur die "nie dit nie"-tak by elke stadium te vermenigvuldig, en trek dit dan van 1 af.</p>
-      <div class="eg">bv. P(geen rooi) = 15/20 × 15/20 = 225/400 → <span class="nowrap">P(ten minste een rooi)</span> = 1 − 225/400 = 175/400.</div>`),
+      <div class="eg">bv. 5 rooi balle uit 20, twee trekkings met terugplasing: P(geen rooi) = 15/20 × 15/20 = 225/400 → <span class="nowrap">P(ten minste een rooi)</span> = 1 − 225/400 = 175/400.</div>`),
   },
   replacement: {
     title: L("With vs without replacement", "Met vs sonder terugplasing"),

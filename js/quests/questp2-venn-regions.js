@@ -74,7 +74,7 @@ const SKILLS = {
     const cases = [
       { shade: ["inter"], correct: L("A ∩ B  (A and B)", "A ∩ B  (A en B)"), wrongs: [L("A ∪ B  (A or B)", "A ∪ B  (A of B)"), L("A′  (not A)", "A′  (nie A)"), L("neither A nor B", "nóg A nóg B")] },
       { shade: [L("onlyA", "onlyA"), "inter", L("onlyB", "onlyB")], correct: L("A ∪ B  (A or B)", "A ∪ B  (A of B)"), wrongs: [L("A ∩ B  (A and B)", "A ∩ B  (A en B)"), L("A′  (not A)", "A′  (nie A)"), L("neither A nor B", "nóg A nóg B")] },
-      { shade: ["notA"], correct: L("A′  (not A)", "A′  (nie A)"), wrongs: [L("A  (only A)", "A  (slegs A)"), L("A ∩ B  (A and B)", "A ∩ B  (A en B)"), L("B′  (not B)", "B′  (nie B)")] },
+      { shade: ["notA"], correct: L("A′  (not A)", "A′  (nie A)"), wrongs: [L("A  (all of circle A)", "A  (die hele sirkel A)"), L("A ∩ B  (A and B)", "A ∩ B  (A en B)"), L("B′  (not B)", "B′  (nie B)")] },
       { shade: ["outside"], correct: L("(A ∪ B)′  (neither)", "(A ∪ B)′  (geen van albei)"), wrongs: [L("A ∪ B  (A or B)", "A ∪ B  (A of B)"), L("A ∩ B  (A and B)", "A ∩ B  (A en B)"), L("A′  (not A)", "A′  (nie A)")] },
     ];
     const c = pick(cases);

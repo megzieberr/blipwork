@@ -29,7 +29,7 @@ const SKILLS = {
     "1", ["0", "0,5", L("the number of branches", "die aantal takke")],
     { graph: coinTree(0.5),
       hint: L("Those branches cover every option from that point.", "Daardie takke dek elke moontlikheid vanaf daardie punt."),
-      answerLabel: L("Branches from one point are exhaustive → they add up to 1.", "Takke uit een punt is uitputtend → hulle tel op tot 1.") }),
+      answerLabel: L("Branches from one point are mutually exclusive and exhaustive → they add up to 1.", "Takke uit een punt is onderling uitsluitend en uitputtend → hulle tel op tot 1.") }),
 
   pathProduct: () => {
     const pH = pick([0.6, 0.7, 0.4, 0.3, 0.8]);
