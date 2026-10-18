@@ -109,7 +109,7 @@ function why(p, q, neg, kind) {
     return L(`<b>Only odd numbers</b> in the numerator and the denominator (${p} and ${q}), so a <b>negative answer is fine</b> 🙂 — an odd root of a negative number really is negative. <b>One solution</b>.`, `<b>Net onewe getalle</b> in die teller en die noemer (${p} en ${q}), so 'n <b>negatiewe antwoord is in orde</b> 🙂: 'n onewe wortel van 'n negatiewe getal is regtig negatief. <b>Een oplossing</b>.`);
   }
   if (p % 2 === 0) {
-    return L(`The numerator is <b>${p}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even numerator cannot be ⊖</b> 🙁 — ${root(p, `x<sup>${p}</sup>`)} can never come out negative. <b>No solution</b>.`, `Die teller is <b>${p}</b>, 'n <b>ewe getal</b>, en die regterkant is negatief. 'n <b>Ewe teller kan nie ⊖ wees nie</b> 🙁: ${root(p, `x<sup>${p}</sup>`)} kan nooit negatief uitkom nie. <b>Geen oplossing</b>.`);
+    return L(`The numerator is <b>${p}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even numerator cannot be ⊖</b> 🙁 — ${root(q, `x<sup>${p}</sup>`)} can never come out negative. <b>No solution</b>.`, `Die teller is <b>${p}</b>, 'n <b>ewe getal</b>, en die regterkant is negatief. 'n <b>Ewe teller kan nie ⊖ wees nie</b> 🙁: ${root(q, `x<sup>${p}</sup>`)} kan nooit negatief uitkom nie. <b>Geen oplossing</b>.`);
   }
   return L(`The denominator is <b>${q}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even denominator cannot ONLY be ⊖</b> 🙁 — ${root(q, "x")} is never negative. <b>No solution</b>.`, `Die noemer is <b>${q}</b>, 'n <b>ewe getal</b>, en die regterkant is negatief. 'n <b>Ewe noemer kan nie NET ⊖ wees nie</b> 🙁: ${root(q, "x")} is nooit negatief nie. <b>Geen oplossing</b>.`);
 }

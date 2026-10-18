@@ -16,7 +16,7 @@ export const CONCEPTS_EQN = {
       <div class="eg">X₁ = ½ → (2x − 1). &nbsp; X₂ = −3 → (x + 3). &nbsp; So 2x² + 5x − 3 = (2x − 1)(x + 3).</div>`, `
       <p>Byna elke kwadratiese vergelyking begin dieselfde: bring alles na EEN kant sodat die ander kant 0 is.</p>
       <div class="formula">ax² + bx + c = 0</div>
-      <p><b>Sakrekenaar (EQN-modus):</b> MODE → <b>5: EQN</b> → <b>3: aX² + bX + c = 0</b> (opsie 4 is die KUBIESE een, verkeerd!) → tik a, b en c in, <b>elkeen met sy eie teken</b> → lees die wortels X₁ en X₂ af.</p>
+      <p><b>Sakrekenaar (EQN-modus):</b> MODE → <b>5: EQN</b> → <b>3: aX² + bX + c = 0</b> (opsie 4 is die DERDEGRAADSE een, verkeerd!) → tik a, b en c in, <b>elkeen met sy eie teken</b> → lees die wortels X₁ en X₂ af.</p>
       <p><b>Wortel → faktor:</b> sit die TEENOORGESTELDE teken in die hakie. 'n Breukwortel: die noemer vermenigvuldig die x, die teller gaan oor met die teenoorgestelde teken.</p>
       <div class="eg">X₁ = ½ → (2x − 1). &nbsp; X₂ = −3 → (x + 3). &nbsp; Dus 2x² + 5x − 3 = (2x − 1)(x + 3).</div>`),
   },

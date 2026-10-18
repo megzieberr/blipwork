@@ -268,8 +268,8 @@ const q3 = {
         { type: "answer", text: { en: "∴ k = 2", af: "∴ k = 2" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "This is the exact same move as the last question's (d) — build Δ in terms of the unknown, then set it to zero. The only difference is k is now the coefficient of x², not a plain constant, so it appears once you multiply out 4ac.",
-        af: "Dit is presies dieselfde stap as die vorige vraag se (d) — bou Δ in terme van die onbekende, en stel dit dan gelyk aan nul. Die enigste verskil is dat k nou die koëffisiënt van x² is, nie 'n gewone konstante nie, so dit verskyn sodra jy 4ac uitvermenigvuldig.",
+        en: "This is the exact same move as the last question's (d) — build Δ in terms of the unknown, then set it to zero. The only difference is that k is now the constant c with a = 2 in front of x², so it picks up a factor of 8 once you multiply out 4ac.",
+        af: "Dit is presies dieselfde stap as die vorige vraag se (d) — bou Δ in terme van die onbekende, en stel dit dan gelyk aan nul. Die enigste verskil is dat k nou die konstante c is, met a = 2 voor x², so dit kry 'n faktor 8 sodra jy 4ac uitvermenigvuldig.",
       },
     },
     {
@@ -398,8 +398,8 @@ const q4 = {
         { type: "answer", text: { en: "= (p − 2)² + 4", af: "= (p − 2)² + 4" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "This is exactly her completing-the-square method from the Functions/Equations work — let x and b/2 fall into a new bracket, but their squares get stuck outside — except this time the 'expression' you're completing the square on is Δ itself, not the original equation. Same method, new target.",
-        af: "Dit is presies haar vierkant-voltooiing-metode van die Funksies/Vergelykings-werk — laat x en b/2 in 'n nuwe hakie val, maar hulle vierkante bly buite vassteek — behalwe dat die 'uitdrukking' waarop jy die vierkant voltooi hierdie keer Δ self is, nie die oorspronklike vergelyking nie. Dieselfde metode, 'n nuwe teiken.",
+        en: "This is exactly her completing-the-square method from the Functions/Equations work — let x and b/2 fall into a new bracket, but the square of b/2 gets stuck outside — except this time the 'expression' you're completing the square on is Δ itself, not the original equation. Same method, new target.",
+        af: "Dit is presies haar vierkant-voltooiing-metode van die Funksies/Vergelykings-werk — laat x en b/2 in 'n nuwe hakie val, maar die kwadraat van b/2 bly buite vassteek — behalwe dat die 'uitdrukking' waarop jy die vierkant voltooi hierdie keer Δ self is, nie die oorspronklike vergelyking nie. Dieselfde metode, 'n nuwe teiken.",
       },
     },
     {

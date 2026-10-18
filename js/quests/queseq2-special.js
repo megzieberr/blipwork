@@ -240,7 +240,7 @@ const SKILLS = {
       return mc(EXPB,
         L(`<b>${pw("x", "2/3")} = ${C(rhs)}</b> has the answers x = ±${C(ans)}. WHERE does the ± come from?`, `<b>${pw("x", "2/3")} = ${C(rhs)}</b> het die antwoorde x = ±${C(ans)}. WAAR kom die ± vandaan?`),
         L(`The exponent ⅔ contains an EVEN power: (∛x)² = ${C(rhs)}, so ∛x = ±${C(a)}, so x = ±${C(ans)}`, `Die eksponent ⅔ bevat 'n EWE mag: (∛x)² = ${C(rhs)}, so ∛x = ±${C(a)}, so x = ±${C(ans)}`),
-        [L("Every rational-exponent equation gets a ±", "Elke vergelyking met 'n rasionale eksponent kry 'n ±"), L(`From square-rooting the ${C(rhs)} at the start`, `Van die vierkantswortel van die ${C(rhs)} aan die begin`), L(`It doesn't — only +${C(ans)} is correct`, `Dit doen nie: net +${C(ans)} is korrek`)],
+        [L("Every rational-exponent equation gets a ±", "Elke vergelyking met 'n rasionale eksponent kry 'n ±"), L(`From square-rooting the ${C(rhs)} at the start`, `Van die vierkantswortel van die ${C(rhs)} aan die begin`), L(`It doesn't — only +${C(ans)} is correct`, `Nêrens nie: net +${C(ans)} is korrek`)],
         { hint: L("x^(2/3) = (∛x)². Undoing an even power → ±.", "x^(2/3) = (∛x)². Maak 'n ewe mag ongedaan → ±."),
           answerLabel: L(`Read x^(2/3) as (∛x)². Undoing the SQUARE gives ∛x = ±${C(a)}, and cubing keeps both signs: x = ±${C(ans)}. The even power on top hides the sign.`, `Lees x^(2/3) as (∛x)². Om die KWADRAAT ongedaan te maak, gee ∛x = ±${C(a)}, en kubering hou albei tekens: x = ±${C(ans)}. Die ewe mag bo steek die teken weg.`),
           solution: [
@@ -254,7 +254,7 @@ const SKILLS = {
       L(`The reciprocal, ${frac(3, 2)}`, `Die resiprook, ${frac(3, 2)}`),
       [L(`${frac(2, 3)} again`, `Weer ${frac(2, 3)}`), "3", "2"],
       { hint: L("x^(2/3) = (∛x)². Undoing an even power → ±.", "x^(2/3) = (∛x)². Maak 'n ewe mag ongedaan → ±."),
-        answerLabel: L(`Raise to the reciprocal ${frac(3, 2)}: (x^(2/3))^(3/2) = x. But remember the even power on top means the final answer is ±${C(ans)}, not just +${C(ans)}.`, `Verhef tot die resiprook ${frac(3, 2)}: (x^(2/3))^(3/2) = x. Maar onthou, die ewe mag bo beteken die finale antwoord is ±${C(ans)}, nie net +${C(ans)} nie.`),
+        answerLabel: L(`Raise to the reciprocal ${frac(3, 2)}: (x^(2/3))^(3/2) undoes the exponent, but the even power on top hid the sign, so the final answer is ±${C(ans)}, not just +${C(ans)}.`, `Verhef tot die resiprook ${frac(3, 2)}: (x^(2/3))^(3/2) maak die eksponent ongedaan, maar die ewe mag bo het die teken weggesteek, so die finale antwoord is ±${C(ans)}, nie net +${C(ans)} nie.`),
         solution: [
           { s: L(`x is stuck under the exponent ${frac(2, 3)}, so you need the power that cancels it`, `x sit vas onder die eksponent ${frac(2, 3)}, so jy het die mag nodig wat dit kanselleer`) },
           { s: L(`Switch numerator and denominator: the reciprocal is ${frac(3, 2)}, and (${frac(2, 3)})·(${frac(3, 2)}) = 1`, `Ruil teller en noemer om: die resiprook is ${frac(3, 2)}, en (${frac(2, 3)})·(${frac(3, 2)}) = 1`) },

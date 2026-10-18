@@ -96,7 +96,7 @@ const q1 = {
         { type: "step", text: { en: "It is a <b>happy</b> parabola cutting the x-axis at −6 and at 1, and &lt; 0 means below the axis — the <b>inside of the bowl</b>.", af: "Dit is 'n <b>happy</b> parabool wat die x-as by −6 en by 1 sny, en &lt; 0 beteken onder die as: <b>binne die bak</b>." }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ −6 &lt; x &lt; 1", af: "∴ −6 &lt; x &lt; 1" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: (x + 6)(x − 1) &lt; 0 does <b>not</b> mean x + 6 &lt; 0 <i>and</i> x − 1 &lt; 0. Two numbers whose product is negative do not both have to be negative — one of them is, and that is exactly what the sketch shows you.", af: "PASOP: (x + 6)(x − 1) &lt; 0 beteken <b>nie</b> x + 6 &lt; 0 <i>en</i> x − 1 &lt; 0 nie. Twee getalle met 'n negatiewe produk hoef nie albei negatief te wees nie: een van hulle is, en dit is presies wat die skets vir jou wys.",
+          en: "WATCH OUT: (x + 6)(x − 1) &lt; 0 does <b>not</b> mean x + 6 &lt; 0 <i>and</i> x − 1 &lt; 0. Two numbers whose product is negative can never both be negative — only one of them is, and that is exactly what the sketch shows you.", af: "PASOP: (x + 6)(x − 1) &lt; 0 beteken <b>nie</b> x + 6 &lt; 0 <i>en</i> x − 1 &lt; 0 nie. Twee getalle met 'n negatiewe produk kan nooit albei negatief wees nie: net een van hulle is, en dit is presies wat die skets vir jou wys.",
         } },
       ],
       esplain: {

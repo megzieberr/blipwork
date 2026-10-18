@@ -47,7 +47,7 @@ const SKILLS = {
         answerLabel: L("x = (−b ± √(b² − 4ac)) / 2a — the whole top is divided by 2a, and it's minus 4ac under the root.", "x = (−b ± √(b² − 4ac)) / 2a: die hele teller word deur 2a gedeel, en dis minus 4ac onder die wortel."),
         solution: [
           { s: L("Check it piece by piece. It opens with −b, not b", "Toets dit stuk vir stuk. Dit begin met −b, nie b nie"), r: L("so a positive b gives a negative start", "dus gee 'n positiewe b 'n negatiewe begin") },
-          { s: L("Under the root sits b² − 4ac, with a MINUS", "Onder die wortel staan b² − 4ac, met 'n MINUS"), r: L("that expression is Δ, and a plus there would never give non-real roots", "daardie uitdrukking is Δ, en 'n plus daar sou nooit nie-reële wortels gee nie") },
+          { s: L("Under the root sits b² − 4ac, with a MINUS", "Onder die wortel staan b² − 4ac, met 'n MINUS"), r: L("that expression is Δ; with a plus, x² + 1 = 0 would wrongly seem to have real roots", "daardie uitdrukking is Δ; met 'n plus sou dit verkeerdelik lyk asof x² + 1 = 0 reële wortels het") },
           { s: L("And the WHOLE top is divided by 2a, so the top needs its own bracket when you type it", "En die HELE teller word deur 2a gedeel, dus het die teller sy eie hakie nodig as jy dit intik") },
         ] });
   },

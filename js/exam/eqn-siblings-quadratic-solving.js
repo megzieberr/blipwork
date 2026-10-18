@@ -147,7 +147,7 @@ const q2 = {
         { type: "step", text: { en: "(2x − 5)(x + 3) = 0", af: "(2x − 5)(x + 3) = 0" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴&nbsp; x = 5/2 &nbsp;&nbsp;or&nbsp;&nbsp; x = −3", af: "∴&nbsp; x = 5/2 &nbsp;&nbsp;of&nbsp;&nbsp; x = −3" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: &nbsp;(2x + 3)(x − 1) = 12&nbsp; does NOT mean &nbsp;2x + 3 = 12&nbsp; or &nbsp;x − 1 = 12. “Each bracket on its own” only works against ZERO, because zero is the only number with the property that a product can reach it only through one of its factors. 12 can be reached as 3 × 4, or 6 × 2, or a hundred other ways.", af: "PASOP: &nbsp;(2x + 3)(x − 1) = 12&nbsp; beteken NIE &nbsp;2x + 3 = 12&nbsp; of &nbsp;x − 1 = 12 nie. “Elke hakie op sy eie” werk net teenoor NUL, want nul is die enigste getal wat 'n produk net deur een van sy faktore kan bereik. 12 kan bereik word as 3 × 4, of 6 × 2, of op honderd ander maniere.",
+          en: "WATCH OUT: &nbsp;(2x + 3)(x − 1) = 12&nbsp; does NOT mean &nbsp;2x + 3 = 12&nbsp; or &nbsp;x − 1 = 12. “Each bracket on its own” only works against ZERO, because a product is zero only when one of its factors is zero; no other number works that way. 12 can be reached as 3 × 4, or 6 × 2, or a hundred other ways.", af: "PASOP: &nbsp;(2x + 3)(x − 1) = 12&nbsp; beteken NIE &nbsp;2x + 3 = 12&nbsp; of &nbsp;x − 1 = 12 nie. “Elke hakie op sy eie” werk net teenoor NUL, want 'n produk is net nul as een van sy faktore nul is; geen ander getal werk so nie. 12 kan bereik word as 3 × 4, of 6 × 2, of op honderd ander maniere.",
         } },
       ],
       esplain: {
