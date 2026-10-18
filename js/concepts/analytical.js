@@ -129,14 +129,14 @@ export const CONCEPTS_ANALYTICAL = {
         <li>An <b>altitude</b> makes a right angle with the base — that’s the height.</li>
         <li>A <b>median</b> goes to the midpoint — that is <b>not</b> the height.</li>
       </ul>
-      <p>Except in a right-angled triangle, the height is a NEW segment inside the triangle, not one of the sides.</p>`, `
+      <p>A side is the height only in a right-angled triangle, when the base is one of the two arms of the right angle. Otherwise the height is a NEW segment, and in an obtuse triangle it can even fall outside the triangle.</p>`, `
       <div class="formula">Oppervlakte = ½ × basis × ⊥hoogte</div>
       <p>Kies enige sy as die <b>basis</b>. Die <b>loodregte hoogte</b> (die hoogtelyn) word dan vanaf die <b>teenoorstaande hoekpunt</b> geteken en ontmoet die basis teen <b>90°</b>.</p>
       <ul>
         <li>'n <b>Hoogtelyn</b> maak 'n regte hoek met die basis: dit is die hoogte.</li>
         <li>'n <b>Swaartelyn</b> gaan na die middelpunt: dit is <b>nie</b> die hoogte nie.</li>
       </ul>
-      <p>Behalwe in 'n reghoekige driehoek is die hoogte 'n NUWE lynstuk binne die driehoek, nie een van die sye nie.</p>`),
+      <p>'n Sy is net die hoogte in 'n reghoekige driehoek, as die basis een van die twee bene van die regte hoek is. Anders is die hoogte 'n NUWE lynstuk, en in 'n stomphoekige driehoek kan dit selfs buite die driehoek val.</p>`),
   },
   proofWords: {
     title: L("Lines in a triangle & ‘prove that…’", "Lyne in 'n driehoek & ‘bewys dat…’"),

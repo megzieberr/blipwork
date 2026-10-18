@@ -66,9 +66,9 @@ const SKILLS = {
   /* name the special line from its description */
   lineNames: () => {
     const cases = [
-      { p: L("A line from a vertex to the <b>midpoint</b> of the opposite side is a…", "'n Lyn van 'n hoekpunt na die <b>middelpunt</b> van die teenoorstaande sy is 'n…"), c: L("median", "swaartelyn"), w: [L("altitude", "hoogtelyn"), L("perpendicular bisector", "middelloodlyn")] },
-      { p: L("A line from a vertex, <b>perpendicular</b> to the opposite side, is an…", "'n Lyn van 'n hoekpunt af, <b>loodreg</b> op die teenoorstaande sy, is 'n…"), c: L("altitude", "hoogtelyn"), w: [L("median", "swaartelyn"), L("perpendicular bisector", "middelloodlyn")] },
-      { p: L("A line through the <b>midpoint</b> of a segment AND <b>perpendicular</b> to it is a…", "'n Lyn deur die <b>middelpunt</b> van 'n lynstuk EN <b>loodreg</b> daarop, is 'n…"), c: L("perpendicular bisector", "middelloodlyn"), w: [L("median", "swaartelyn"), L("altitude", "hoogtelyn")] },
+      { p: L("A line from a vertex to the <b>midpoint</b> of the opposite side is called the…", "'n Lyn van 'n hoekpunt na die <b>middelpunt</b> van die teenoorstaande sy is 'n…"), c: L("median", "swaartelyn"), w: [L("altitude", "hoogtelyn"), L("perpendicular bisector", "middelloodlyn")] },
+      { p: L("A line from a vertex, <b>perpendicular</b> to the opposite side, is called the…", "'n Lyn van 'n hoekpunt af, <b>loodreg</b> op die teenoorstaande sy, is 'n…"), c: L("altitude", "hoogtelyn"), w: [L("median", "swaartelyn"), L("perpendicular bisector", "middelloodlyn")] },
+      { p: L("A line through the <b>midpoint</b> of a segment AND <b>perpendicular</b> to it is called the…", "'n Lyn deur die <b>middelpunt</b> van 'n lynstuk EN <b>loodreg</b> daarop, is 'n…"), c: L("perpendicular bisector", "middelloodlyn"), w: [L("median", "swaartelyn"), L("altitude", "hoogtelyn")] },
     ];
     const k = pick(cases);
     return mc("proofWords", k.p, k.c, k.w,
