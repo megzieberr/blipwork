@@ -114,7 +114,7 @@ const SKILLS = {
     return mc("trigParams", L(`Describe the transformation from y = ${fn} x to ${eqStr(cv)}.`, `Beskryf die transformasie van y = ${fn} x na ${eqStr(cv)}.`),
       correct, wrongs,
       { graph: trigGraph(cv, { accent: ACC, midline: kind === "shift" }).spec, layout: "grid2",
-        hint: L("Compare amplitude (a), midline (q), orientation (sign of a) and period (b).", "Vergelyk amplitude (a), middellyn (q), oriëntasie (teken van a) en periode (b)."),
+        hint: L("Compare amplitude (a), midline (q), orientation (sign of a) and period (b).", "Vergelyk amplitude (a), middelste lyn (q), oriëntasie (teken van a) en periode (b)."),
         answerLabel: `${eqStr(cv)}: ${correct.toLowerCase()}.` });
   },
 };

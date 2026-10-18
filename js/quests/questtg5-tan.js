@@ -62,7 +62,7 @@ const SKILLS = {
     const hi = m + a, lo = m - a;
     return {
       type: "calc", concept: "tanAValue",
-      prompt: L(`A tan graph crosses its midline at an inflection point. 45° to the <b>right</b> it sits at y = ${nstr(hi)}; 45° to the <b>left</b> it sits at y = ${nstr(lo)}. Find <b>a</b>.`, `Die tan-grafiek sny sy middellyn by 'n buigpunt. 45° na <b>regs</b> is dit by y = ${nstr(hi)}; 45° na <b>links</b> is dit by y = ${nstr(lo)}. Vind <b>a</b>.`),
+      prompt: L(`A tan graph crosses its midline at an inflection point. 45° to the <b>right</b> it sits at y = ${nstr(hi)}; 45° to the <b>left</b> it sits at y = ${nstr(lo)}. Find <b>a</b>.`, `Die tan-grafiek sny sy middelste lyn by 'n buigpunt. 45° na <b>regs</b> is dit by y = ${nstr(hi)}; 45° na <b>links</b> is dit by y = ${nstr(lo)}. Vind <b>a</b>.`),
       expected: a, dp: 0, allowNeg: true,
       hint: L("a = (the value 45° right − the value 45° left) ÷ 2.", "a = (die waarde 45° regs − die waarde 45° links) ÷ 2."),
       answerLabel: L(`a = (${nstr(hi)} − (${nstr(lo)})) ÷ 2 = ${a}.`, `a = (${nstr(hi)} − (${nstr(lo)})) ÷ 2 = ${a}.`),

@@ -55,7 +55,7 @@ const SKILLS = {
           { dp: 1, tol: 0.1, unit: "°" }),
       ],
       expected: val, dp: 1, tol: 0.1,   // accept the neighbouring tenth from 4-dp cosine working
-      hint: L("The side opposite θ is the one that gets subtracted: cosθ = (sum of the other two squared − opposite²)/(2·those two).", "Die sy teenoor θ word afgetrek: cosθ = (som van die ander twee gekwadreer − teenoorstaande²)/(2·daardie twee)."),
+      hint: L("The side opposite θ is the one that gets subtracted: cosθ = (sum of the squares of the other two − opposite²)/(2·those two).", "Die sy teenoor θ word afgetrek: cosθ = (ander twee se kwadrate saam − teenoorstaande²)/(2·daardie twee)."),
       answerLabel: L(`θ = ${ang(val)}`, `θ = ${ang(val)}`),
       solution: [
         { s: L(`cos θ = (${others[0]}² + ${others[1]}² − ${opp}²) / (2·${others[0]}·${others[1]})`, `cos θ = (${others[0]}² + ${others[1]}² − ${opp}²) / (2·${others[0]}·${others[1]})`), r: L("rearranged cosine rule", "herrangskikte cosinusreël") },

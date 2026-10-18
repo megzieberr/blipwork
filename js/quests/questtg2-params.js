@@ -60,7 +60,7 @@ const SKILLS = {
       L(`Shifted ${Math.abs(q)} units ${dir}`, `${Math.abs(q)} eenhede ${dir}geskuif`),
       [L(`Shifted ${Math.abs(q)} units ${q > 0 ? "down" : "up"}`, `${Math.abs(q)} eenhede ${q > 0 ? "af" : "op"}geskuif`), L(`Shifted ${Math.abs(q)}° to the right`, `${Math.abs(q)}° na regs geskuif`), L("Reflected in the x-axis", "In die x-as gereflekteer")],
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec, layout: "grid2",
-        hint: L("q slides the whole graph vertically. q > 0 up, q < 0 down. The midline becomes y = q.", "q skuif die hele grafiek vertikaal. q > 0 op, q < 0 af. Die middellyn word y = q."),
+        hint: L("q slides the whole graph vertically. q > 0 up, q < 0 down. The midline becomes y = q.", "q skuif die hele grafiek vertikaal. q > 0 op, q < 0 af. Die middelste lyn word y = q."),
         answerLabel: L(`q = ${q} shifts the graph ${Math.abs(q)} units ${dir}.`, `q = ${q} skuif die grafiek ${Math.abs(q)} eenhede ${dir}.`) });
   },
 
@@ -71,11 +71,11 @@ const SKILLS = {
     const q = pick([-2, -1, 1, 2, 3]);
     const cv = { fn, a, b: 1, p: 0, q };
     const yl = (v) => L(`y = ${String(v).replace("-", "−")}`, `y = ${String(v).replace("-", "−")}`);
-    return mc("trigParams", L(`${eqStr(cv)}<br>What is the equation of the <b>midline</b>?`, `${eqStr(cv)}<br>Wat is die vergelyking van die <b>middellyn</b>?`),
+    return mc("trigParams", L(`${eqStr(cv)}<br>What is the equation of the <b>midline</b>?`, `${eqStr(cv)}<br>Wat is die vergelyking van die <b>middelste lyn</b>?`),
       yl(q), pick3(yl(q), [yl(a), L("y = 0", "y = 0"), yl(q + a), yl(-q), yl(q - a)]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
-        hint: L("The midline runs through the middle of the wave at y = q (the dashed line).", "Die middellyn loop deur die middel van die golf by y = q (die stippellyn)."),
-        answerLabel: L(`Midline: y = ${String(q).replace("-", "−")}.`, `Middellyn: y = ${String(q).replace("-", "−")}.`) });
+        hint: L("The midline runs through the middle of the wave at y = q (the dashed line).", "Die middelste lyn loop deur die middel van die golf by y = q (die stippellyn)."),
+        answerLabel: L(`Midline: y = ${String(q).replace("-", "−")}.`, `Middelste lyn: y = ${String(q).replace("-", "−")}.`) });
   },
 
   /* reflection yes/no */

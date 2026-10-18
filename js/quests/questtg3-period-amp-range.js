@@ -67,7 +67,7 @@ const SKILLS = {
     const A = amplitudeOf(cv), q = cv.q || 0;
     return mc("trigRange", L(`${eqStr(cv)}<br>What is the <b>range</b>?`, `${eqStr(cv)}<br>Wat is die <b>waardeversameling</b>?`),
       rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q, q + A), L("y ∈ ℝ", "y ∈ ℝ")]),
-      { graph, hint: L("Range = [q − amplitude ; q + amplitude]. Start at the midline, go one amplitude each way.", "Waardeversameling = [q − amplitude ; q + amplitude]. Begin by die middellyn, gaan een amplitude elke kant toe."),
+      { graph, hint: L("Range = [q − amplitude ; q + amplitude]. Start at the midline, go one amplitude each way.", "Waardeversameling = [q − amplitude ; q + amplitude]. Begin by die middelste lyn, gaan een amplitude elke kant toe."),
         answerLabel: L(`Range: ${rangeStr(cv)}.`, `Waardeversameling: ${rangeStr(cv)}.`) });
   },
 
@@ -78,8 +78,8 @@ const SKILLS = {
     return mc("trigRange", L(`${eqStr(cv)}<br>What is the <b>range</b>?`, `${eqStr(cv)}<br>Wat is die <b>waardeversameling</b>?`),
       rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q, q + A), intervalStr(q - 1, q + 1)]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
-        hint: L(`Midline is y = ${nstr(q)}. Range = [${nstr(q)} − ${A} ; ${nstr(q)} + ${A}].`, `Die middellyn is y = ${nstr(q)}. Waardeversameling = [${nstr(q)} − ${A} ; ${nstr(q)} + ${A}].`),
-        answerLabel: L(`Range: ${rangeStr(cv)} (midline ${nstr(q)}, amplitude ${A}).`, `Waardeversameling: ${rangeStr(cv)} (middellyn ${nstr(q)}, amplitude ${A}).`) });
+        hint: L(`Midline is y = ${nstr(q)}. Range = [${nstr(q)} − ${A} ; ${nstr(q)} + ${A}].`, `Die middelste lyn is y = ${nstr(q)}. Waardeversameling = [${nstr(q)} − ${A} ; ${nstr(q)} + ${A}].`),
+        answerLabel: L(`Range: ${rangeStr(cv)} (midline ${nstr(q)}, amplitude ${A}).`, `Waardeversameling: ${rangeStr(cv)} (middelste lyn ${nstr(q)}, amplitude ${A}).`) });
   },
 
   /* how many cycles in [0°; 360°] */

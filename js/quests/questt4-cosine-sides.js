@@ -112,7 +112,7 @@ const SKILLS = {
       [L(`x² = ${b}² + ${c}² + 2(${b})(${c})·cos ${A}°`, `x² = ${b}² + ${c}² + 2(${b})(${c})·cos ${A}°`),
        L(`x² = ${b}² − ${c}² − 2(${b})(${c})·cos ${A}°`, `x² = ${b}² − ${c}² − 2(${b})(${c})·cos ${A}°`),
        L(`x = ${b} + ${c} − 2(${b})(${c})·cos ${A}°`, `x = ${b} + ${c} − 2(${b})(${c})·cos ${A}°`)],
-      { hint: L("It is a MINUS in the middle, and you square first (x², not x).", "Dit is 'n MINUS in die middel, en jy kwadreer eers (x², nie x nie)."),
+      { hint: L("Plus between the squares, MINUS in front of the 2bc term, and you square first (x², not x).", "Plus tussen die kwadrate, MINUS voor die 2bc-term, en jy kwadreer eers (x², nie x nie)."),
         answerLabel: L(`x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}° — sum of squares minus the 2bc·cos term.`, `x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}°: som van die kwadrate min die 2bc·cos-term.`),
         solution: [
           { s: L(`x is opposite Â, and the two sides ${b} and ${c} meet at Â`, `x is teenoor Â, en die twee sye ${b} en ${c} kom by Â bymekaar`), r: L("so x plays the part of a, and the sides are b and c", "dus speel x die rol van a, en die sye is b en c") },

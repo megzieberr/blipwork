@@ -35,7 +35,7 @@ const SKILLS = {
     const right = { fn, a: 1, b: 1, p: mag, q: 0 };
     return mc("trigShifts", L(`Which equation shifts y = ${fn} x <b>${mag}° to the left</b>?`, `Watter vergelyking skuif y = ${fn} x <b>${mag}° na links</b>?`),
       eqStr(left), [eqStr(right), L(`y = ${fn} x + ${mag}`, `y = ${fn} x + ${mag}`), L(`y = ${fn} x − ${mag}`, `y = ${fn} x − ${mag}`)],
-      { hint: L("Left means the bracket reads (x + …). A vertical (+ outside the function) does not move it sideways.", "Links beteken die hakie lees (x + …). 'n Vertikale skuif (+ buite die funksie) beweeg dit nie links of regs nie."),
+      { hint: L("Left means the bracket reads (x + …). A vertical shift (+ outside the function) does not move it sideways.", "Links beteken die hakie lees (x + …). 'n Vertikale skuif (+ buite die funksie) beweeg dit nie links of regs nie."),
         answerLabel: L(`${eqStr(left)} shifts ${mag}° left.`, `${eqStr(left)} skuif ${mag}° na links.`) });
   },
 
@@ -102,7 +102,7 @@ const SKILLS = {
       L(`Start with y = ${a}${fn} x, then shift it ${Math.abs(q)} ${q > 0 ? "up" : "down"}. What is the new <b>range</b>?`, `Begin met y = ${a}${fn} x en skuif dit dan ${Math.abs(q)} ${q > 0 ? "op" : "af"}. Wat is die nuwe <b>waardeversameling</b>?`),
       rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q - 1, q + 1), L("y ∈ ℝ", "y ∈ ℝ")]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
-        hint: L(`Amplitude stays ${A}; the midline moves to y = ${nstr(q)}. Range = [${nstr(q - A)} ; ${nstr(q + A)}].`, `Die amplitude bly ${A}; die middellyn skuif na y = ${nstr(q)}. Waardeversameling = [${nstr(q - A)} ; ${nstr(q + A)}].`),
+        hint: L(`Amplitude stays ${A}; the midline moves to y = ${nstr(q)}. Range = [${nstr(q - A)} ; ${nstr(q + A)}].`, `Die amplitude bly ${A}; die middelste lyn skuif na y = ${nstr(q)}. Waardeversameling = [${nstr(q - A)} ; ${nstr(q + A)}].`),
         answerLabel: L(`New range: ${rangeStr(cv)}.`, `Nuwe waardeversameling: ${rangeStr(cv)}.`) });
   },
 
@@ -114,7 +114,7 @@ const SKILLS = {
       yes: false,
       hint: L("Only b changes the period. Shifting just slides the same wave to a new place.", "Net b verander die periode. 'n Skuif beweeg net dieselfde golf na 'n nuwe plek."),
       answerLabel: L("No — shifts move the graph but the period (set by b) stays the same.", "Nee: skuiwe beweeg die grafiek, maar die periode (bepaal deur b) bly dieselfde."),
-      solution: [{ s: L("Period = 360° ÷ b. Shifts change p and q, not b, so the period is unchanged.", "Periode = 360° ÷ b. Skuiwe verander p en q, nie b nie, dus bly die periode onveranderd.") }],
+      solution: [{ s: L("Period = 360° ÷ b (180° ÷ b for tan). Shifts change p and q, not b, so the period is unchanged.", "Periode = 360° ÷ b (180° ÷ b vir tan). Skuiwe verander p en q, nie b nie, dus bly die periode onveranderd.") }],
     };
   },
 };

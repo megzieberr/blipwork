@@ -42,8 +42,8 @@ const SKILLS = {
     return mc("findTrigEquation", L(`The graph shows y = a·${fn} x + q.<br>Read the value of <b>q</b> (the vertical shift).`, `Die grafiek wys y = a·${fn} x + q.<br>Lees die waarde van <b>q</b> af (die vertikale skuif).`),
       nstr(q), pick3(nstr(q), ["0", nstr(-q), nstr(q + 1), nstr(q - 1), nstr(amplitudeOf(cv))]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
-        hint: L("q = (y max + y min) ÷ 2 — the height of the midline (the dashed line).", "q = (y maks + y min) ÷ 2: die hoogte van die middellyn (die stippellyn)."),
-        answerLabel: L(`q = ${nstr(q)} (the midline).`, `q = ${nstr(q)} (die middellyn).`) });
+        hint: L("q = (y max + y min) ÷ 2 — the height of the midline (the dashed line).", "q = (y maks + y min) ÷ 2: die hoogte van die middelste lyn (die stippellyn)."),
+        answerLabel: L(`q = ${nstr(q)} (the midline).`, `q = ${nstr(q)} (die middelste lyn).`) });
   },
 
   /* read b (from the period) */
@@ -75,7 +75,7 @@ const SKILLS = {
     return mc("findTrigEquation", L("Which equation matches the graph?", "Watter vergelyking pas by die grafiek?"),
       eqStr(cv), pick3(eqStr(cv), decoys),
       { graph: ampRangeGraph(cv, { accent: ACC }).spec, layout: "grid2",
-        hint: L("Find a (height + sign), q (midline) and b (from the period), then read off sin vs cos.", "Kry a (hoogte + teken), q (middellyn) en b (uit die periode), en lees dan af of dit sin of cos is."),
+        hint: L("Find a (height + sign), q (midline) and b (from the period), then read off sin vs cos.", "Kry a (hoogte + teken), q (middelste lyn) en b (uit die periode), en lees dan af of dit sin of cos is."),
         answerLabel: L(`Equation: ${eqStr(cv)}.`, `Vergelyking: ${eqStr(cv)}.`) });
   },
 

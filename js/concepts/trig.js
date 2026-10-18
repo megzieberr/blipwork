@@ -78,7 +78,7 @@ export const CONCEPTS_TRIG = {
         <li>a ≥ b → <b>one</b> triangle</li>
       </ul>
       <div class="formula">obtuse angle = 180° − (acute angle)</div>`, `
-      <p>Net met die <b>sinusreël</b>, en net met twee sye en 'n <b>nie-ingeslote</b> hoek (SSA). Soms pas <b>twee</b> driehoeke.</p>
+      <p>Net met die <b>sinusreël</b>, en net met twee sye en 'n <b>nie-ingeslote</b> hoek (SSH). Soms pas <b>twee</b> driehoeke.</p>
       <p>Vergelyk die sy <b>a</b> teenoor die bekende hoek Â met <b>h = b·sinÂ</b>:</p>
       <ul>
         <li>a &lt; h → <b>geen</b> driehoek</li>
