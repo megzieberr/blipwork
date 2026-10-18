@@ -39,6 +39,9 @@ const norm = (l) => (l === "af" ? "af" : "en");
 const listeners = new Set();
 
 let LANG = (() => {
+  /* admin.html is always English and never writes mhq.lang: a phone that remembers ?lang=af
+     would save Afrikaans titles into assignments and push text (audit finding E, 2026-10-18). */
+  try { if (/\/admin\.html$/.test(location.pathname)) return "en"; } catch { /* no location (not a page) */ }
   let fromUrl = null;
   try { fromUrl = new URLSearchParams(location.search).get("lang"); } catch { /* no location (not a page) */ }
   if (fromUrl === "en" || fromUrl === "af") {
