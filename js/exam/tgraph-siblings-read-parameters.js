@@ -30,6 +30,8 @@
    writes them on.
    ============================================================ */
 
+import { L } from "../lang.js";
+
 const PAPER = "siblings";
 const CH = "tgraph";
 const TOPIC = "read-parameters";
@@ -62,7 +64,7 @@ const q1 = {
     spec: Q1_SPEC,
     parts: {
       a: { question: {}, reveal: { vmeasure: { x: 90, y0: -3, y1: 3 } } },
-      b: { question: {}, reveal: { hmeasure: { x0: 0, x1: 180, y: 3, label: "period = 180°" } } },
+      b: { question: {}, reveal: { hmeasure: { x0: 0, x1: 180, y: 3, label: L("period = 180°", "periode = 180°") } } },
       c: { question: {}, reveal: { hlines: [{ y: 3, label: "y = 3" }, { y: -3, label: "y = −3" }] } },
     },
   },
@@ -126,7 +128,7 @@ const q2 = {
   diagram: {
     spec: Q2_SPEC,
     parts: {
-      a: { question: {}, reveal: { hmeasure: { x0: 0, x1: 360, y: 3, label: "period = 360°" } } },
+      a: { question: {}, reveal: { hmeasure: { x0: 0, x1: 360, y: 3, label: L("period = 360°", "periode = 360°") } } },
       b: { question: {}, reveal: { midline: { y: 1 }, vmeasure: { x: 90, y0: -1, y1: 3 } } },
       c: { question: {}, reveal: { midline: { y: 1 }, hlines: [{ y: 3, label: "y = 3" }, { y: -1, label: "y = −1" }] } },
     },
@@ -257,7 +259,7 @@ const q4 = {
   diagram: {
     spec: Q4_SPEC,
     parts: {
-      a: { question: {}, reveal: { hmeasure: { x0: -90, x1: 90, y: 4, label: "period = 180°" } } },
+      a: { question: {}, reveal: { hmeasure: { x0: -90, x1: 90, y: 4, label: L("period = 180°", "periode = 180°") } } },
       b: { question: {}, reveal: { vlines: [{ x: -90, label: "x = −90°" }, { x: 90, label: "x = 90°" }] } },
       c: { question: {}, reveal: { midline: { y: -1 } } },
     },
@@ -333,7 +335,7 @@ const q5 = {
         question: {},
         reveal: {
           vmeasure: { x: 45, y0: -2, y1: 2 },
-          hmeasure: { x0: -45, x1: 135, y: 2.5, label: "period = 180°" },
+          hmeasure: { x0: -45, x1: 135, y: 2.5, label: L("period = 180°", "periode = 180°") },
         },
       },
       b: { question: {}, reveal: { vlines: [{ x: -90, label: "x = −90°" }] } },

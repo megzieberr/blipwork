@@ -125,7 +125,7 @@ const DISCOVER = [
    is always savings: so once the loan has drained, its caption fades to the
    neutral reminder (11 Oct, from the phone checker's report). The jug stays
    as it ended, empty. */
-const REMIND = `<p>Payments are <b>coins</b>. The${NB}total is <b>the${NB}jug</b>.</p>`;
+const REMIND = L(`<p>Payments are <b>coins</b>. The${NB}total is <b>the${NB}jug</b>.</p>`, `<p>Paaiemente is <b>munte</b>. Die${NB}totaal is <b>die${NB}beker</b>.</p>`);
 function remindAfterDrain(jd) {
   const frame = jd.isConnected && jd.dataset.remind !== "done" ? jd.closest(".reveal-frame") : null;
   const cap = frame ? frame.querySelector(".jd-cap") : null;

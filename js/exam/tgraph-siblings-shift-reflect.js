@@ -26,6 +26,8 @@
    trig graphs, max two parameters varied).
    ============================================================ */
 
+import { L } from "../lang.js";
+
 const PAPER = "siblings";
 const CH = "tgraph";
 const TOPIC = "shift-reflect";
@@ -52,7 +54,7 @@ const q1 = {
       a: { question: {}, reveal: { curves: [Q1_G] } },
       b: {
         question: {},
-        reveal: { curves: [Q1_G], hmeasure: { x0: -180, x1: 180, y: 2, label: "period = 360°, unchanged" } },
+        reveal: { curves: [Q1_G], hmeasure: { x0: -180, x1: 180, y: 2, label: L("period = 360°, unchanged", "periode = 360°, onveranderd") } },
       },
     },
   },

@@ -17,6 +17,14 @@ import {
 } from "../statlib.js";
 import { L } from "../lang.js";
 
+/* Reason label (QUEUE.md row T94): the r: label "quartiles" is the same
+   English as this file's concept id, and af_check allows one English text
+   only ONE af. So the label's English is its key here (the id itself) and
+   only the Afrikaans is written out; the concept id stays English. */
+const R_LABEL = Object.fromEntries(Object.entries({
+  quartiles: "kwartiele",
+}).map(([id, af]) => [id, L(id, af)]));
+
 const C = v => fmtComma(v);                 // comma-formatted display
 const list = a => a.join("  ;  ");          // ordered-list display
 
@@ -140,7 +148,7 @@ function genIqrFromList() {
     expected: ans, answerLabel: L(`IQR = ${C(ans)}`, `interkwartielomvang = ${C(ans)}`),
     hint: L("Find Q1 and Q3 from the list first, then IQR = Q3 − Q1.", "Vind eers Q1 en Q3 uit die lys, dan interkwartielomvang = Q3 − Q1."),
     solution: [
-      { s: L(`Q1 = ${C(q1)} and Q3 = ${C(q3)}`, `Q1 = ${C(q1)} en Q3 = ${C(q3)}`), r: L("quartiles", "quartiles") },
+      { s: L(`Q1 = ${C(q1)} and Q3 = ${C(q3)}`, `Q1 = ${C(q1)} en Q3 = ${C(q3)}`), r: R_LABEL.quartiles },
       { s: L(`IQR = Q3 − Q1 = ${C(q3)} − ${C(q1)} = ${C(ans)}`, `interkwartielomvang = Q3 − Q1 = ${C(q3)} − ${C(q1)} = ${C(ans)}`), r: L("interquartile range", "interkwartielomvang") },
     ],
   };

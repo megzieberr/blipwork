@@ -27,6 +27,9 @@ import { mountPapers } from "./papers.js";
 /* INBOX-PLAN.md unit 3 (2026-10-04): the 📥 chip in the hub head. A plain
    static import on purpose: one small file, only the hub uses it. */
 import { mountInbox } from "./inbox.js";
+/* QUEUE.md row T94: the Level 4 tile's sub-line is maths content, so it
+   follows the device language (js/lang.js); the rest of this file is UI. */
+import { L } from "./lang.js";
 /* FUNFUN-PART2-BRIEF.md (2026-08-23) — js/funfun/ is a SYNCED COPY of the
    graph-quest app (generated output, never hand-edited). Only three things
    are read from it here: the quest list, its grandfathered unlock rule, and
@@ -651,7 +654,7 @@ export function renderExamChapter(app, host, params) {
       const card = el("div", "quest exam-skill-card" + (isL4 ? " exam-tile-l4" : "") + (empty ? " locked" : ""));
       card.style.setProperty("--qc", isL4 ? L4_ACCENT : ch.signature);
       card.innerHTML = `<h3>${skill.label}</h3>`
-        + (isL4 ? `<p class="muted small exam-tile-l4-note">mixed hard questions — for when the basics sit</p>` : "")
+        + (isL4 ? `<p class="muted small exam-tile-l4-note">${L("mixed hard questions — for when the basics sit", "gemengde moeilike vrae: vir wanneer jy die basiese werk ken")}</p>` : "")
         + `<p class="muted small exam-skill-count">${empty ? ui.comingSoon : `${cards.length} card${cards.length === 1 ? "" : "s"}`}</p>`;
       if (!empty) {
         card.addEventListener("click", () => {

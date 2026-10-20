@@ -722,7 +722,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     const capEl = f3 ? f3.querySelector(".jd-cap") : null, capH = capEl ? capEl.getBoundingClientRect().height : 0;
     if (lvl3) lvl3.dispatchEvent(new Event("animationend", { bubbles: true }));
     const capAfter = capOf(f3), capH2 = capEl ? capEl.getBoundingClientRect().height : -1;
-    tick(capAfter === "Payments are coins. The total is the jug." && !/bank|START/i.test(capAfter) && !!capEl && capEl.classList.contains("jd-remind") && Math.abs(capH2 - capH) < 1,
+    tick((capAfter === "Payments are coins. The total is the jug." || capAfter === "Paaiemente is munte. Die totaal is die beker.") && !/bank|START/i.test(capAfter) && !!capEl && capEl.classList.contains("jd-remind") && Math.abs(capH2 - capH) < 1,
       `f8 card 1 frame 3: once the drain is done the caption fades to the reminder line ("${capAfter}"), in the same height (${Math.round(capH)} -> ${Math.round(capH2)} px, the chips never jump)`);
     if (lvl3) lvl3.getAnimations().forEach(a => a.finish());
     const endLvl = f3 ? level(f3) : -1;

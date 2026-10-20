@@ -931,7 +931,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   const eqnNatureLabel = (skillsForChapter("eqn").find(s => s.id === "nature-chain") || {}).label;
   tick(!!lastTile && tileText(lastTile) === eqnL4Label, `the LAST tile on the grid is the Level 4 one, got "${lastTile ? tileText(lastTile) : "(none)"}"`);
   tick(!!lastTile && lastTile.classList.contains("exam-tile-l4"), "the Level 4 tile carries the exam-tile-l4 class (full-width, amber)");
-  tick(!!lastTile && /mixed hard questions/i.test(lastTile.textContent), "the Level 4 tile carries its one-line muted sub-line");
+  tick(!!lastTile && /mixed hard questions|gemengde moeilike vrae/i.test(lastTile.textContent), "the Level 4 tile carries its one-line muted sub-line");
   tick(!!eqnNatureLabel && topicCards.some(c => tileText(c) === eqnNatureLabel), "one of eqn's tiles is the nature-of-roots chain, with her own label");
   lines.push(`examChapter screen skill tiles: [${topicCards.map(tileText).join(", ")}]`);
 
