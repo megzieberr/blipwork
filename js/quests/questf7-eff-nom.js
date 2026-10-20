@@ -9,8 +9,13 @@ import { toFrac, effFromNom, COMPOUNDING, pow } from "../finlib.js";
 import { L } from "../lang.js";
 
 const CL = "effNom";
+/* T95: finlib's labels are English; the Afrikaans side reads its own word
+   (AF-GLOSSARY row 217). A getter, so L() picks at render time and the
+   English label stays byte-identical. */
+const HOW_AF = { 2: "halfjaarliks", 4: "kwartaalliks", 12: "maandeliks" };
+const twin = c => ({ ...c, get label() { return L(c.label, HOW_AF[c.k]); } });
 /* the frequencies worth converting (k > 1) */
-const OPTS = COMPOUNDING.filter(c => [2, 4, 12].includes(c.k));
+const OPTS = COMPOUNDING.filter(c => [2, 4, 12].includes(c.k)).map(twin);
 
 const SKILLS = {
   effectiveAnnual: () => mc(CL,

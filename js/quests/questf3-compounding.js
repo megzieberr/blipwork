@@ -9,12 +9,18 @@ import { toFrac, COMPOUNDING, pow } from "../finlib.js";
 import { L } from "../lang.js";
 
 const CL = "compounding";
+/* T95: finlib's labels are English; the Afrikaans side reads its own word
+   (AF-GLOSSARY row 217). A getter, so L() picks at render time and the
+   English label stays byte-identical. */
+const HOW_AF = { 1: "jaarliks", 2: "halfjaarliks", 4: "kwartaalliks", 12: "maandeliks" };
+const twin = c => ({ ...c, get label() { return L(c.label, HOW_AF[c.k]); } });
+const TWINNED = COMPOUNDING.filter(c => c.k <= 12).map(twin);
 /* the meaningful (k>1) options for rate/exponent setup */
-const OPTS = COMPOUNDING.filter(c => [2, 4, 12].includes(c.k));
+const OPTS = TWINNED.filter(c => [2, 4, 12].includes(c.k));
 
 const SKILLS = {
   timesPerYear: () => {
-    const o = pick(COMPOUNDING.filter(c => c.k <= 12));
+    const o = pick(TWINNED);
     return {
       type: "mc", concept: CL,
       prompt: L(`How many times a year is interest added when it is compounded <b>${o.label}</b>?`, `Hoeveel keer per jaar word rente bygetel as dit <b>${o.label}</b> saamgestel word?`),

@@ -70,7 +70,8 @@ const refrain = loan => ({ s: loan ? REFRAIN : REFRAIN_SAVING });
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = COMPOUNDING.filter(c => [1, 2, 4, 12].includes(c.k)).map(c => c.k);
-const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const HOW_AF = { 1: "jaarliks", 4: "kwartaalliks", 12: "maandeliks" };   // T95: the Afrikaans word for finlib's English label (as f9)
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : afL(COMPOUNDING.find(c => c.k === k).label, HOW_AF[k]));   // a non-breaking hyphen (f10 review 1)
 const DEP_AMTS = [3000, 4000, 5000, 6000, 8000, 10000, 12000, 14000, 15000, 20000];
 const WD_AMTS = [500, 1000, 1500, 2000, 2500, 3000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500, 8000, 9000];
