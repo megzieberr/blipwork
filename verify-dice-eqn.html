@@ -59,12 +59,30 @@ import { questEq5 } from "./js/quests/queseq5-square.js";
 import { questEq6 } from "./js/quests/queseq6-formula.js";
 import { questEq7 } from "./js/quests/queseq7-inequalities.js";
 import { questEq8 } from "./js/quests/queseq8-nature.js";
-import { questEq9, solutionCount, OPT_TWO, OPT_ONE, OPT_NONE } from "./js/quests/queseq9-solution-count.js";
+import { questEq9, solutionCount as solutionCountHere, OPT_TWO as OPT_TWO_HERE, OPT_ONE as OPT_ONE_HERE, OPT_NONE as OPT_NONE_HERE } from "./js/quests/queseq9-solution-count.js";
 import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
 import { answerCorrect, fmtComma } from "./js/check.js";
 import { getConcept } from "./js/concepts.js";
 import { verifyFunction } from "./js/engine/function-graph.js";
 import { paraDisc, paraRoots } from "./js/funclib.js";
+import { diceTwins } from "./js/quests/_finance-check.js";
+import { getLang } from "./js/lang.js";
+
+/* S11 (2026-10-20): under ?lang=af every dice card is read through its ENGLISH twin, the same card from the same
+   draws (diceTwins in js/quests/_finance-check.js, the S7 recipe): the Afrikaans card is built, checked against its
+   twin, and the twin is what every check below reads, so the English-wording recompute holds in both languages.
+   Under English nothing is wrapped. A twin that is not the same card throws; outside a try, the banner says so */
+if (getLang() !== "en") addEventListener("error", e => {
+  const b = document.getElementById("banner");
+  if (b.className) return;
+  b.className = "fail";
+  b.textContent = `✗ checks FAILED: the page stopped (${e.message})`;
+});
+/* eq9's option words (OPT_TWO / OPT_ONE / OPT_NONE, and solutionCount's answer) speak through L(): the recompute
+   compares the twin with the ENGLISH ones */
+const EN_LIBS = await diceTwins([{ url: "js/quests/dice-eqn.js", pool: eqnPool }], ["js/quests/queseq9-solution-count.js"]);
+const EQ9 = EN_LIBS ? EN_LIBS[0] : { solutionCount: solutionCountHere, OPT_TWO: OPT_TWO_HERE, OPT_ONE: OPT_ONE_HERE, OPT_NONE: OPT_NONE_HERE };
+const { solutionCount, OPT_TWO, OPT_ONE, OPT_NONE } = EQ9;
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };

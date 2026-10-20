@@ -50,12 +50,28 @@ import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
 import { answerCorrect } from "./js/check.js";
 import { getConcept } from "./js/concepts.js";
 import {
-  firstDiffs, secondDiffs, classify, classifyName, quadSolve, quadTn, arithTn, arithAC,
-  linStr, quadStr, geoStr, geoTn, ratioLabel,
+  firstDiffs, secondDiffs, classify, quadSolve, quadTn, arithTn, arithAC,
+  linStr, quadStr, geoStr, geoTn, ratioLabel, classifyName as classifyNameHere,
 } from "./js/patternlib.js";
 import { verifyPattern, computePattern } from "./js/engine/pattern-graph.js";
 import { verifyFunction } from "./js/engine/function-graph.js";
-import { ord } from "./js/quests/_patterns.js";
+import { ord as ordHere } from "./js/quests/_patterns.js";
+import { diceTwins } from "./js/quests/_finance-check.js";
+import { getLang } from "./js/lang.js";
+
+/* S11 (2026-10-20): under ?lang=af every dice card is read through its ENGLISH twin, the same card from the same
+   draws (diceTwins in js/quests/_finance-check.js, the S7 recipe): the Afrikaans card is built, checked against its
+   twin, and the twin is what every check below reads, so the English-wording recompute holds in both languages.
+   Under English nothing is wrapped. A twin that is not the same card throws; outside a try, the banner says so */
+if (getLang() !== "en") addEventListener("error", e => {
+  const b = document.getElementById("banner");
+  if (b.className) return;
+  b.className = "fail";
+  b.textContent = `✗ checks FAILED: the page stopped (${e.message})`;
+});
+/* patternlib's classifyName and _patterns' ord speak through L(): the recompute compares the twin with the ENGLISH helpers */
+const EN_LIBS = await diceTwins([{ url: "js/quests/dice-patterns.js", pool: pool }], ["js/patternlib.js", "js/quests/_patterns.js"]);
+const classifyName = EN_LIBS ? EN_LIBS[0].classifyName : classifyNameHere, ord = EN_LIBS ? EN_LIBS[1].ord : ordHere;
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };

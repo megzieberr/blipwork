@@ -84,6 +84,20 @@ import { renderPlay } from "./js/play.js";
 import { methodHtml as poolMethodHtml } from "./js/quests/dice-gtrig.js";   // Part 4: the REAL method markup, not a restatement of it
 import { rng } from "./js/rng.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
+import { diceTwins } from "./js/quests/_finance-check.js";
+import { getLang } from "./js/lang.js";
+
+/* S11 (2026-10-20): under ?lang=af every dice card is read through its ENGLISH twin, the same card from the same
+   draws (diceTwins in js/quests/_finance-check.js, the S7 recipe): the Afrikaans card is built, checked against its
+   twin, and the twin is what every check below reads, so the English-wording recompute holds in both languages.
+   Under English nothing is wrapped. A twin that is not the same card throws; outside a try, the banner says so */
+if (getLang() !== "en") addEventListener("error", e => {
+  const b = document.getElementById("banner");
+  if (b.className) return;
+  b.className = "fail";
+  b.textContent = `✗ checks FAILED: the page stopped (${e.message})`;
+});
+await diceTwins([{ url: "js/quests/dice-stats.js", pool: statsPool }]);
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
@@ -291,7 +305,7 @@ function boldNums(html) {
 }
 function parseFreqRows(html) {
   const rows = [...html.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(r => [...r[1].matchAll(/<td>([\s\S]*?)<\/td>/g)].map(c => c[1].trim()));
-  return rows.filter(tds => tds.length >= 2 && !/^Total$/i.test(tds[0]));
+  return rows.filter(tds => tds.length >= 2 && !/^(Total|Totaal)$/i.test(tds[0]));
 }
 function correctOptionLabel(q) { const c = q.options.find(o => o.correct); return c ? c.label : null; }
 function correctOptionNum(q) { const l = correctOptionLabel(q); return l == null ? NaN : Number(String(l).replace(",", ".")); }
@@ -337,7 +351,7 @@ const RECOMPUTE = {
   "q3.percentile": q => { const [n] = boldNums(q.prompt); const pm = q.prompt.match(/(\d+)th percentile/); return !!pm && near(percentilePos(n, Number(pm[1])), q.expected, 1e-6); },
 
   // q5 — grouped data
-  "q5.total":       q => { const rows = parseFreqRows(q.prompt); const sum = rows.reduce((s, r) => s + Number(r[1]), 0); return near(sum, q.expected, 1e-6) && !/<td>Total<\/td>/i.test(q.prompt); /* no-spoiler */ },
+  "q5.total":       q => { const rows = parseFreqRows(q.prompt); const sum = rows.reduce((s, r) => s + Number(r[1]), 0); return near(sum, q.expected, 1e-6) && !/<td>(Total|Totaal)<\/td>/i.test(q.prompt); /* no-spoiler */ },
   "q5.midpoint":    q => { const [lo, up] = boldNums(q.prompt); return near((lo + up) / 2, q.expected, 1e-6); },
   "q5.fx":          q => { const [lo, up, f] = boldNums(q.prompt); return near(f * (lo + up) / 2, q.expected, 1e-6); },
   "q5.estMean":     q => { const rows = parseFreqRows(q.prompt); let fx = 0, n = 0; rows.forEach(r => { fx += Number(r[1]) * Number(r[2]); n += Number(r[1]); }); return near(fx / n, q.expected, 0.02); },
@@ -351,7 +365,7 @@ const RECOMPUTE = {
     if (!m) return false;
     const idx = rows.findIndex(r => r[0] === m[1]);
     if (idx < 0) return false;
-    return near(rows.slice(0, idx + 1).reduce((s, r) => s + Number(r[1]), 0), q.expected, 1e-6) && !/<td>Total<\/td>/i.test(q.prompt); /* no-spoiler */
+    return near(rows.slice(0, idx + 1).reduce((s, r) => s + Number(r[1]), 0), q.expected, 1e-6) && !/<td>(Total|Totaal)<\/td>/i.test(q.prompt); /* no-spoiler */
   },
   "q6.readQuartile": q => {
     const classes = q.graph.classes, n = classes.reduce((s, c) => s + c.freq, 0);

@@ -33,7 +33,7 @@ import {
 } from "../finlib.js";
 import { fmtComma } from "../check.js";
 import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN, RING_MIN_PX, LABEL_MIN_PX } from "../engine/timeline-graph.js";
-import { setRng as setRngRaw, resetRng as resetRngRaw } from "../rng.js";
+import { setRng as setRngRaw, resetRng as resetRngRaw, rng as rngRaw } from "../rng.js";
 import { getLang } from "../lang.js";
 
 const C = v => fmtComma(v);
@@ -1700,11 +1700,11 @@ const twinShape = s => {
   return [(out.match(/R\d/g) || []).length, (t.match(/&(?:[a-z]+|#\d+);/gi) || []).length, (t.match(/<sup\b/g) || []).length].join("/");
 };
 /* null when the Afrikaans card a is the English card e in the other language, else where and why not */
-export function twinDiff(a, e, at = "card", seen = new Set()) {
+export function twinDiff(a, e, at = "card", seen = new Set(), digits = twinDigits) {
   if (typeof a !== typeof e) return `${at}: ${typeof a} here, ${typeof e} in English`;
   if (typeof a === "string") {
     if (a === e) return null;
-    if (twinDigits(a) !== twinDigits(e)) return `${at}: digits ${twinDigits(a) || "none"} here, ${twinDigits(e) || "none"} in English`;
+    if (digits(a) !== digits(e)) return `${at}: digits ${digits(a) || "none"} here, ${digits(e) || "none"} in English`;
     if (twinShape(a) !== twinShape(e)) return `${at}: money outside a unit / entities / superscripts ${twinShape(a)} here, ${twinShape(e)} in English`;
     return null;
   }
@@ -1715,7 +1715,7 @@ export function twinDiff(a, e, at = "card", seen = new Set()) {
   if (Array.isArray(a) !== Array.isArray(e)) return `${at}: an array on one side only`;
   const ka = Object.keys(a).sort(), ke = Object.keys(e).sort();
   if (ka.join("|") !== ke.join("|")) return `${at}: keys ${ka.join(",")} here, ${ke.join(",")} in English`;
-  for (const k of ka) { const why = twinDiff(a[k], e[k], Array.isArray(a) ? `${at}[${k}]` : `${at}.${k}`, seen); if (why) return why; }
+  for (const k of ka) { const why = twinDiff(a[k], e[k], Array.isArray(a) ? `${at}[${k}]` : `${at}.${k}`, seen, digits); if (why) return why; }
   return null;
 }
 let TWIN = null, TWIN_DEPTH = 0;
@@ -1785,4 +1785,94 @@ export async function financeTwins({ questDef, quests, F13_FAMILIES, f13Story, f
     f13GraphOf: twinOf(f13GraphOf, (...a) => TWIN.f13GraphOf(...a), "f13GraphOf"),
     BUILD_TIMELINE_EXAMPLE: TWIN.BUILD_TIMELINE_EXAMPLE,
   };
+}
+
+/* ============================================================
+   S11 (2026-10-20): THE SAME TWINS FOR THE DICE PAGES
+   ------------------------------------------------------------
+   The seven verify-dice*.html pages re-derive answers from a card's
+   ENGLISH wording, so under ?lang=af they read every dice card through
+   its English twin too, exactly as verify-finance does (above): each
+   pool entry's gen() is wrapped in place; the Afrikaans card is built
+   first and every draw recorded, the English iframe builds the same
+   card from those draws, twinDiff must find ONE card, and gen() hands
+   back the English twin.
+   The one difference: a dice card is drawn inside js/dice.js's
+   withSeed(), whose seeded stream this file cannot see. So the wrapper
+   reads the stream AHEAD (DICE_AHEAD draws from the page's rng()),
+   serves the Afrikaans card from that prefix, and then leaves the rest
+   of the prefix in place, in order, for whatever the caller draws next:
+   the caller sees the very same stream it would have seen unwrapped
+   (Math.random once the prefix runs out, which no dice check comes near).
+   The digits are compared without a lone 0 or 1: the Afrikaans may say
+   in words what the English writes as a figure, or the other way round
+   ("a = 2 is positief" for "a = 2 > 0", "behalwe 0" for "non-zero",
+   "1/3" for "one over 3"); every other number, flag and id must still be
+   identical.
+   A page's own helpers that speak through L() (funclib's ineqOutside,
+   patternlib's classifyName, _patterns' ord) come from the English realm
+   too: diceTwins(pools, extraUrls) hands those modules back.
+   Under English nothing is wrapped.
+   ============================================================ */
+const DICE_AHEAD = 4096;
+const diceDigits = s => (String(s).match(/\d+/g) || []).filter(d => d !== "0" && d !== "1").sort().join(",");
+function diceTwinOf(here, there, where) {
+  return function (...args) {
+    if (TWIN_DEPTH) return here.apply(this, args);
+    const ahead = [];
+    for (let i = 0; i < DICE_AHEAD; i++) ahead.push(rngRaw());
+    let used = 0, af, en, k = 0;
+    const next = () => (used < ahead.length ? ahead[used++] : Math.random());
+    TWIN_DEPTH++;
+    try { setRngRaw(next); af = here.apply(this, args); }
+    finally { TWIN_DEPTH--; setRngRaw(next); }
+    const draws = ahead.slice(0, used);
+    try {
+      TWIN.setRng(() => { if (k >= draws.length) throw new Error(`${where}: the English twin wants more random draws than the ${draws.length} the Afrikaans card made`); return draws[k++]; });
+      en = there(...args);
+    } finally { TWIN.resetRng(); }
+    if (k !== draws.length) throw new Error(`${where}: the English twin made ${k} random draws, the Afrikaans card ${draws.length}`);
+    const why = twinDiff(af, en, "card", new Set(), diceDigits);
+    if (why) throw new Error(`${where}: the Afrikaans card is not its English twin: ${why}`);
+    return en;
+  };
+}
+/* the English realm for the dice pages: the pool modules named by URL (relative to the site root) */
+function englishDiceRealm(urls) {
+  return new Promise((resolve, reject) => {
+    const KEY = "mhq.lang", CB = "__s11EnglishDiceTwin", root = new URL("../../", import.meta.url).href;
+    let had = null;
+    try { had = localStorage.getItem(KEY); localStorage.setItem(KEY, "en"); } catch { /* private mode */ }
+    const done = (fn, v) => { clearTimeout(timer); delete window[CB]; try { if (had == null) localStorage.removeItem(KEY); else localStorage.setItem(KEY, had); } catch { /* private mode */ } fn(v); };
+    const timer = setTimeout(() => done(reject, new Error("the English dice twin iframe did not load in 60 s")), 60000);
+    window[CB] = api => (api.lang === "en" ? done(resolve, api) : done(reject, new Error(`the English dice twin iframe came up in "${api.lang}"`)));
+    const f = document.createElement("iframe");
+    f.hidden = true;
+    f.title = "English dice twins (verify harness)";
+    f.srcdoc = `<!doctype html><meta charset="utf-8"><script type="module">
+import { setRng, resetRng } from "${root}js/rng.js";
+import { getLang } from "${root}js/lang.js";
+const mods = await Promise.all(${JSON.stringify(urls.map(u => new URL(u, root).href))}.map(u => import(u)));
+parent.${CB}({ mods, setRng, resetRng, lang: getLang() });
+<\/script>`;
+    document.body.appendChild(f);
+  });
+}
+/* pools: [{ url: "js/quests/dice-exp.js", pool }] (the page's own imported pool objects). Wraps every
+   entry's gen() in place under any language but English. extra: more module URLs whose ENGLISH
+   modules the page wants (its L()-speaking helpers). Returns null under English, else those
+   English modules, in order. */
+export async function diceTwins(pools, extra = []) {
+  if (getLang() === "en") return null;
+  TWIN = await englishDiceRealm(pools.map(p => p.url).concat(extra));
+  pools.forEach(({ url, pool }, m) => {
+    const there = TWIN.mods[m].pool;
+    if (!there || there.entries.length !== pool.entries.length) throw new Error(`dice twins: ${url} is not the same pool in English`);
+    pool.entries.forEach((e, j) => {
+      const te = there.entries[j];
+      if (te.skillId !== e.skillId) throw new Error(`dice twins: ${url} entry ${j + 1} is ${e.skillId} here, ${te.skillId} in English`);
+      e.gen = diceTwinOf(e.gen, (...a) => te.gen(...a), `${url} ${e.skillId}`);
+    });
+  });
+  return TWIN.mods.slice(pools.length);
 }

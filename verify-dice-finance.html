@@ -51,6 +51,20 @@ import { answerCorrect, parseNum } from "./js/check.js";
 import { getConcept } from "./js/concepts.js";
 import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf } from "./js/quests/_finance-check.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
+import { diceTwins } from "./js/quests/_finance-check.js";
+import { getLang } from "./js/lang.js";
+
+/* S11 (2026-10-20): under ?lang=af every dice card is read through its ENGLISH twin, the same card from the same
+   draws (diceTwins in js/quests/_finance-check.js, the S7 recipe): the Afrikaans card is built, checked against its
+   twin, and the twin is what every check below reads, so the English-wording recompute holds in both languages.
+   Under English nothing is wrapped. A twin that is not the same card throws; outside a try, the banner says so */
+if (getLang() !== "en") addEventListener("error", e => {
+  const b = document.getElementById("banner");
+  if (b.className) return;
+  b.className = "fail";
+  b.textContent = `✗ checks FAILED: the page stopped (${e.message})`;
+});
+await diceTwins([{ url: "js/quests/dice-finance.js", pool: financePool }]);
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };

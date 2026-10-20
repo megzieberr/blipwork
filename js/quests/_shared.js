@@ -10,6 +10,7 @@ import { sortAsc, midpoint } from "../statlib.js";
    round; static play is unaffected (rng() defaults to Math.random). */
 export { rng } from "../rng.js";
 import { rng } from "../rng.js";
+import { L } from "../lang.js";
 
 export const C = v => fmtComma(v);
 export const list = a => a.join("  ;  ");
@@ -68,7 +69,7 @@ export function freqTable(classes, opts = {}) {
     return `<tr><td>${classInterval(cl, notation)}</td><td>${cl.freq}</td>${mid ? `<td>${midpoint(cl)}</td>` : ""}${cum ? `<td>${c}</td>` : ""}</tr>`;
   }).join("");
   const n = classes.reduce((s, x) => s + x.freq, 0);
-  const totalRow = total ? `<tr><td>Total</td><td>${n}</td>${mid ? "<td></td>" : ""}${cum ? "<td></td>" : ""}</tr>` : "";
+  const totalRow = total ? `<tr><td>${L("Total", "Totaal")}</td><td>${n}</td>${mid ? "<td></td>" : ""}${cum ? "<td></td>" : ""}</tr>` : "";
   return `<table class="q-table">${head}${rows}${totalRow}</table>`;
 }
 

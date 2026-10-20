@@ -55,10 +55,26 @@ import { getConcept } from "./js/concepts.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import {
   makeFn, paraTP, paraStd, paraRoots, paraTPString, lineXInt, lineYInt,
-  domainStr, rangeStr, eqStr, ptStr, avgGradient, fix, C, ineqBetween, ineqOutside,
+  domainStr, rangeStr, eqStr, ptStr, avgGradient, fix, C, ineqBetween, ineqOutside as ineqOutsideHere,
 } from "./js/funclib.js";
 import { FAMILY } from "./js/quests/_func.js";
 import { verifyFunction } from "./js/engine/function-graph.js";
+import { diceTwins } from "./js/quests/_finance-check.js";
+import { getLang } from "./js/lang.js";
+
+/* S11 (2026-10-20): under ?lang=af every dice card is read through its ENGLISH twin, the same card from the same
+   draws (diceTwins in js/quests/_finance-check.js, the S7 recipe): the Afrikaans card is built, checked against its
+   twin, and the twin is what every check below reads, so the English-wording recompute holds in both languages.
+   Under English nothing is wrapped. A twin that is not the same card throws; outside a try, the banner says so */
+if (getLang() !== "en") addEventListener("error", e => {
+  const b = document.getElementById("banner");
+  if (b.className) return;
+  b.className = "fail";
+  b.textContent = `✗ checks FAILED: the page stopped (${e.message})`;
+});
+/* funclib's ineqOutside speaks through L() ("or" / "of"): the recompute compares the twin with the ENGLISH helper */
+const EN_LIBS = await diceTwins([{ url: "js/quests/dice-func.js", pool: pool }], ["js/funclib.js"]);
+const ineqOutside = EN_LIBS ? EN_LIBS[0].ineqOutside : ineqOutsideHere;
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
