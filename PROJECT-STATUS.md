@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-18 12:55 (🔔 send-push v3 DEPLOYED 12:52 with CORS, Verify JWT off: the admin "tell the kids NOW" button can reach the function for the first time; 🚀 sw v102 `9e4fda6` LIVE 12:08: the audit's FIX ROUND shipped, 146 teaching-text fixes in both languages + f8 overflow + admin pinned to English; 0 unpushed; her calls: 49 skipped items in `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, cron.sql re-run after exams; 🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
+# Project status — updated 2026-10-22 01:05 (🚀 sw v103 `a669d14` LIVE 01:04: T94 + T95 + S11 shipped (Afrikaans leftovers, finance compounding labels, the seven dice test pages read the English twin), harness finance 692 / dice 146 / exam 678 green EN + AF, 0 unpushed; the Afrikaans queue has NO open rows, only G2 (after 16 Nov) waits, the 22:00 night routine now logs 'waiting' and stops; before that: 🔔 send-push v3 DEPLOYED 12:52 with CORS, Verify JWT off: the admin "tell the kids NOW" button can reach the function for the first time; 🚀 sw v102 `9e4fda6` LIVE 12:08: the audit's FIX ROUND shipped, 146 teaching-text fixes in both languages + f8 overflow + admin pinned to English; 0 unpushed; her calls: 49 skipped items in `_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`, cron.sql re-run after exams; 🔍 FULL AUDIT 6/10 overnight: report `_docs/BLIPWORK-AUDIT-2026-10-18.md`; before that: 🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -114,7 +114,7 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 - 2026-10-18 (audit, live read): f8–f13 are already OPEN on live (all 99 quests open); the Term toggle is ON since 2026-10-06. Both pending lines settled.
 
 ## ⏳ Pending on Megan
-- ⛔ **FIRST, next Blipwork session, before ANY building** (her ruling 2026-10-18 12:57) 💻 ~10 min per batch: rule on the
+- ⛔ **FIRST, next Blipwork session, before ANY building** (her ruling 2026-10-18 12:57; her word 2026-10-22 07:41: she looks at these AFTER this exam week, so not before Tue 27 Oct) 💻 ~10 min per batch: rule on the
   49 audit items that need your word, `Desktop/Claude Code Projects/_docs/BLIPWORK-AUDIT-2026-10-18/HER-CALLS.md`
   (teaching and marking choices, your device words, "unsure" maths). How the session does it: open with this list, show
   it in batches of about 10 grouped by chapter, you say the id + your word (or "leave it"), one Opus worker applies each
@@ -123,9 +123,8 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
 - 💻 your call, after exams: re-run `supabase/cron.sql` on live (the 60 s timeout for the two push jobs).
 - 📱 next homework you set in the daytime: the NOW push should land on the kids' phones at once (send-push v3, deployed
   18 Oct 12:52); if it does not, tell a session.
-- 📱 2 taps [today]: close and reopen Blipwork twice on your phone so it picks up v102 (the fix round).
-- 🌐 1 word [your call, whenever]: "run S11" (one Opus worker, about 200k) so the seven dice test pages can check the
-  Afrikaans dice rounds too, or leave it (the app renders them; only the harness can't read Afrikaans there).
+- 📱 2 taps [today]: close and reopen Blipwork twice on your phone so it picks up v103 (the Afrikaans leftovers + S11).
+- ☑ S11 done 20 Oct, shipped in v103 (the dice test pages read Afrikaans through the English twin).
 - 📱 [after exams, your 19:17 ruling]: play Blipwork start to finish with `?lang=af` (your phone already remembers it) and
   tell a session every word you dislike; close and reopen the app twice first so the phone picks up v101.
 - 📱 1 tap [whenever]: your phone remembers Afrikaans from tonight's test; open
