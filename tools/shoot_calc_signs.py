@@ -35,7 +35,7 @@ window.__ready = true;
 # key names as printed on the key face -> the rendered button's data-keyid (same table as verify-calc-casio.html)
 KEY = {"+": "plus", "−": "minus", "×": "mult", "÷": "div", "=": "eq", "◀": "left", "▶": "right", "▲": "up", "▼": "down",
        "AC": "ac", "SHIFT": "shift", "ALPHA": "alpha", "(": "lparen", ")": "rparen", "x²": "x2", "x^": "pow", "√": "sqrt",
-       "frac": "frac", "sin": "sin", "CALC": "calc", "X": "alpha rparen", "³√": "shift sqrt", "ˣ√": "shift pow"}
+       "frac": "frac", "sin": "sin", "CALC": "calc", "MODE": "mode", "X": "alpha rparen", "³√": "shift sqrt", "ˣ√": "shift pow"}
 def ids(seq):
     out = []
     for t in seq.split():
@@ -90,6 +90,16 @@ EXP = """() => {
   return { exps: out, curInWrap: !!cur && cur.parentElement.classList.contains('calc-supw'),
            curNext: cur && cur.nextSibling ? (cur.nextSibling.nodeType === 3 ? cur.nextSibling.textContent[0] : cur.nextSibling.className) : null };
 }"""
+# TABLE mode (MODE 7): the selected cell's row number and column heading, and whether it shows inside the LCD
+TBL = """() => {
+  const sel = document.querySelector('#host .lcd-tbl .lcd-tbl-sel'); if (!sel) return { sel: null };
+  const tr = sel.parentElement, n = tr.querySelector('.lcd-tbl-n'), lit = document.querySelector('#host .lcd-tbl th.lcd-tbl-lit');
+  const lcd = document.querySelector('#host .calc-lcd').getBoundingClientRect(), b = sel.getBoundingClientRect();
+  return { row: n ? n.textContent : null, col: lit ? lit.textContent : null,
+           visible: b.height > 0 && b.top >= lcd.top - 0.5 && b.bottom <= lcd.bottom + 0.5,
+           rows: [...document.querySelectorAll('#host .lcd-tbl tr')].slice(1).map(r => r.querySelector('.lcd-tbl-n').textContent) };
+}"""
+
 # (6-5)^2 measured BEFORE the change (5 Nov, the tall-signs commit 21a3f23): the 2 glyph's top and bottom from the line's top
 PLAIN_SQ = (2.0, 17.0)
 
@@ -182,6 +192,20 @@ def main():
             shoot("calc-signs-14.png")
             press("▶"); x = pg.evaluate(EXP); m = measure()
             check(not x["curInWrap"] and m["text"] == "(12+6)²", "14: ▶ puts it back after the ², outside the wrap", x)
+
+            # 15-16: TABLE mode ▲ / ▼ wrap (her measurement 5 Nov 2026): f(X)=X, Start 1, End 12, Step 1, column F(X)
+            press("AC MODE 7 X = = 1 = 12 = 1 = ▶ " + " ".join(["▼"] * 12))
+            t = pg.evaluate(TBL)
+            check(t["row"] == "13" and t["col"] == "F(X)" and t["visible"], "15 set-up: 12 rows, ▼ ×12 reaches the bottom (empty) row 13 in F(X)", t)
+            press("▼"); t = pg.evaluate(TBL)
+            check(t["row"] == "1" and t["col"] == "F(X)" and t["visible"] and t["rows"][0] == "1", "15: ▼ on the bottom row lands on row 1, same column, the window at the top", t)
+            shoot("calc-signs-15-table-down-wrap.png")
+            press("▲"); t = pg.evaluate(TBL)
+            check(t["row"] == "13" and t["col"] == "F(X)" and t["visible"], "16: ▲ on row 1 lands on the bottom row 13, same column, on screen", t)
+            shoot("calc-signs-16-table-up-wrap.png")
+            press("▲"); t = pg.evaluate(TBL)
+            check(t["row"] == "12" and t["visible"], "16: a normal ▲ step after the wrap goes to row 12", t)
+            press("AC AC MODE 1")   # back to COMP for the prompt checks below
 
             # the .lcd-pr-typing screen: a one-line typed value may not make the LCD taller (styles.css's rule)
             press("AC X x² + 1 CALC"); h0 = measure()["lcdH"] if pg.query_selector("#host .lcd-expr") else pg.evaluate("document.querySelector('#host .calc-lcd').getBoundingClientRect().height")
