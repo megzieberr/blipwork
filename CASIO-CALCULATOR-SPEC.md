@@ -204,12 +204,13 @@ builds (listed at the end), each its own fresh session. Start with the two you r
   typed inline: `3×10 5` = 300000.
 - x⁻¹: 2, =, x⁻¹ → Ans⁻¹ = ½.
 - x! = SHIFT x⁻¹: 5! = 120.
-- FACT = SHIFT °'" (not measured, from the Casio manual, 5 Nov 2026; her emulator overrules):
-  on a shown whole-number answer from 2 up to 10 digits it shows the prime factors, ascending,
-  × between, a repeated prime raised once (1092 = → `2²×3×7×13`); only primes up to 997 are
-  tried, the rest goes last in brackets (1234567 → `127×(9721)`, 1009 → `(1009)`). 0, 1,
-  negatives, decimals, fractions, π or root answers, 11+ digits, typing: nothing happens.
-  SHIFT FACT or S⇔D again → the plain answer; Ans is unchanged.
+- FACT = SHIFT °'" (5 Nov 2026). MEASURED on her emulator 5 Nov 2026 15:04: 1092 = → `2²×3×7×13`,
+  again → 1092; 1234567 → `127×(9721)`; 1009 → `(1009)`; a shown answer it cannot factor (5/2 from 2,5,
+  0, 1, −12, 11 digits) → the three-line **Math ERROR** screen, ▶ (Goto) → the typed line, cursor at the
+  end; typing (1 2 SHIFT °'") → nothing, no error; S⇔D on the list → nothing; °'" on it → 1092°0'0";
+  + after it → Ans+. From the Casio manual, not measured: only primes up to 997 are tried (the rest last
+  in brackets), 2 up to 10 digits, π / root answers → Math ERROR. Blipwork choices: AC clears the error,
+  Ans keeps the last answer, SHIFT S⇔D on the list does nothing, off the COMP screen the key does nothing.
 - nCr = SHIFT ÷: `5C2` = 10 (special C sign). nPr = SHIFT ×: `5P2` = 20.
 - % = SHIFT (: postfix, divides by 100: `20%×50` = 10.
 - Abs = SHIFT hyp: template |□| with straight bars: |−5| = 5.
