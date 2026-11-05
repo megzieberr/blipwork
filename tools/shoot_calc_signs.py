@@ -74,6 +74,25 @@ MEASURE = """() => {
   return { text: ex.textContent, rads, groups, curAt, lcdH: R(document.querySelector('#host .calc-lcd')).height };
 }"""
 
+# the exponent after a tall thing (5 Nov, "Fix the ² first"): where each ² / ³ glyph and ^□ box sits, against the
+# .calc-supw wrap's element (its first child); glyph rects come from a range over the character
+EXP = """() => {
+  const ex = document.querySelector('#host .lcd-expr'), e = ex.getBoundingClientRect();
+  const out = [], w = document.createTreeWalker(ex, NodeFilter.SHOW_TEXT); let n;
+  while ((n = w.nextNode())) for (let i = 0; i < n.textContent.length; i++) if ('²³'.includes(n.textContent[i])) {
+    const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect();
+    const wrap = n.parentElement.closest('.calc-supw'), el = wrap && wrap.firstElementChild;
+    out.push({ ch: n.textContent[i], top: b.top - e.top, bottom: b.bottom - e.top, wrapped: !!wrap,
+               elTop: el ? el.getBoundingClientRect().top - e.top : null }); }
+  ex.querySelectorAll('.calc-supw > .calc-pow-exp').forEach(s => { const b = s.getBoundingClientRect(), el = s.parentElement.firstElementChild;
+    out.push({ ch: '^', top: b.top - e.top, bottom: b.bottom - e.top, wrapped: true, elTop: el.getBoundingClientRect().top - e.top }); });
+  const cur = ex.querySelector('.calc-cursor');
+  return { exps: out, curInWrap: !!cur && cur.parentElement.classList.contains('calc-supw'),
+           curNext: cur && cur.nextSibling ? (cur.nextSibling.nodeType === 3 ? cur.nextSibling.textContent[0] : cur.nextSibling.className) : null };
+}"""
+# (6-5)^2 measured BEFORE the change (5 Nov, the tall-signs commit 21a3f23): the 2 glyph's top and bottom from the line's top
+PLAIN_SQ = (2.0, 17.0)
+
 fails, notes = [], []
 def check(ok, what, info=""):
     (notes if ok else fails).append(f"{'OK  ' if ok else 'FAIL'} {what}{'  ' + str(info) if info else ''}")
@@ -141,9 +160,32 @@ def main():
                 press("◀")
             check(len(seen) == 3, "07: the cursor was found in all three places", list(seen))
 
+            # 09-13: the exponent after a tall thing sits level with its top; (6−5)² keeps the normal superscript
+            def top_exp(tag, seq, png, want_text):
+                press(seq); m = measure(); geometry(tag, m, want_text); x = pg.evaluate(EXP)
+                ok = bool(x["exps"]) and all(e["wrapped"] and abs(e["top"] - e["elTop"]) <= 1 for e in x["exps"])
+                check(ok, f"{tag}: the exponent's top is level with the element's top (within 1 px)",
+                      [(e["ch"], round(e["top"], 2), e["elTop"] and round(e["elTop"], 2)) for e in x["exps"]])
+                shoot(png); return x
+            top_exp("09 (½+6)²", "AC ( frac 1 ▼ 2 ▶ + 6 ) x²", "calc-signs-09.png", "(12+6)²")
+            top_exp("10 ½ then x²", "AC frac 1 ▼ 2 ▶ x²", "calc-signs-10.png", "12²")
+            top_exp("11 √½ then x²", "AC √ frac 1 ▼ 2 ▶ ▶ x²", "calc-signs-11.png", "√12²")
+            top_exp("12 (½)^3 then x²", "AC ( frac 1 ▼ 2 ▶ ) x^ 3 ▶ x²", "calc-signs-12.png", "(12)3²")
+            press("AC ( 6 − 5 ) x²"); x = pg.evaluate(EXP)
+            e0 = x["exps"][0] if x["exps"] else None
+            check(e0 is not None and not e0["wrapped"] and abs(e0["top"] - PLAIN_SQ[0]) < 0.01 and abs(e0["bottom"] - PLAIN_SQ[1]) < 0.01,
+                  "13 (6−5)²: the ² is unchanged (not wrapped, same place as before the change)", e0)
+            shoot("calc-signs-13.png")
+            # the cursor between the tall element and its ², then after the ²
+            press("AC ( frac 1 ▼ 2 ▶ + 6 ) x² ◀"); x = pg.evaluate(EXP)
+            check(x["curInWrap"] and x["curNext"] == "²", "14: ◀ from the end puts the cursor between the bracket and the ², inside the wrap", x)
+            shoot("calc-signs-14.png")
+            press("▶"); x = pg.evaluate(EXP); m = measure()
+            check(not x["curInWrap"] and m["text"] == "(12+6)²", "14: ▶ puts it back after the ², outside the wrap", x)
+
             # the .lcd-pr-typing screen: a one-line typed value may not make the LCD taller (styles.css's rule)
             press("AC X x² + 1 CALC"); h0 = measure()["lcdH"] if pg.query_selector("#host .lcd-expr") else pg.evaluate("document.querySelector('#host .calc-lcd').getBoundingClientRect().height")
-            for typed in ("3", "( 3 )", "√ 3"):
+            for typed in ("3", "( 3 )", "√ 3", "( 3 ) x²"):
                 press("AC X x² + 1 CALC " + typed)
                 typing = pg.query_selector("#host .lcd-pr-typing") is not None
                 h = pg.evaluate("document.querySelector('#host .calc-lcd').getBoundingClientRect().height")
