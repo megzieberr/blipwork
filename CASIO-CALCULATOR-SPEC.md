@@ -204,6 +204,12 @@ builds (listed at the end), each its own fresh session. Start with the two you r
   typed inline: `3×10 5` = 300000.
 - x⁻¹: 2, =, x⁻¹ → Ans⁻¹ = ½.
 - x! = SHIFT x⁻¹: 5! = 120.
+- FACT = SHIFT °'" (not measured, from the Casio manual, 5 Nov 2026; her emulator overrules):
+  on a shown whole-number answer from 2 up to 10 digits it shows the prime factors, ascending,
+  × between, a repeated prime raised once (1092 = → `2²×3×7×13`); only primes up to 997 are
+  tried, the rest goes last in brackets (1234567 → `127×(9721)`, 1009 → `(1009)`). 0, 1,
+  negatives, decimals, fractions, π or root answers, 11+ digits, typing: nothing happens.
+  SHIFT FACT or S⇔D again → the plain answer; Ans is unchanged.
 - nCr = SHIFT ÷: `5C2` = 10 (special C sign). nPr = SHIFT ×: `5P2` = 20.
 - % = SHIFT (: postfix, divides by 100: `20%×50` = 10.
 - Abs = SHIFT hyp: template |□| with straight bars: |−5| = 5.
