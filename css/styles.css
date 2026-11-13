@@ -732,43 +732,64 @@ h2{font-size:20px} h3{font-size:17px}
 .calc-name{font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:.6px}
 .calc-close{background:none;border:0;color:#aeb6c6;font-size:18px;cursor:pointer;line-height:1}
 .calc{display:flex;flex-direction:column;gap:10px}
-.calc-lcd{background:#b8c6ae;border:2px solid #161a22;border-radius:6px;padding:8px 10px;min-height:100px;display:flex;flex-direction:column;color:#1c241a;font-family:var(--font-num)}
-.calc-ind{font-size:9px;letter-spacing:1.5px;color:#3a4434;min-height:12px;line-height:12px;display:flex;align-items:center;white-space:nowrap;overflow:hidden}
+/* LCD SIZE (13 Nov 2026, her ask "much much bigger"): every size inside the
+   screen is a base px number times --lcd-k, so the whole screen is tuned with
+   that ONE number. At --lcd-k:1 every rule gives its old size (except the
+   two-column menus, .lcd-menu, re-laid out so they fit a 360 px phone). 2.4
+   makes the EQN menu's longest line (4:aX³+bX²+cX+d=0) fill about 86% of the
+   screen width, like the real fx-991ZA (about 16 characters across).
+   Two sizes follow it at a slower rate, on purpose, and need no tuning:
+   --lcd-ki, the status row (D, Math, S, A ...): it stays the small row, and
+   its fixed slots must still fit side by side; --lcd-kt, the cells of the
+   TABLE / EQN / STAT grids: they stay small (as on the real one) so a value
+   like −6,12×10⁸ still fits its cell and the big line under the grid stays
+   more than twice their size. The big answer line and the error message are
+   also capped by the screen width (.lcd-res, below), so a 10-digit answer or
+   "Insufficient MEM" still fits on one line. Hairline borders keep their px. */
+.calc-lcd{--lcd-k:2.4;--lcd-ki:calc(1 + (var(--lcd-k) - 1) * .1);--lcd-kt:calc(1 + (var(--lcd-k) - 1) * .3);background:#b8c6ae;border:2px solid #161a22;border-radius:6px;padding:8px 10px;min-height:calc(20px + 80px * var(--lcd-k));display:flex;flex-direction:column;color:#1c241a;font-family:var(--font-num);container-type:inline-size}
+.calc-ind{font-size:calc(9px * var(--lcd-ki, 1));letter-spacing:calc(1.5px * var(--lcd-ki, 1));color:#3a4434;min-height:calc(12px * var(--lcd-ki, 1));line-height:calc(12px * var(--lcd-ki, 1));display:flex;align-items:center;white-space:nowrap;overflow:hidden}
 /* status-line marks (calculator Build 1): one fixed-width slot per mark, like
    the real LCD's fixed segments, so no mark ever pushes another sideways */
 .calc-ind>span{flex:none;display:block;overflow:hidden}
-.calc-ind .ind-sa{width:13px}
-.calc-ind .ind-sa b{display:inline-block;border:1px solid currentColor;border-radius:1px;padding:0 1px;line-height:9px;letter-spacing:0;font-weight:700}
-.calc-ind .ind-m{width:11px}
-.calc-ind .ind-sto,.calc-ind .ind-rcl{width:25px}
-.calc-ind .ind-stat,.calc-ind .ind-freq{width:32px}
-.calc-ind .ind-fix{width:25px}   /* Build 4: the FIX tag (SETUP Fix 0~9) */
+.calc-ind .ind-sa{width:calc(13px * var(--lcd-ki, 1))}
+.calc-ind .ind-sa b{display:inline-block;border:1px solid currentColor;border-radius:1px;padding:0 calc(1px * var(--lcd-ki, 1));line-height:calc(9px * var(--lcd-ki, 1));letter-spacing:0;font-weight:700}
+.calc-ind .ind-m{width:calc(11px * var(--lcd-ki, 1))}
+.calc-ind .ind-sto,.calc-ind .ind-rcl{width:calc(25px * var(--lcd-ki, 1))}
+.calc-ind .ind-stat,.calc-ind .ind-freq{width:calc(32px * var(--lcd-ki, 1))}
+.calc-ind .ind-fix{width:calc(25px * var(--lcd-ki, 1))}   /* Build 4: the FIX tag (SETUP Fix 0~9) */
 .calc-ind .ind-gap{flex:1 1 auto;min-width:0}
-.calc-ind .ind-drg{width:11px}
-.calc-ind .ind-math{width:32px}
-.calc-ind .ind-hist{width:22px;text-align:right;letter-spacing:0}
+.calc-ind .ind-drg{width:calc(11px * var(--lcd-ki, 1))}
+.calc-ind .ind-math{width:calc(32px * var(--lcd-ki, 1))}
+.calc-ind .ind-hist{width:calc(22px * var(--lcd-ki, 1));text-align:right;letter-spacing:0}
 .calc-main{flex:1;display:flex;flex-direction:column;justify-content:center}
-.lcd-expr{font-size:13px;min-height:16px;overflow-x:hidden;overflow-y:hidden;white-space:nowrap;max-width:100%}
-.lcd-res{font-size:24px;text-align:right;font-weight:700;min-height:28px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;max-width:100%}
+.lcd-expr{font-size:calc(13px * var(--lcd-k, 1));min-height:calc(16px * var(--lcd-k, 1));overflow-x:hidden;overflow-y:hidden;white-space:nowrap;max-width:100%}
+.lcd-res{font-size:calc(24px * var(--lcd-k, 1));text-align:right;font-weight:700;min-height:calc(28px * var(--lcd-k, 1));overflow-x:auto;overflow-y:hidden;white-space:nowrap;max-width:100%}
+/* the answer line's font is capped at 10.6cqi (cqi = 1% of the LCD's inner
+   width), so the longest answer, −4,547473509×10⁻¹³, still fits across */
+@supports (width:1cqi){.lcd-res{font-size:min(calc(24px * var(--lcd-k, 1)), 10.6cqi);min-height:min(calc(28px * var(--lcd-k, 1)), 12.4cqi)}}
 /* calculator Build 2: a long entry line scrolls with the cursor (the code
    sets scrollLeft) and a ◀ at the left edge marks hidden content (spec §1) */
 .lcd-line{position:relative;min-width:0;max-width:100%}
-.lcd-lmark{position:absolute;left:0;top:0;bottom:0;z-index:1;display:flex;align-items:center;padding-right:2px;font-size:9px;line-height:1;background:#b8c6ae}
+.lcd-lmark{position:absolute;left:0;top:0;bottom:0;z-index:1;display:flex;align-items:center;padding-right:calc(2px * var(--lcd-k, 1));font-size:calc(9px * var(--lcd-k, 1));line-height:1;background:#b8c6ae}
 .lcd-lmark[hidden]{display:none}
 /* the three-line error screen (spec §3): Syntax ERROR / [AC] :Cancel / [◀][▶]:Goto */
-.lcd-err{display:flex;flex-direction:column;gap:3px}
-.lcd-res.lcd-err-msg{font-size:15px;text-align:left;min-height:0}
-.lcd-err-line{font-size:12px;white-space:nowrap}
+.lcd-err{display:flex;flex-direction:column;gap:calc(3px * var(--lcd-k, 1))}
+.lcd-res.lcd-err-msg{font-size:calc(15px * var(--lcd-k, 1));text-align:left;min-height:0}
+@supports (width:1cqi){.lcd-res.lcd-err-msg{font-size:min(calc(15px * var(--lcd-k, 1)), 10.2cqi)}}   /* 16 characters across: Insufficient MEM */
+.lcd-err-line{font-size:calc(12px * var(--lcd-k, 1));white-space:nowrap}
 /* big/small decimals: a small "×10" and a raised power (spec §7) */
-.calc-x10{font-size:.62em;margin-left:1px}
+.calc-x10{font-size:.62em;margin-left:calc(1px * var(--lcd-k, 1))}
 .calc-x10-exp{font-size:.55em;line-height:0;vertical-align:super}
-.lcd-title{font-size:12px;font-weight:700;margin-bottom:3px}
-.lcd-menu{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-size:12px}
+.lcd-title{font-size:calc(12px * var(--lcd-k, 1));font-weight:700;margin-bottom:calc(3px * var(--lcd-k, 1))}
+/* two-column menus (MODE, SETUP, STAT): at the big size "7:TABLE  8:VECTOR"
+   only fits a 360 px phone with the EQN list's font (11) and the columns
+   sized to their items, the second pushed to the right edge */
+.lcd-menu{display:grid;grid-template-columns:auto auto;justify-content:space-between;gap:calc(2px * var(--lcd-k, 1)) calc(4px * var(--lcd-k, 1));font-size:calc(11px * var(--lcd-k, 1))}
 .lcd-ov{border-top:1px solid currentColor;display:inline-block;line-height:1.05}   /* mean: bar above the x */
-.lcd-note{font-size:11px;margin-top:8px}
-.lcd-more{text-align:right;font-size:11px;margin-top:2px}
-.lcd-tab{width:100%;border-collapse:collapse;font-size:12px}
-.lcd-tab th,.lcd-tab td{border:1px solid #6c7a64;padding:1px 5px;text-align:center;min-width:22px}
+.lcd-note{font-size:calc(11px * var(--lcd-k, 1));margin-top:calc(8px * var(--lcd-k, 1))}
+.lcd-more{text-align:right;font-size:calc(11px * var(--lcd-k, 1));margin-top:calc(2px * var(--lcd-k, 1))}
+.lcd-tab{width:100%;border-collapse:collapse;font-size:calc(12px * var(--lcd-kt, 1))}
+.lcd-tab th,.lcd-tab td{border:1px solid #6c7a64;padding:calc(1px * var(--lcd-kt, 1)) calc(5px * var(--lcd-kt, 1));text-align:center;min-width:calc(22px * var(--lcd-kt, 1))}
 .lcd-tab th{font-weight:700}
 .lcd-tab u{text-decoration:none;border-bottom:2px solid #1c241a;padding-bottom:1px}
 
@@ -776,22 +797,22 @@ h2{font-size:20px} h3{font-size:17px}
    radicals, superscript powers/exponents, the entry cursor, and the empty
    dotted-square template placeholder — all inline so they sit correctly
    within the running text of the entry/result line. ---- */
-.calc-frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 1px;line-height:1.15}
-.calc-frac-num,.calc-frac-den{display:block;padding:0 2px;font-size:.92em}
-.calc-frac-bar{display:block;width:100%;height:0;border-top:1.4px solid currentColor;margin:1px 0}
+.calc-frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 calc(1px * var(--lcd-k, 1));line-height:1.15}
+.calc-frac-num,.calc-frac-den{display:block;padding:0 calc(2px * var(--lcd-k, 1));font-size:.92em}
+.calc-frac-bar{display:block;width:100%;height:0;border-top:1.4px solid currentColor;margin:calc(1px * var(--lcd-k, 1)) 0}
 /* Tall signs (her screenshot, 5 Nov 2026): the √ is a drawn shape that runs
    the body's full height (align-items:stretch), a fixed tick at the bottom
    left and one stretched rising line that meets the body's border-top at the
    top-right corner with no gap. The real character stays in .calc-hid (the
    line's text still reads √ ( )). */
-.calc-rad{display:inline-flex;align-items:stretch;vertical-align:middle;margin:0 1px}
+.calc-rad{display:inline-flex;align-items:stretch;vertical-align:middle;margin:0 calc(1px * var(--lcd-k, 1))}
 .calc-rad-deg{font-size:.55em;line-height:1;margin-right:-.3em;position:relative;top:-.3em;align-self:flex-start;z-index:1}
 .calc-rad-idx{margin-right:0}   /* ˣ√ index box (Build 2): small, upper left, holds a typed slot so it may not overlap the √ */
 .calc-rad-sign{flex:none;position:relative;width:.55em;font-size:1em;line-height:1}
 .calc-rad-sign svg{position:absolute;display:block;overflow:visible}
 .calc-rad-tick{left:0;bottom:0;width:.25em;height:.5em}
 .calc-rad-rise{left:.25em;top:0;width:.3em;height:100%}
-.calc-rad-body{display:inline-block;border-top:1.4px solid currentColor;padding:.1em 2px 0 1px}
+.calc-rad-body{display:inline-block;border-top:1.4px solid currentColor;padding:.1em calc(2px * var(--lcd-k, 1)) 0 calc(1px * var(--lcd-k, 1))}
 .calc-hid{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* Tall brackets (5 Nov 2026): renderBox wraps each ( … ) pair in .calc-br;
    the two .calc-brk shapes stretch to the group's height. Each is a thin
@@ -807,27 +828,27 @@ h2{font-size:20px} h3{font-size:17px}
    the exponent sits level with the element's top, like the real fx-991ZA. */
 .calc-supw{display:inline-flex;align-items:flex-start;vertical-align:middle;line-height:1.15}
 .calc-supw>.calc-cursor{align-self:center}
-.calc-pow-exp{font-size:.68em;line-height:1;vertical-align:super;padding:0 1px}
-.calc-slot{display:inline-block;width:.65em;height:.85em;border:1.3px dashed currentColor;border-radius:1px;opacity:.6;vertical-align:middle;margin:0 1px}
+.calc-pow-exp{font-size:.68em;line-height:1;vertical-align:super;padding:0 calc(1px * var(--lcd-k, 1))}
+.calc-slot{display:inline-block;width:.65em;height:.85em;border:1.3px dashed currentColor;border-radius:1px;opacity:.6;vertical-align:middle;margin:0 calc(1px * var(--lcd-k, 1))}
 .calc-cursor{display:inline-block;width:0;border-left:1.4px solid currentColor;height:1em;vertical-align:middle;margin:0 -.5px;animation:calc-blink 1s step-end infinite}
 /* calculator Build 4: log□ (base low and small), |□| (straight bars that grow
    with what is inside), the nCr / nPr sign, the mixed number's whole part.
    10^□ and e^□ reuse .calc-pow-exp; the ×10 glyph reuses .calc-x10. */
-.calc-logb-base{font-size:.68em;line-height:1;vertical-align:sub;padding:0 1px}
-.calc-abs-body{display:inline-block;border-left:1.4px solid currentColor;border-right:1.4px solid currentColor;padding:0 2px;margin:0 1px;line-height:1.15}
-.calc-comb{font-weight:700;font-size:1.05em;padding:0 1px}
-.calc-mixed-whole{padding-right:1px}
+.calc-logb-base{font-size:.68em;line-height:1;vertical-align:sub;padding:0 calc(1px * var(--lcd-k, 1))}
+.calc-abs-body{display:inline-block;border-left:1.4px solid currentColor;border-right:1.4px solid currentColor;padding:0 calc(2px * var(--lcd-k, 1));margin:0 calc(1px * var(--lcd-k, 1));line-height:1.15}
+.calc-comb{font-weight:700;font-size:1.05em;padding:0 calc(1px * var(--lcd-k, 1))}
+.calc-mixed-whole{padding-right:calc(1px * var(--lcd-k, 1))}
 /* calculator Build 5: the prompt screen (CALC X?, SOLVE Solve for X; TABLE
    and EQN reuse it): label small at the top left, the current value bottom
    right in .lcd-res, a typed value BIG at the top left. And the three-line
    SOLVE answer, all in the small font: the equation (cut off at the right
    when too long, like the line under a result), X= and L−R= with their
    values right-aligned. */
-.lcd-pr-typing .lcd-expr{font-size:16px;min-height:20px}
+.lcd-pr-typing .lcd-expr{font-size:calc(16px * var(--lcd-k, 1));min-height:calc(20px * var(--lcd-k, 1))}
 .lcd-pr-typing .calc-frac{line-height:1.05}   /* a typed fraction may not make the LCD taller */
-.lcd-pr+.lcd-res{line-height:28px}
-.lcd-solve{display:flex;flex-direction:column;gap:2px;min-width:0}
-.lcd-sv-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:13px;line-height:16px;white-space:nowrap;min-width:0}
+.lcd-pr+.lcd-res{line-height:calc(28px * var(--lcd-k, 1))}
+.lcd-solve{display:flex;flex-direction:column;gap:calc(2px * var(--lcd-k, 1));min-width:0}
+.lcd-sv-row{display:flex;justify-content:space-between;align-items:baseline;gap:calc(6px * var(--lcd-k, 1));font-size:calc(13px * var(--lcd-k, 1));line-height:calc(16px * var(--lcd-k, 1));white-space:nowrap;min-width:0}
 .lcd-sv-lab{flex:none}
 .lcd-sv-val{min-width:0;overflow:hidden;text-align:right}
 /* calculator Build 6: the TABLE screen (MODE 7, spec §12). It is the STAT
@@ -836,14 +857,14 @@ h2{font-size:20px} h3{font-size:17px}
    numbers, vertical lines between the columns, a line under the heading; the
    selected cell and its column heading in reverse LCD colours; the selected
    value big and right-aligned underneath (.lcd-res). */
-.lcd-tab.lcd-tbl{table-layout:fixed;font-size:10px;line-height:10px}
-.lcd-tbl th,.lcd-tbl td{border:0;border-left:1px solid #6c7a64;padding:0 2px;height:10px;min-width:0;white-space:nowrap;overflow:hidden}
+.lcd-tab.lcd-tbl{table-layout:fixed;font-size:calc(10px * var(--lcd-kt, 1));line-height:calc(10px * var(--lcd-kt, 1))}
+.lcd-tbl th,.lcd-tbl td{border:0;border-left:1px solid #6c7a64;padding:0 calc(2px * var(--lcd-kt, 1));height:calc(10px * var(--lcd-kt, 1));min-width:0;white-space:nowrap;overflow:hidden}
 .lcd-tbl th{border-bottom:1px solid #6c7a64}
-.lcd-tbl .lcd-tbl-n{width:15px;border-left:0;padding:0 1px;font-size:8px;font-weight:400}
+.lcd-tbl .lcd-tbl-n{width:calc(15px * var(--lcd-kt, 1));border-left:0;padding:0 calc(1px * var(--lcd-kt, 1));font-size:calc(8px * var(--lcd-kt, 1));font-weight:400}
 .lcd-tbl .lcd-tbl-sel,.lcd-tbl .lcd-tbl-lit{background:#1c241a;color:#b8c6ae}
 .lcd-tbl .calc-x10{line-height:0}
-.lcd-tbl .calc-x10-exp{vertical-align:baseline;position:relative;top:-3px;line-height:0}   /* the ×10 form raised without making its row taller */
-.lcd-res.lcd-tbl-val{min-height:0;height:26px;line-height:26px}
+.lcd-tbl .calc-x10-exp{vertical-align:baseline;position:relative;top:calc(-3px * var(--lcd-kt, 1));line-height:0}   /* the ×10 form raised without making its row taller */
+.lcd-res.lcd-tbl-val{min-height:0;height:calc(26px * var(--lcd-k, 1));line-height:calc(26px * var(--lcd-k, 1))}
 /* calculator Build 9 (spec §19.2): the STAT data editor is drawn with these
    same TABLE cells (table.lcd-tab.lcd-tbl.lcd-stat, three rows, its cursor
    cell the reversed .lcd-tbl-sel, its value in .lcd-tbl-val) and shows a
@@ -858,33 +879,33 @@ h2{font-size:20px} h3{font-size:17px}
    grows; an answer's value (.lcd-eqn-val); the INEQ inequality under the grid
    (.lcd-ineq); and one-item-per-line menus (.lcd-menu-list). */
 .lcd-tbl.lcd-eqn th,.lcd-tbl.lcd-eqn td{border:0}
-.lcd-tbl.lcd-eqn .lcd-eqn-bk{width:4px;padding:0}
+.lcd-tbl.lcd-eqn .lcd-eqn-bk{width:calc(4px * var(--lcd-kt, 1));padding:0}
 .lcd-tbl.lcd-eqn td.lcd-eqn-bl{border-left:1.4px solid currentColor}
 .lcd-tbl.lcd-eqn td.lcd-eqn-br{border-right:1.4px solid currentColor}
 .lcd-tbl.lcd-eqn td.lcd-eqn-t{border-top:1.4px solid currentColor}
 .lcd-tbl.lcd-eqn td.lcd-eqn-b{border-bottom:1.4px solid currentColor}
-.lcd-line.lcd-eqn-in{height:26px;display:flex;align-items:center}
-.lcd-eqn-in .lcd-expr{flex:1 1 auto;min-width:0;font-size:16px;line-height:1}
+.lcd-line.lcd-eqn-in{height:calc(26px * var(--lcd-k, 1));display:flex;align-items:center}
+.lcd-eqn-in .lcd-expr{flex:1 1 auto;min-width:0;font-size:calc(16px * var(--lcd-k, 1));line-height:1}
 .lcd-eqn-in .calc-frac{line-height:1;font-size:.72em}
 .lcd-eqn-val .calc-frac{line-height:1}   /* a fraction answer (5/2, −½+(√3/2)i) may not make the LCD taller */
-.lcd-ineq{font-size:11px;line-height:13px;white-space:nowrap}
-.lcd-menu.lcd-menu-list{grid-template-columns:1fr;gap:0;font-size:11px;line-height:14px}
+.lcd-ineq{font-size:calc(11px * var(--lcd-k, 1));line-height:calc(13px * var(--lcd-k, 1));white-space:nowrap}
+.lcd-menu.lcd-menu-list{grid-template-columns:1fr;gap:0;font-size:calc(11px * var(--lcd-k, 1));line-height:calc(14px * var(--lcd-k, 1))}
 /* the MODE menu (spec §16): digits in reversed boxes, rows packed so the
    eight items and the ▼ fit the LCD's plain height (the old 7-item menu made
    it 10 px taller, an 8-item one with ▼ would make it 29 px taller) */
-.lcd-mi-n{background:#1c241a;color:#b8c6ae;padding:0 2px;border-radius:1px}
-.lcd-menu.lcd-menu-boxed{gap:0 10px;line-height:14px}
-.lcd-menu-boxed+.lcd-more{line-height:12px;margin-top:0}
+.lcd-mi-n{background:#1c241a;color:#b8c6ae;padding:0 calc(2px * var(--lcd-k, 1));border-radius:1px}
+.lcd-menu.lcd-menu-boxed{gap:0 calc(4px * var(--lcd-k, 1));line-height:calc(14px * var(--lcd-k, 1))}
+.lcd-menu-boxed+.lcd-more{line-height:calc(12px * var(--lcd-k, 1));margin-top:0}
 /* calculator Build 8 (spec §15, §16): MODE 3's eight STAT types in two plain
    columns, rows packed like the MODE menu so the LCD keeps its plain height
    (.lcd-menu-packed; SETUP reuses .lcd-menu-boxed); the hat of x̂ and ŷ drawn
    above the letter (.lcd-hat, the LCD font will not stack a combining
    circumflex, as .lcd-ov does for x̄); CLR's last screen, two centred lines
    (.lcd-done); the Reset …? lines [=] :Yes / [AC] :Cancel use .lcd-note */
-.lcd-menu.lcd-menu-packed{gap:0 10px;line-height:14px}
+.lcd-menu.lcd-menu-packed{gap:0 calc(4px * var(--lcd-k, 1));line-height:calc(14px * var(--lcd-k, 1))}
 .lcd-hat{position:relative;display:inline-block;line-height:1.05}
 .lcd-hat::before{content:"";position:absolute;left:50%;top:.1em;width:.24em;height:.24em;border-left:1px solid currentColor;border-top:1px solid currentColor;transform:translateX(-50%) rotate(45deg)}
-.lcd-done{text-align:center;font-size:13px;line-height:18px}
+.lcd-done{text-align:center;font-size:calc(13px * var(--lcd-k, 1));line-height:calc(18px * var(--lcd-k, 1))}
 @keyframes calc-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
 .calc-pad{display:flex;flex-direction:column;gap:8px}
